@@ -4,10 +4,10 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-sealed interface MainScreen {
+sealed interface StartScreen {
     @Serializable
-    data object Home: MainScreen
+    data object Home: StartScreen
 
     @Serializable
-    data object LogIn: MainScreen
+    data object LogIn: StartScreen
 }

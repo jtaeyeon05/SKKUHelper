@@ -6,7 +6,7 @@ import androidx.navigation.createGraph
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.fragment
 import com.skku_team2.skku_helper.databinding.ActivityStartBinding
-import com.skku_team2.skku_helper.navigation.MainScreen
+import com.skku_team2.skku_helper.navigation.StartScreen
 import com.skku_team2.skku_helper.ui.HomeFragment
 import com.skku_team2.skku_helper.ui.LogInFragment
 
@@ -22,11 +22,11 @@ class StartActivity : AppCompatActivity() {
 
         val navHostFragment = supportFragmentManager.findFragmentById(binding.fragmentContainerView.id) as NavHostFragment
         val navController = navHostFragment.navController
-        navController.graph = navController.createGraph(MainScreen.Home) {
-            fragment<HomeFragment, MainScreen.Home> {
+        navController.graph = navController.createGraph(StartScreen.Home) {
+            fragment<HomeFragment, StartScreen.Home> {
                 label = "Home"
             }
-            fragment<LogInFragment, MainScreen.LogIn> {
+            fragment<LogInFragment, StartScreen.LogIn> {
                 label = "LogIn"
             }
         }

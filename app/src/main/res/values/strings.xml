@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SKKU Helper</string>
+
+    <!-- Start Home Screen -->
+    <string name="start_home_skku">SKKU</string>
+    <string name="start_home_login">Log In</string>
 </resources>
