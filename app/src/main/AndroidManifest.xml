@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SKKUHelper">
         <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".StartActivity"
             android:exported="true">
             <intent-filter>
