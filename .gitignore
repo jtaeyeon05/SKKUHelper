@@ -1,0 +1,38 @@
+### OS ###
+# macOS
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+*.log
+*.tmp
+
+### IDE ###
+# IntelliJ / AndroidStudio
+captures/
+build/
+out/
+.cxx/
+.externalNativeBuild/
+.idea/
+.idea_modules/
+.gradle/
+.navigation/
+local.properties
+output.json
+!gradle/wrapper/gradle-wrapper.jar
+*.iml
+*.ipr
+*.iws
+*.apk
+
+### Code ###
+# Android
+obj/
+.externalNativeBuild
+.cxx
+*.ap_
+*.class
+*.dex
+*.jks
+*.keystore
