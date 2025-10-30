@@ -78,6 +78,7 @@
     </FrameLayout>
 
     <Button
+        android:id="@+id/button_token_help"
         style="?attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -92,13 +93,13 @@
         android:layout_weight="1" />
 
     <Button
-        android:id="@+id/button_confirm"
+        android:id="@+id/button_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
         android:backgroundTint="?attr/colorPrimaryContainer"
         android:textColor="?attr/colorOnPrimaryContainer"
-        android:text="@string/start_login_confirm" />
+        android:text="@string/start_login_login" />
 
     <Space
         android:layout_width="0dp"
