@@ -65,7 +65,7 @@ class LogInFragment : Fragment() {
         binding.buttonLogin.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
                 MaterialAlertDialogBuilder(requireContext()).apply {
-                    setTitle(R.string.start_login_token_help_title)
+                    setTitle(R.string.start_login_login_loading_title)
                     val dialogLayout = LinearLayout(requireContext()).apply {
                         layoutParams = LinearLayout.LayoutParams(
                             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -93,7 +93,7 @@ class LogInFragment : Fragment() {
                             LinearLayout.LayoutParams.WRAP_CONTENT,
                         )
                         it.textSize = 16f
-                        it.setText(R.string.start_login_login_loading)
+                        it.setText(R.string.start_login_login_loading_message)
                         dialogLayout.addView(it)
                     }
                     setView(dialogLayout)
