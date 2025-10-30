@@ -104,6 +104,7 @@ class LogInFragment : Fragment() {
                     val logInResult = viewModel.logIn()
                     if (logInResult) {
                         val mainActivityIntent = Intent(requireContext(), MainActivity::class.java)
+                        mainActivityIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(mainActivityIntent)
                     } else {
                         // Log In Failed
