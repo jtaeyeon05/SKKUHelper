@@ -1,8 +1,8 @@
 package com.skku_team2.skku_helper.ui
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -10,16 +10,17 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Space
 import android.widget.TextView
+import androidx.core.net.toUri
+import androidx.core.view.setPadding
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.skku_team2.skku_helper.MainActivity
 import com.skku_team2.skku_helper.R
 import com.skku_team2.skku_helper.databinding.FragmentLoginBinding
-import androidx.core.net.toUri
-import androidx.core.view.setPadding
-import com.google.android.material.progressindicator.CircularProgressIndicator
+import com.skku_team2.skku_helper.utils.getColorAttr
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -121,22 +122,13 @@ class LogInFragment : Fragment() {
         }
 
         viewModel.uiState.observe(viewLifecycleOwner) { state ->
-            val theme = context?.theme
             binding.buttonLogin.isEnabled = state.buttonLogInEnabled
             if (state.buttonLogInEnabled) {
-                val colorButtonContainer = TypedValue()
-                val colorButtonOnContainer = TypedValue()
-                theme?.resolveAttribute(com.google.android.material.R.attr.colorPrimaryContainer, colorButtonContainer, true)
-                theme?.resolveAttribute(com.google.android.material.R.attr.colorOnPrimaryContainer, colorButtonOnContainer, true)
-                binding.buttonLogin.setBackgroundColor(colorButtonContainer.data)
-                binding.buttonLogin.setTextColor(colorButtonOnContainer.data)
+                binding.buttonLogin.setBackgroundColor(context?.getColorAttr(com.google.android.material.R.attr.colorPrimaryContainer) ?: Color.BLACK)
+                binding.buttonLogin.setTextColor(context?.getColorAttr(com.google.android.material.R.attr.colorOnPrimaryContainer) ?: Color.WHITE)
             } else {
-                val colorButtonContainer = TypedValue()
-                val colorButtonOnContainer = TypedValue()
-                theme?.resolveAttribute(com.google.android.material.R.attr.colorSurfaceContainerHighest, colorButtonContainer, true)
-                theme?.resolveAttribute(com.google.android.material.R.attr.colorOnSurfaceVariant, colorButtonOnContainer, true)
-                binding.buttonLogin.setBackgroundColor(colorButtonContainer.data)
-                binding.buttonLogin.setTextColor(colorButtonOnContainer.data)
+                binding.buttonLogin.setBackgroundColor(context?.getColorAttr(com.google.android.material.R.attr.colorSurfaceContainerHighest) ?: Color.GRAY)
+                binding.buttonLogin.setTextColor(context?.getColorAttr(com.google.android.material.R.attr.colorOnSurfaceVariant) ?: Color.WHITE)
             }
         }
     }
