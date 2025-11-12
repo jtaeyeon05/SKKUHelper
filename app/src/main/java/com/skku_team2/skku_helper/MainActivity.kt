@@ -6,20 +6,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.fragment.app.Fragment
 import androidx.navigation.createGraph
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.fragment
 import com.skku_team2.skku_helper.databinding.ActivityMainBinding
 import com.skku_team2.skku_helper.navigation.MainScreen
-import com.skku_team2.skku_helper.navigation.StartScreen
-import com.skku_team2.skku_helper.utils.getColorAttr
-import com.skku_team2.skku_helper.utils.isBright
 import com.skku_team2.skku_helper.ui.AccountFragment
 import com.skku_team2.skku_helper.ui.CalendarFragment
 import com.skku_team2.skku_helper.ui.HomeFragment
-import com.skku_team2.skku_helper.ui.LogInFragment
-import com.skku_team2.skku_helper.ui.StartFragment
+import com.skku_team2.skku_helper.utils.getColorAttr
+import com.skku_team2.skku_helper.utils.isBright
 
 
 class MainActivity : AppCompatActivity() {
@@ -41,7 +37,6 @@ class MainActivity : AppCompatActivity() {
             view.setPadding(systemBars.left, 0, systemBars.right, 0)
 
             binding.topSystemBarMain.layoutParams.height = systemBars.top
-            binding.bottomSystemBarMain.layoutParams.height = systemBars.bottom
             insets
         }
 
@@ -59,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.navigationViewMain.setOnItemSelectedListener { item ->
+        binding.bottomNavigationViewMain.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.calendarItem -> {
                     navController.navigate(MainScreen.Calendar)

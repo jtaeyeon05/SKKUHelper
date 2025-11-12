@@ -31,16 +31,12 @@
         android:name="androidx.navigation.fragment.NavHostFragment" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/navigationView_main"
+        android:id="@+id/bottomNavigationView_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/menu_bottomnavigationview" />
-
-    <View
-        android:id="@+id/bottomSystemBar_main"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="?attr/colorPrimary" />
+        app:itemTextColor="?attr/colorOnPrimary"
+        app:itemIconTint="?attr/colorOnPrimary"
+        app:backgroundTint="?attr/colorPrimary"
+        app:menu="@menu/menu_bottom_navigation_view_main" />
 
 </LinearLayout>
