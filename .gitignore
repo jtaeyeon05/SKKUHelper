@@ -36,3 +36,6 @@ obj/
 *.dex
 *.jks
 *.keystore
+
+# API KEY
+/app/src/test/java/com/skku_team2/skku_helper/Secret.kt
