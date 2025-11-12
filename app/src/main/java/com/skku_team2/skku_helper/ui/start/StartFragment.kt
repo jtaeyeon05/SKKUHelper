@@ -1,4 +1,4 @@
-package com.skku_team2.skku_helper.ui
+package com.skku_team2.skku_helper.ui.start
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package com.skku_team2.skku_helper.ui
+package com.skku_team2.skku_helper.ui.start
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

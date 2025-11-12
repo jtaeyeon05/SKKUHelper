@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/gradient_start"
-    tools:context=".ui.LogInFragment">
+    tools:context=".ui.start.LogInFragment">
 
     <Space
         android:layout_width="0dp"

@@ -7,8 +7,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.fragment
 import com.skku_team2.skku_helper.databinding.ActivityStartBinding
 import com.skku_team2.skku_helper.navigation.StartScreen
-import com.skku_team2.skku_helper.ui.StartFragment
-import com.skku_team2.skku_helper.ui.LogInFragment
+import com.skku_team2.skku_helper.ui.start.StartFragment
+import com.skku_team2.skku_helper.ui.start.LogInFragment
 
 
 class StartActivity : AppCompatActivity() {

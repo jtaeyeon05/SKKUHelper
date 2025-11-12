@@ -11,9 +11,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.fragment
 import com.skku_team2.skku_helper.databinding.ActivityMainBinding
 import com.skku_team2.skku_helper.navigation.MainScreen
-import com.skku_team2.skku_helper.ui.AccountFragment
-import com.skku_team2.skku_helper.ui.CalendarFragment
-import com.skku_team2.skku_helper.ui.HomeFragment
+import com.skku_team2.skku_helper.ui.main.AccountFragment
+import com.skku_team2.skku_helper.ui.main.CalendarFragment
+import com.skku_team2.skku_helper.ui.main.HomeFragment
 import com.skku_team2.skku_helper.utils.getColorAttr
 import com.skku_team2.skku_helper.utils.isBright
 
