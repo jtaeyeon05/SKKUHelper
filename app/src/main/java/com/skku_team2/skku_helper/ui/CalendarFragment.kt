@@ -26,10 +26,10 @@ class CalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.buttonGoMain.setOnClickListener {
+        /*binding.buttonGoMain.setOnClickListener {
             val goMainIntent = Intent(activity, MainActivity::class.java)
             startActivity(goMainIntent)
-        }
+        }*/
     }
 
     override fun onDestroyView() {

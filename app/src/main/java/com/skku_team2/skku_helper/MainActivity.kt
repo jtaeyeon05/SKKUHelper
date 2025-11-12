@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
             replaceFragment(homeFragment)
         }
 
-        binding.navigationView.setOnItemSelectedListener { item ->
+        binding.navigationViewMain.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.homeItem -> {
                     replaceFragment(HomeFragment())
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.frameLayout, fragment)
+            .replace(R.id.frameLayout_main, fragment)
             .commit()
     }
 }
