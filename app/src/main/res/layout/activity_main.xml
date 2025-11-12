@@ -23,12 +23,12 @@
         android:background="?attr/colorPrimary"
         app:title="@string/app_name" />
 
-    <FrameLayout
-        android:id="@+id/frameLayout_main"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="Main" />
+        android:name="androidx.navigation.fragment.NavHostFragment" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigationView_main"

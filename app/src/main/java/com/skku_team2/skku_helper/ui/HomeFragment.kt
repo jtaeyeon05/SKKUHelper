@@ -5,11 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavOptions
-import androidx.navigation.fragment.findNavController
-import com.skku_team2.skku_helper.R
 import com.skku_team2.skku_helper.databinding.FragmentHomeBinding
-import com.skku_team2.skku_helper.navigation.StartScreen
 
 
 class HomeFragment : Fragment() {
@@ -26,15 +22,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.buttonLogin.setOnClickListener {
-            findNavController().navigate(
-                route = StartScreen.LogIn,
-                NavOptions.Builder()
-                    .setEnterAnim(R.anim.fade_in)
-                    .setExitAnim(R.anim.fade_out)
-                    .build()
-            )
-        }
+        // TODO
     }
 
     override fun onDestroyView() {

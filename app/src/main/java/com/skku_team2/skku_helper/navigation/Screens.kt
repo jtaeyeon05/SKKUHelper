@@ -6,8 +6,21 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface StartScreen {
     @Serializable
-    data object Home: StartScreen
+    data object Start: StartScreen
 
     @Serializable
     data object LogIn: StartScreen
+}
+
+
+@Serializable
+sealed interface MainScreen {
+    @Serializable
+    data object Calendar: MainScreen
+
+    @Serializable
+    data object Home: MainScreen
+
+    @Serializable
+    data object Account: MainScreen
 }
