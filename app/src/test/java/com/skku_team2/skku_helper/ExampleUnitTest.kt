@@ -9,35 +9,22 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
-import com.google.gson.annotations.SerializedName
+
 
 class ExampleUnitTest {
-
-    data class CourseTest(
-        val id: Int,
-        val name: String,
-        @SerializedName("course_code") val courseCode: String?
-    )
-
-    data class AssignmentTest(
-        val id: Long,
-        val name: String,
-        @SerializedName("due_at") val dueAt: String?
-    )
-
     interface CanvasApiTest {
         @GET("api/v1/courses")
         fun getCourses(
             @Header("Authorization") token: String,
             @Query("enrollment_state") state: String = "active",
             @Query("per_page") perPage: Int = 100
-        ): Call<List<CourseTest>>
+        ): Call<List<Course>>
 
         @GET("api/v1/courses/{courseId}/assignments")
         fun getAssignments(
             @Header("Authorization") token: String,
             @Path("courseId") courseId: Int
-        ): Call<List<AssignmentTest>>
+        ): Call<List<Assignment>>
     }
 
     @Test
