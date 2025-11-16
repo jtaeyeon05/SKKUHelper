@@ -1,5 +1,7 @@
 package com.skku_team2.skku_helper
 
+import com.skku_team2.skku_helper.data.Assignment
+import com.skku_team2.skku_helper.data.Course
 import org.junit.Test
 import org.junit.Assert.*
 import retrofit2.Call
@@ -11,7 +13,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 
-class ExampleUnitTest {
+class CanvasUnitTest {
     interface CanvasApiTest {
         @GET("api/v1/courses")
         fun getCourses(
