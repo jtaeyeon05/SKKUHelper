@@ -1,7 +1,7 @@
 package com.skku_team2.skku_helper
 
-import com.skku_team2.skku_helper.data.Assignment
-import com.skku_team2.skku_helper.data.Course
+import com.skku_team2.skku_helper.canvas.Assignment
+import com.skku_team2.skku_helper.canvas.Course
 import org.junit.Test
 import org.junit.Assert.*
 import retrofit2.Call

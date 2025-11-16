@@ -14,22 +14,29 @@ import androidx.core.net.toUri
 import androidx.core.view.setPadding
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.skku_team2.skku_helper.ui.main.MainActivity
 import com.skku_team2.skku_helper.R
 import com.skku_team2.skku_helper.databinding.FragmentLoginBinding
+import com.skku_team2.skku_helper.key.IntentKey
 import com.skku_team2.skku_helper.utils.getColorAttr
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
 
 class LogInFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
+    private val startViewModel: StartViewModel by activityViewModels()
     private val viewModel: LogInViewModel by viewModels()
 
     override fun onCreateView(
@@ -104,8 +111,10 @@ class LogInFragment : Fragment() {
                     dialog.show()
                     val logInResult = viewModel.logIn()
                     if (logInResult) {
-                        val mainActivityIntent = Intent(requireContext(), MainActivity::class.java)
-                        mainActivityIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        val mainActivityIntent = Intent(requireContext(), MainActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            putExtra(IntentKey.EXTRA_TOKEN, startViewModel.uiState.value.token)
+                        }
                         startActivity(mainActivityIntent)
                     } else {
                         // Log In Failed
@@ -121,14 +130,18 @@ class LogInFragment : Fragment() {
             }
         }
 
-        viewModel.uiState.observe(viewLifecycleOwner) { state ->
-            binding.buttonLogin.isEnabled = state.buttonLogInEnabled
-            if (state.buttonLogInEnabled) {
-                binding.buttonLogin.setBackgroundColor(context?.getColorAttr(com.google.android.material.R.attr.colorPrimaryContainer) ?: Color.BLACK)
-                binding.buttonLogin.setTextColor(context?.getColorAttr(com.google.android.material.R.attr.colorOnPrimaryContainer) ?: Color.WHITE)
-            } else {
-                binding.buttonLogin.setBackgroundColor(context?.getColorAttr(com.google.android.material.R.attr.colorSurfaceContainerHighest) ?: Color.GRAY)
-                binding.buttonLogin.setTextColor(context?.getColorAttr(com.google.android.material.R.attr.colorOnSurfaceVariant) ?: Color.WHITE)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    binding.buttonLogin.isEnabled = state.buttonLogInEnabled
+                    if (state.buttonLogInEnabled) {
+                        binding.buttonLogin.setBackgroundColor(context?.getColorAttr(com.google.android.material.R.attr.colorPrimaryContainer) ?: Color.BLACK)
+                        binding.buttonLogin.setTextColor(context?.getColorAttr(com.google.android.material.R.attr.colorOnPrimaryContainer) ?: Color.WHITE)
+                    } else {
+                        binding.buttonLogin.setBackgroundColor(context?.getColorAttr(com.google.android.material.R.attr.colorSurfaceContainerHighest) ?: Color.GRAY)
+                        binding.buttonLogin.setTextColor(context?.getColorAttr(com.google.android.material.R.attr.colorOnSurfaceVariant) ?: Color.WHITE)
+                    }
+                }
             }
         }
     }

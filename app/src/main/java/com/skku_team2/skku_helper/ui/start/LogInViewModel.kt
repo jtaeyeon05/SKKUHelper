@@ -1,9 +1,11 @@
 package com.skku_team2.skku_helper.ui.start
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 
 data class LogInUiState(
@@ -13,14 +15,16 @@ data class LogInUiState(
 )
 
 class LogInViewModel : ViewModel() {
-    private val _uiState = MutableLiveData(LogInUiState())
-    val uiState: LiveData<LogInUiState> = _uiState
+    private val _uiState = MutableStateFlow(LogInUiState())
+    val uiState: StateFlow<LogInUiState> = _uiState.asStateFlow()
 
     fun onTokenChanged(text: String) {
-        _uiState.value = _uiState.value?.copy(
-            token = text,
-            buttonLogInEnabled = text.isNotBlank()
-        )
+        _uiState.update {
+            it.copy(
+                token = text,
+                buttonLogInEnabled = text.isNotBlank()
+            )
+        }
     }
 
     suspend fun logIn(token: String = uiState.value?.token.orEmpty()): Boolean {

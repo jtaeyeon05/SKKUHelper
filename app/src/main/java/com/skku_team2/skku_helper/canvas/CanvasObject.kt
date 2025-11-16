@@ -1,4 +1,4 @@
-package com.skku_team2.skku_helper.data
+package com.skku_team2.skku_helper.canvas
 
 import com.google.gson.annotations.SerializedName
 

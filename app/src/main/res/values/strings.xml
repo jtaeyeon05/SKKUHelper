@@ -22,4 +22,5 @@
     <string name="main_menu_calendar">Calendar</string>
     <string name="main_menu_home">Home</string>
     <string name="main_menu_account">Account</string>
+    <string name="main_message_auto_login">Automatic LogIn Success!</string>
 </resources>

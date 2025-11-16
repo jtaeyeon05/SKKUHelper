@@ -10,7 +10,9 @@ import androidx.navigation.createGraph
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.fragment
 import com.google.android.material.R
+import com.google.android.material.snackbar.Snackbar
 import com.skku_team2.skku_helper.databinding.ActivityMainBinding
+import com.skku_team2.skku_helper.key.IntentKey
 import com.skku_team2.skku_helper.navigation.MainScreen
 import com.skku_team2.skku_helper.utils.getColorAttr
 import com.skku_team2.skku_helper.utils.isBright
@@ -67,6 +69,12 @@ class MainActivity : AppCompatActivity() {
                 }
                 else -> false
             }
+        }
+
+        if (intent.getBooleanExtra(IntentKey.EXTRA_IS_AUTO_LOGIN, false)) {
+            Snackbar.make(binding.main, this.getString(com.skku_team2.skku_helper.R.string.main_message_auto_login), Snackbar.LENGTH_SHORT).apply {
+                anchorView = binding.bottomNavigationViewMain
+            }.show()
         }
     }
 }
