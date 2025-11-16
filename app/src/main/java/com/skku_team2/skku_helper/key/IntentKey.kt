@@ -1,6 +1,6 @@
-package com.skku_team2.skku_helper.data
+package com.skku_team2.skku_helper.key
 
 
-object IntentKeys {
+object IntentKey {
     const val EXTRA_TOKEN = "com.skku_team2.skku_helper.EXTRA_TOKEN"
 }

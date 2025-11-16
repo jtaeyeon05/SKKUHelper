@@ -8,19 +8,19 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.skku_team2.skku_helper.R
-import com.skku_team2.skku_helper.databinding.FragmentStartBinding
+import com.skku_team2.skku_helper.databinding.FragmentLobbyBinding
 import com.skku_team2.skku_helper.navigation.StartScreen
 
 
-class StartFragment : Fragment() {
-    private var _binding: FragmentStartBinding? = null
+class LobbyFragment : Fragment() {
+    private var _binding: FragmentLobbyBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentStartBinding.inflate(inflater, container, false)
+        _binding = FragmentLobbyBinding.inflate(inflater, container, false)
         return binding.root
     }
 

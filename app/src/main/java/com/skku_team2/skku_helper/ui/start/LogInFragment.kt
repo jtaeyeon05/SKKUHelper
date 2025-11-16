@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.CircularProgressIndicator
-import com.skku_team2.skku_helper.MainActivity
+import com.skku_team2.skku_helper.ui.main.MainActivity
 import com.skku_team2.skku_helper.R
 import com.skku_team2.skku_helper.databinding.FragmentLoginBinding
 import com.skku_team2.skku_helper.utils.getColorAttr

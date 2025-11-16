@@ -6,4 +6,4 @@
     android:layout_height="match_parent"
     android:name="androidx.navigation.fragment.NavHostFragment"
     android:background="@drawable/gradient_start"
-    tools:context=".StartActivity" />
+    tools:context=".ui.start.StartActivity" />

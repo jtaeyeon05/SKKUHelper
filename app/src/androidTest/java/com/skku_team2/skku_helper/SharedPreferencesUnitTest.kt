@@ -11,10 +11,10 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class SharedPreferencesUnitTest {
-    object TestPrefFiles {
+    object TestPrefFile {
         const val TEST = "com.skku_team2.skku_helper.TEST"
     }
-    object TestPrefKeys {
+    object TestPrefKey {
         object Test {
             const val FILE1 = "com.skku_team2.skku_helper.test.FILE1"
             const val FILE2 = "com.skku_team2.skku_helper.test.FILE2"
@@ -29,16 +29,16 @@ class SharedPreferencesUnitTest {
         val file2 = 1234
 
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        val sharedPreferences = appContext.getSharedPreferences(TestPrefFiles.TEST, Context.MODE_PRIVATE)
+        val sharedPreferences = appContext.getSharedPreferences(TestPrefFile.TEST, Context.MODE_PRIVATE)
 
         sharedPreferences.edit {
             Log.d("testSharedPreferences", "SharedPreferences 작성")
-            putString(TestPrefKeys.Test.FILE1, file1)
-            putInt(TestPrefKeys.Test.FILE2, file2)
+            putString(TestPrefKey.Test.FILE1, file1)
+            putInt(TestPrefKey.Test.FILE2, file2)
         }
 
-        val loadedFile1 = sharedPreferences.getString(TestPrefKeys.Test.FILE1, null)
-        val loadedFile2 = sharedPreferences.getInt(TestPrefKeys.Test.FILE2, -1)
+        val loadedFile1 = sharedPreferences.getString(TestPrefKey.Test.FILE1, null)
+        val loadedFile2 = sharedPreferences.getInt(TestPrefKey.Test.FILE2, -1)
         run {
             Log.d("testSharedPreferences", "SharedPreferences 읽기")
             Log.d("testSharedPreferences", "FILE1: $loadedFile1")
