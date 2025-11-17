@@ -2,6 +2,7 @@ package com.skku_team2.skku_helper.ui.main
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -17,8 +18,11 @@ import com.skku_team2.skku_helper.navigation.MainScreen
 import com.skku_team2.skku_helper.utils.getColorAttr
 import com.skku_team2.skku_helper.utils.isBright
 
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +57,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.bottomNavigationViewMain.selectedItemId = com.skku_team2.skku_helper.R.id.homeItem
         binding.bottomNavigationViewMain.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 com.skku_team2.skku_helper.R.id.calendarItem -> {

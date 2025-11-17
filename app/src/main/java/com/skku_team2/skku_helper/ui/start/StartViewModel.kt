@@ -37,7 +37,7 @@ class StartRepository(context: Context) {
         return withContext(Dispatchers.IO) {
             try {
                 val authorizationToken = "Bearer $token"
-                val courseResponse = CanvasClient.api.getCourses(authorizationToken).execute()
+                val courseResponse = CanvasClient.api.getCourses(authorizationToken, 5).execute()
                 courseResponse.isSuccessful
             } catch (_: Exception) {
                 false

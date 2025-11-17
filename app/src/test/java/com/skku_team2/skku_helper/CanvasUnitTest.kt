@@ -27,11 +27,18 @@ class CanvasUnitTest {
             @Header("Authorization") token: String,
             @Path("courseId") courseId: Int
         ): Call<List<Assignment>>
+
+        @GET("api/v1/courses/{courseId}/assignments/{assignmentId}")
+        fun getAssignment(
+            @Header("Authorization") token: String,
+            @Path("courseId") courseId: Int,
+            @Path("assignmentId") assignmentId: Int
+        ): Call<Assignment>
     }
 
     @Test
     fun testCanvasApi() {
-        println("테스트 시작")
+        println("과제 리스트 테스트 시작")
 
         val retrofit = Retrofit.Builder()
             .baseUrl("https://canvas.skku.edu/")
@@ -62,7 +69,7 @@ class CanvasUnitTest {
                             println("   -> 과제 없음")
                         } else {
                             assignments.forEach { assignment ->
-                                println("   - 과제명: ${assignment.name}")
+                                println("   - 과제명: ${assignment.name} (ID: ${assignment.id})")
                                 println("     마감일: ${assignment.dueAt ?: "없음"}")
                             }
                         }
@@ -80,6 +87,45 @@ class CanvasUnitTest {
             fail("에러 발생: ${e.message}")
         }
 
-        println("\n테스트 종료")
+        println("과제 리스트 테스트 종료")
+
+        println("단일 과제 테스트 시작")
+        try {
+            val courseResponse = api.getCourses(myToken).execute()
+
+            if (courseResponse.isSuccessful) {
+                val course = (courseResponse.body() ?: emptyList())[0]
+                println("[과목] ${course.name} (ID: ${course.id})")
+
+                val assignResponse = api.getAssignments(myToken, course.id).execute()
+                if (assignResponse.isSuccessful) {
+                    val assignment = (assignResponse.body() ?: emptyList())[0]
+                    println("   - 과제명: ${assignment.name} (ID: ${assignment.id})")
+                    println("     마감일: ${assignment.dueAt ?: "없음"}")
+
+                    val singleAssignResponse = api.getAssignment(myToken, course.id, assignment.id).execute()
+                    if (singleAssignResponse.isSuccessful) {
+                        val singleAssignment = singleAssignResponse.body()
+                        println("   - 과제명: ${singleAssignment?.name} (ID: ${singleAssignment?.id})")
+                        println("     마감일: ${singleAssignment?.dueAt ?: "없음"}")
+                    } else {
+                        println("   -> 단일 과제 가져오기 실패")
+                    }
+
+                } else {
+                    println("   -> 과제 목록 가져오기 실패")
+                }
+
+            } else {
+                println(">>> 과목 목록 가져오기 실패: ${courseResponse.code()}")
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            fail("에러 발생: ${e.message}")
+        }
+        println("단일 과제 테스트 종료")
     }
+
+
 }
