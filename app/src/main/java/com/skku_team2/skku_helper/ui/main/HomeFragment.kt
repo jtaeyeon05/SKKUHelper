@@ -33,7 +33,7 @@ class HomeFragment : Fragment() {
         binding.buttonTestAssignment.setOnClickListener {
             val assignmentActivityIntent = Intent(requireContext(), AssignmentActivity::class.java).apply {
                 putExtra(IntentKey.EXTRA_TOKEN, mainViewModel.token)
-                putExtra(IntentKey.EXTRA_COURSE_ID, 66262)  // Debug: Mobile Application Programming Lab
+                putExtra(IntentKey.EXTRA_COURSE_ID, 66262)  // Debug: Mobile App Programming Lab
                 putExtra(IntentKey.EXTRA_ASSIGNMENT_ID, 1992814)  // Debug: Lab6
             }
             startActivity(assignmentActivityIntent)

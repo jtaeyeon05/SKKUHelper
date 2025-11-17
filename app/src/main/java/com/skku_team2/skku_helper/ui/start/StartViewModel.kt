@@ -37,8 +37,8 @@ class StartRepository(context: Context) {
         return withContext(Dispatchers.IO) {
             try {
                 val authorizationToken = "Bearer $token"
-                val courseResponse = CanvasClient.api.getCourses(authorizationToken, 5).execute()
-                courseResponse.isSuccessful
+                val coursesResponse = CanvasClient.api.getCourses(authorizationToken, 5).execute()
+                coursesResponse.isSuccessful
             } catch (_: Exception) {
                 false
             }
@@ -54,6 +54,7 @@ data class StartUiState(
 class StartViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = StartRepository(application)
     private val _uiState = MutableStateFlow(StartUiState())
+
     val uiState: StateFlow<StartUiState> = _uiState.asStateFlow()
 
     init {

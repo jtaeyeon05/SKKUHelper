@@ -37,7 +37,21 @@ data class Course(
     @SerializedName("restrict_enrollments_to_course_dates") val restrictEnrollmentsToCourseDates: Boolean,
     @SerializedName("overridden_course_visibility") val overriddenCourseVisibility: String?
      */
-)
+) {
+    companion object {
+        val default get() = Course(
+            id = 0,
+            name = "Course",
+            originalName = "Course",
+            courseCode = null,
+            uuid = "ABCDEFG",
+            accountId = 0,
+            createdAt = null,
+            startAt = null,
+            endAt = null
+        )
+    }
+}
 
 data class Assignment(
     @SerializedName("id") val id: Int,
@@ -95,4 +109,24 @@ data class Assignment(
     @SerializedName("only_visible_to_overrides") val onlyVisibleToOverrides: Boolean,
     @SerializedName("submissions_download_url") val submissionsDownloadUrl: String?,
      */
-)
+) {
+    companion object {
+        val default get() = Assignment(
+            id = 0,
+            name = "Assignment",
+            description = "Assignment Description",
+            position = 1,
+            courseId = 0,
+            isQuizAssignment = false,
+            gradingType = null,
+            pointsPossible = null,
+            lockedForUser = null,
+            htmlUrl = null,
+            createdAt = null,
+            updatedAt = null,
+            dueAt = null,
+            lockAt = null,
+            unlockAt = null
+        )
+    }
+}
