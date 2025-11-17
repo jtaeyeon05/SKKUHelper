@@ -4,74 +4,36 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.skku_team2.skku_helper.databinding.HeaderRowBinding
+import com.skku_team2.skku_helper.canvas.Assignment
 import com.skku_team2.skku_helper.databinding.ItemRecyclerviewBinding
 
+
 class AssignmentAdapter(
-    private val rows: MutableList<AssignmentRow>
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    companion object {
-        private const val VIEW_TYPE_HEADER = 0
-        private const val VIEW_TYPE_ITEM = 1
-    }
-
-    override fun getItemViewType(position: Int): Int =
-        when(rows[position]){
-            is AssignmentRow.Header -> VIEW_TYPE_HEADER
-            is AssignmentRow.Item -> VIEW_TYPE_ITEM
-        }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if(viewType == VIEW_TYPE_HEADER){
-            val binding = HeaderRowBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            )
-            HeaderViewHolder(binding)
-        } else {
-            val binding = ItemRecyclerviewBinding.inflate(
-                LayoutInflater.from(parent.context), parent, false
-            )
-            ItemViewHolder(binding)
-        }
-    }
-
-    inner class HeaderViewHolder(
-        private val binding: HeaderRowBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: AssignmentRow.Header) {
-            binding.Title.text = item.title
-            binding.btnToggle.rotation = if (item.expanded) 180f else 0f
-        }
-
-    }
-
-    inner class ItemViewHolder(
+    private val assignmentList: MutableList<Assignment>
+): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    class ItemViewHolder(
         private val binding: ItemRecyclerviewBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
+    ): RecyclerView.ViewHolder(binding.root) {
+        fun bind(assignment: Assignment) {
+            binding.textViewTitle.text = assignment.name
+            binding.textViewSubTitle.text = "${assignment.courseId} - ${assignment.isQuizAssignment}"
 
-        fun bind(item: AssignmentRow.Item) {
-            val a = item.assignment
-            binding.assingnmentTitle.text = a.title
-            binding.assignmentSubtitle.text = "${a.course} - ${a.type}"
-
-            if (a.isCompleted) {
-                binding.assignmentStatus.text = "Completed"
-                binding.assignmentStatus.setTextColor(Color.parseColor("#4CAF50"))
+            if (assignment.isQuizAssignment) {
+                binding.textViewState.text = "Completed"
+                binding.textViewState.setTextColor(Color.parseColor("#4CAF50"))
             } else {
-                binding.assignmentStatus.text = "${a.remainingDays} days"
-                binding.assignmentStatus.setTextColor(Color.parseColor("#D32F2F"))
+                binding.textViewState.text = "${assignment.dueAt} days"
+                binding.textViewState.setTextColor(Color.parseColor("#D32F2F"))
             }
         }
     }
 
-    override fun getItemCount(): Int = rows.size
+    override fun getItemCount(): Int = assignmentList.size
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (val row = rows[position]) {
-            is AssignmentRow.Header -> (holder as HeaderViewHolder).bind(row)
-            is AssignmentRow.Item   -> (holder as ItemViewHolder).bind(row)
-        }
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) = (holder as ItemViewHolder).bind(assignmentList[position])
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val binding = ItemRecyclerviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ItemViewHolder(binding)
     }
 }
