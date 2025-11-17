@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.bottomNavigationViewMain.selectedItemId = com.skku_team2.skku_helper.R.id.homeItem
+        if (savedInstanceState == null) binding.bottomNavigationViewMain.selectedItemId = com.skku_team2.skku_helper.R.id.homeItem
         binding.bottomNavigationViewMain.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 com.skku_team2.skku_helper.R.id.calendarItem -> {

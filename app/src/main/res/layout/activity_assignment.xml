@@ -8,10 +8,53 @@
     android:orientation="vertical"
     tools:context=".ui.assignment.AssignmentActivity">
 
-    <TextView
-        android:id="@+id/textView_test"
+    <View
+        android:id="@+id/topSystemBar_assignment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="TEST" />
+        android:layout_height="0dp"
+        android:background="?attr/colorPrimary" />
+
+    <com.google.android.material.appbar.CollapsingToolbarLayout
+        android:id="@+id/toolbarLayout_assignment"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
+        app:expandedTitleTextColor="?attr/colorOnPrimary"
+        app:expandedSubtitleTextColor="?attr/colorOnPrimary"
+        app:expandedTitleTextAppearance="@style/TextAppearance.Material3.TitleLarge"
+        app:expandedSubtitleTextAppearance="@style/TextAppearance.Material3.TitleSmall"
+        android:background="?attr/colorPrimary">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar_assignment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:navigationIconTint="?attr/colorOnPrimary"
+            app:title="TITLE"
+            app:subtitle="SUBTITLE"
+            app:navigationIcon="@drawable/ic_back" />
+    </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <TextView
+            android:id="@+id/textView_test"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="TEST" />
+
+    </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView_assignment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:itemTextColor="?attr/colorOnPrimary"
+        app:itemIconTint="?attr/colorOnPrimary"
+        app:backgroundTint="?attr/colorPrimary"
+        app:menu="@menu/menu_bottom_navigation_view_assignment" />
 
 </LinearLayout>

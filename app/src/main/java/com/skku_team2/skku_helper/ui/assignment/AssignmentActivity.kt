@@ -6,11 +6,14 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.skku_team2.skku_helper.R
 import com.skku_team2.skku_helper.databinding.ActivityAssignmentBinding
+import com.skku_team2.skku_helper.utils.getColorAttr
+import com.skku_team2.skku_helper.utils.isBright
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
@@ -26,18 +29,39 @@ class AssignmentActivity : AppCompatActivity() {
 
         binding = ActivityAssignmentBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setSupportActionBar(binding.topAppBarAssignment)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            val insetsController = WindowInsetsControllerCompat(window, window.decorView)
+            insetsController.isAppearanceLightStatusBars = !this.getColorAttr(com.google.android.material.R.attr.colorOnPrimary).isBright()
+
+            view.setPadding(systemBars.left, 0, systemBars.right, 0)
+
+            binding.topSystemBarAssignment.layoutParams.height = systemBars.top
             insets
         }
+
+        binding.topAppBarAssignment.setNavigationOnClickListener { finish() }
 
         binding.textViewTest.text = """
             token = ${viewModel.token?.substring(0, 10)}...
             courseId = ${viewModel.courseId}
             assignmentId = ${viewModel.assignmentId}
         """.trimIndent()
+
+        binding.bottomNavigationViewAssignment.isItemActiveIndicatorEnabled = false
+        binding.bottomNavigationViewAssignment.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.deleteItem -> {
+                    false
+                }
+                R.id.editItem -> {
+                    false
+                }
+                else -> false
+            }
+        }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
