@@ -33,8 +33,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonTestAssignment.setOnClickListener {
-            val assignmentActivityIntent =
-                Intent(requireContext(), AssignmentActivity::class.java).apply {
+            val assignmentActivityIntent = Intent(requireContext(), AssignmentActivity::class.java).apply {
                     putExtra(IntentKey.EXTRA_TOKEN, mainViewModel.token)
                     putExtra(IntentKey.EXTRA_COURSE_ID, 66262)  // Debug: Mobile Application Programming Lab
                     putExtra(IntentKey.EXTRA_COURSE_ID, 66262)  // Debug: Mobile App Programming Lab
@@ -50,7 +49,7 @@ class HomeFragment : Fragment() {
                 name = "AS2"
             )
         )
-        val adapter = AssignmentAdapter(dummyAssignmentList)
+        val adapter = AssignmentAdapter(requireContext(), mainViewModel.token, dummyAssignmentList)
         binding.recyclerViewAssignment.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewAssignment.adapter = adapter
     }

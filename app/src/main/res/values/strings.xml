@@ -19,6 +19,11 @@
     <string name="start_login_login_failed_dismiss">Dismiss</string>
 
     <!-- MainActivity -->
+    <!-- MainActivity - Home -->
+    <string name="main_home_left_assignments">Left Assignments</string>
+    <string name="main_home_completed_assignments">Completed Assignments</string>
+    <string name="main_home_expired_assignments">Expired Assignments</string>
+    <!-- MainActivity - Menu -->
     <string name="main_menu_calendar">Calendar</string>
     <string name="main_menu_home">Home</string>
     <string name="main_menu_account">Account</string>
