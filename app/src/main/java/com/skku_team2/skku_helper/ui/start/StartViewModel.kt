@@ -69,4 +69,26 @@ class StartViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
+    fun changeToken(token: String) {
+        _uiState.update {
+            it.copy(
+                token = token,
+                isTokenVerified = null,
+            )
+        }
+    }
+
+    suspend fun verifyToken(): Boolean {
+        val token = uiState.value.token ?: ""
+        val isTokenVerified = repository.verifyToken(token)
+        if (isTokenVerified) repository.saveToken(token)
+        _uiState.update {
+            it.copy(
+                token = token,
+                isTokenVerified = isTokenVerified,
+            )
+        }
+        return isTokenVerified
+    }
 }

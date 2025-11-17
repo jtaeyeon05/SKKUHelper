@@ -10,17 +10,20 @@
     <string name="start_login_token_help">What is Token?</string>
     <string name="start_login_login">Log In</string>
     <string name="start_login_token_help_title">What is Token?</string>
-    <!--TODO--> <string name="start_login_token_help_message">"Tokens are provided by i-Campus… You can obtain it here…"</string>
+    <string name="start_login_token_help_message">A Token is provided by i-Campus. You can obtain it here (Approved Integration -> New Access Token -> Generate Token).</string>
     <string name="start_login_token_help_dismiss">Dismiss</string>
     <string name="start_login_token_help_issue">Issue Token</string>
     <string name="start_login_login_loading_title">Log In</string>
-    <string name="start_login_login_loading_message">Loading</string>
     <string name="start_login_login_failed_title">Log In Failed</string>
     <string name="start_login_login_failed_message">Login failed. Please check your internet connection or verify that the token value was entered correctly.</string>
     <string name="start_login_login_failed_dismiss">Dismiss</string>
+
     <!-- MainActivity -->
     <string name="main_menu_calendar">Calendar</string>
     <string name="main_menu_home">Home</string>
     <string name="main_menu_account">Account</string>
     <string name="main_message_auto_login">Automatic LogIn Success!</string>
+
+    <!-- ETC -->
+    <string name="dialog_loading_message">Loading</string>
 </resources>
