@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skku_team2.skku_helper.canvas.Assignment
+import androidx.lifecycle.ViewModelProvider
 import com.skku_team2.skku_helper.databinding.FragmentHomeBinding
 import com.skku_team2.skku_helper.key.IntentKey
 import com.skku_team2.skku_helper.ui.assignment.AssignmentActivity
@@ -20,6 +22,8 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val mainViewModel: MainViewModel by activityViewModels()
+    private lateinit var viewModel: HomeViewModel
+    private lateinit var assignmentAdapter: AssignmentAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +44,21 @@ class HomeFragment : Fragment() {
                     putExtra(IntentKey.EXTRA_ASSIGNMENT_ID, 1992814)  // Debug: Lab6
                 }
             startActivity(assignmentActivityIntent)
+        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+
+        setupRecyclerView()
+        observeViewModel()
+
+        if (viewModel.homepageData.value == null) {
+            viewModel.loadData()
+        }
+    }
+
+    private fun setupRecyclerView() {
+        assignmentAdapter = AssignmentAdapter()
+        binding.recyclerViewHome.apply {
+            adapter = assignmentAdapter
+            layoutManager = LinearLayoutManager(requireContext())
         }
 
         val dummyAssignmentList = mutableListOf(
@@ -52,6 +71,18 @@ class HomeFragment : Fragment() {
         val adapter = AssignmentAdapter(requireContext(), mainViewModel.token, dummyAssignmentList)
         binding.recyclerViewAssignment.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewAssignment.adapter = adapter
+    }
+
+    private fun observeViewModel() {
+        viewModel.homepageData.observe(viewLifecycleOwner) { dataList ->
+            assignmentAdapter.submitList(dataList)
+        }
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.progressBarHome.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+        viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onDestroyView() {
