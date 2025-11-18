@@ -9,6 +9,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.concurrent.atomic.AtomicInteger
 
+
 data class CombinedAssignmentInfo(
     val assignment: Assignment,
     val courseName: String

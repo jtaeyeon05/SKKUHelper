@@ -6,8 +6,8 @@ import androidx.lifecycle.LiveData
 import com.skku_team2.skku_helper.canvas.CanvasRepository
 import com.skku_team2.skku_helper.canvas.CombinedAssignmentInfo
 
-class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
+class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = CanvasRepository(application.applicationContext)
     val homepageData: LiveData<List<CombinedAssignmentInfo>> = repository.combinedData
     val isLoading: LiveData<Boolean> = repository.isLoading

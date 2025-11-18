@@ -4,36 +4,38 @@ import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
+
 object DateUtil {
-    // Canvas API의 날짜 형식 (ISO 8601)
-    private val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+    private val canvasDateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME // Canvas API의 날짜 형식 (ISO 8601)
 
-    fun calculateRemainingDays(dueAt: String?): String {
-        if (dueAt == null) {
-            return "기한 없음"
-        }
+    sealed interface RemainingTime {
+        data class Days(val value: Long) : RemainingTime
+        data class Hours(val value: Long) : RemainingTime
+        data class Minutes(val value: Long) : RemainingTime
+        data object Closed : RemainingTime
+        data object NoData : RemainingTime
+        data object Error : RemainingTime
+    }
 
+    fun calculateRemainingTime(dueAt: String?): RemainingTime {
+        if (dueAt == null) return RemainingTime.NoData
         return try {
-            val dueDate = OffsetDateTime.parse(dueAt, formatter)
             val now = OffsetDateTime.now()
+            val dueDate = OffsetDateTime.parse(dueAt, canvasDateTimeFormatter)
+
             val minutesRemaining = ChronoUnit.MINUTES.between(now, dueDate)
+            val hoursRemaining = ChronoUnit.HOURS.between(now, dueDate)
+            val daysRemaining = ChronoUnit.DAYS.between(now.toLocalDate(), dueDate.toLocalDate())
 
             when {
-                minutesRemaining < 0 -> "마감"
-                minutesRemaining < 60 -> "${minutesRemaining}분 남음"
-                else -> {
-                    val hoursRemaining = ChronoUnit.HOURS.between(now, dueDate)
-                    if (hoursRemaining < 24) {
-                        "${hoursRemaining}시간 남음"
-                    } else {
-                        val daysRemaining = ChronoUnit.DAYS.between(now.toLocalDate(), dueDate.toLocalDate())
-                        "D-${daysRemaining}"
-                    }
-                }
+                minutesRemaining < 0 -> RemainingTime.Closed
+                minutesRemaining < 60 -> RemainingTime.Minutes(minutesRemaining)
+                hoursRemaining < 24 -> RemainingTime.Hours(hoursRemaining)
+                else -> RemainingTime.Days(daysRemaining)
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            "날짜 오류"
+            RemainingTime.Error
         }
     }
 }
