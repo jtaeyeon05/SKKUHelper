@@ -2,7 +2,7 @@ package com.skku_team2.skku_helper.canvas
 
 import com.google.gson.annotations.SerializedName
 
-
+//TODO: data class submisson 추가 및 3개 합쳐서 home 화면 list에 담기
 data class Course(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
@@ -72,6 +72,8 @@ data class Assignment(
     @SerializedName("lock_at") val lockAt: String?,
     @SerializedName("unlock_at") val unlockAt: String?,
 
+    @SerializedName("submission") val submission: Submission?,
+
     /* Additional Fields
     @SerializedName("assignment_group_id") val assignmentGroupId: Int?,
     @SerializedName("grading_standard_id") val gradingStandardId: Int?,
@@ -126,7 +128,33 @@ data class Assignment(
             updatedAt = null,
             dueAt = null,
             lockAt = null,
-            unlockAt = null
+            unlockAt = null,
+            submission = null
         )
     }
 }
+
+data class Submission(
+    @SerializedName("id") val id: Int,
+    @SerializedName("user_id") val userId: Int,
+    @SerializedName("workflow_state") val workflowState: String, // "submitted", "graded", "untaken" etc.
+    @SerializedName("score") val score: Double?,
+
+    /* Additional Fields
+    @SerializedName("quiz_id") val quizId: Int,
+    @SerializedName("submission_id") val submissionId: Int,
+    @SerializedName("started_at") val startedAt: String?,
+    @SerializedName("finished_at") val finishedAt: String?,
+    @SerializedName("end_at") val endAt: String?,
+    @SerializedName("attempt") val attempt: Int,
+    @SerializedName("extra_attempts") val extraAttempts: Int,
+    @SerializedName("extra_time") val extraTime: Int,
+    @SerializedName("manually_unlocked") val manuallyUnlocked: Boolean,
+    @SerializedName("time_spent") val timeSpent: Int,
+    @SerializedName("score_before_regrade") val scoreBeforeRegrade: Double?,
+    @SerializedName("kept_score") val keptScore: Double?,
+    @SerializedName("fudge_points") val fudgePoints: Double?,
+    @SerializedName("has_seen_results") val hasSeenResults: Boolean,
+    @SerializedName("overdue_and_needs_submission") val overdueAndNeedsSubmission: Boolean
+     */
+)
