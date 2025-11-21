@@ -2,7 +2,6 @@ package com.skku_team2.skku_helper.canvas
 
 import com.google.gson.annotations.SerializedName
 
-//TODO: data class submisson 추가 및 3개 합쳐서 home 화면 list에 담기
 data class Course(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
