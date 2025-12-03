@@ -5,28 +5,28 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.R
-import com.skku_team2.skku_helper.canvas.CombinedAssignmentInfo
+import com.skku_team2.skku_helper.canvas.AssignmentData
 import com.skku_team2.skku_helper.databinding.ItemAssignmentBinding
 import com.skku_team2.skku_helper.key.IntentKey
 import com.skku_team2.skku_helper.ui.assignment.AssignmentActivity
 import com.skku_team2.skku_helper.utils.DateUtil
 import com.skku_team2.skku_helper.utils.getColorAttr
 
+
 class AssignmentAdapter(
     private val context: Context,
-    private val token: String
-) : ListAdapter<CombinedAssignmentInfo, AssignmentAdapter.ItemViewHolder>(DiffCallback) {
-
+    private val token: String,
+    private val assignmentDataList: MutableList<AssignmentData>
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<CombinedAssignmentInfo>() {
-            override fun areItemsTheSame(oldItem: CombinedAssignmentInfo, newItem: CombinedAssignmentInfo): Boolean {
+        private val DiffCallback = object : DiffUtil.ItemCallback<AssignmentData>() {
+            override fun areItemsTheSame(oldItem: AssignmentData, newItem: AssignmentData): Boolean {
                 return oldItem.assignment.id == newItem.assignment.id
             }
 
-            override fun areContentsTheSame(oldItem: CombinedAssignmentInfo, newItem: CombinedAssignmentInfo): Boolean {
+            override fun areContentsTheSame(oldItem: AssignmentData, newItem: AssignmentData): Boolean {
                 return oldItem == newItem
             }
         }
@@ -35,20 +35,17 @@ class AssignmentAdapter(
     inner class ItemViewHolder(
         private val binding: ItemAssignmentBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(item: CombinedAssignmentInfo) {
-            val assignment = item.assignment
+        fun bind(assignmentData: AssignmentData) {
+            val course = assignmentData.course
+            val assignment = assignmentData.assignment
 
             binding.textViewTitle.text = assignment.name
-            binding.textViewSubTitle.text = "${item.courseName} - ${if (assignment.isQuizAssignment) "Quiz" else "Assignment"}"
+            binding.textViewSubTitle.text = "${course.name} - ${if (assignment.isQuizAssignment) "Quiz" else "Assignment"}"
 
-            val isSubmitted = assignment.submission?.workflowState == "submitted" || assignment.submission?.workflowState == "graded"
-
-            if (isSubmitted) {
+            if (assignment.isSubmitted) {
                 binding.textViewState.text = "Submitted"
                 binding.textViewState.setTextColor(context.getColorAttr(R.attr.colorTertiary))
             } else {
-                // 미제출 시 남은 시간 표시
                 when (val remainingTime = DateUtil.calculateRemainingTime(assignment.dueAt)) {
                     is DateUtil.RemainingTime.Days -> {
                         binding.textViewState.text = "${remainingTime.value} Days"
@@ -83,12 +80,12 @@ class AssignmentAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
+    override fun getItemCount(): Int = assignmentDataList.size
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) = (holder as ItemViewHolder).bind(assignmentDataList[position])
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val binding = ItemAssignmentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ItemViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(getItem(position))
     }
 }

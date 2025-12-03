@@ -12,13 +12,18 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skku_team2.skku_helper.R
-import com.skku_team2.skku_helper.canvas.Assignment
 import com.skku_team2.skku_helper.databinding.FragmentHomeBinding
 import com.skku_team2.skku_helper.key.IntentKey
 import com.skku_team2.skku_helper.ui.assignment.AssignmentActivity
 import kotlin.getValue
 import android.transition.AutoTransition
-import kotlin.math.exp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.skku_team2.skku_helper.canvas.AssignmentData
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 
 class HomeFragment : Fragment() {
@@ -28,14 +33,12 @@ class HomeFragment : Fragment() {
     private val mainViewModel: MainViewModel by activityViewModels()
     private val viewModel: HomeViewModel by viewModels()
 
-    private val dummyAssignmentList: MutableList<Assignment> = mutableListOf()
+    private val leftAssignmentDataList = mutableListOf<AssignmentData>()
     private lateinit var leftAssignmentAdapter: AssignmentAdapter
+    private val completedAssignmentDataList = mutableListOf<AssignmentData>()
     private lateinit var completedAssignmentAdapter: AssignmentAdapter
+    private val expiredAssignmentDataList = mutableListOf<AssignmentData>()
     private lateinit var expiredAssignmentAdapter: AssignmentAdapter
-
-    private var isLeftAssignmentExpanded = true
-    private var isCompletedAssignmentExpanded = true
-    private var isExpiredAssignmentExpanded = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,121 +61,89 @@ class HomeFragment : Fragment() {
             startActivity(assignmentActivityIntent)
         }
 
-        observeViewModel()
-        if (viewModel.homepageData.value == null) viewModel.loadData()
-
-        dummyAssignmentList.clear()
-        dummyAssignmentList.addAll(
-            listOf(
-                Assignment.default,
-                Assignment.default.copy(
-                    id = 2,
-                    name = "AS2"
-                )
-            )
-        )
-
-        leftAssignmentAdapter = AssignmentAdapter(requireContext(), mainViewModel.token, dummyAssignmentList)
+        leftAssignmentAdapter = AssignmentAdapter(requireContext(), mainViewModel.token, leftAssignmentDataList)
         binding.recyclerViewLeftAssignment.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewLeftAssignment.adapter = leftAssignmentAdapter
 
-        completedAssignmentAdapter = AssignmentAdapter(requireContext(), mainViewModel.token, dummyAssignmentList)
+        completedAssignmentAdapter = AssignmentAdapter(requireContext(), mainViewModel.token, completedAssignmentDataList)
         binding.recyclerViewCompletedAssignment.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewCompletedAssignment.adapter = completedAssignmentAdapter
 
-        expiredAssignmentAdapter = AssignmentAdapter(requireContext(), mainViewModel.token, dummyAssignmentList)
+        expiredAssignmentAdapter = AssignmentAdapter(requireContext(), mainViewModel.token, expiredAssignmentDataList)
         binding.recyclerViewExpiredAssignment.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewExpiredAssignment.adapter = expiredAssignmentAdapter
 
         binding.recyclerViewLeftAssignment.visibility = View.VISIBLE
-        binding.iconButtonLeftAssignment.setOnClickListener {
-            toggleLeftAssignment()
-        }
+        binding.layoutLeftAssignment.setOnClickListener { viewModel.toggleLeftAssignment() }
+        binding.iconButtonLeftAssignment.setOnClickListener { viewModel.toggleLeftAssignment() }
 
         binding.recyclerViewCompletedAssignment.visibility = View.VISIBLE
-        binding.iconButtonCompletedAssignment.setOnClickListener {
-            toggleCompletedAssignment()
-        }
+        binding.layoutCompletedAssignment.setOnClickListener { viewModel.toggleCompletedAssignment() }
+        binding.iconButtonCompletedAssignment.setOnClickListener { viewModel.toggleCompletedAssignment() }
 
         binding.recyclerViewExpiredAssignment.visibility = View.VISIBLE
-        binding.iconButtonExpiredAssignment.setOnClickListener {
-            toggleExpiredAssignment()
+        binding.layoutExpiredAssignment.setOnClickListener { viewModel.toggleExpiredAssignment() }
+        binding.iconButtonExpiredAssignment.setOnClickListener { viewModel.toggleExpiredAssignment() }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.uiState
+                        .map { Triple(it.assignmentDataList, it.isLoading, it.errorMessage) }
+                        .distinctUntilChanged()
+                        .collect { (assignmentDataList, isLoading, errorMessage) ->
+                            leftAssignmentDataList.clear()
+                            leftAssignmentDataList.addAll(assignmentDataList.filter { (_, assignment) -> !assignment.isSubmitted })
+                            completedAssignmentDataList.clear()
+                            completedAssignmentDataList.addAll(assignmentDataList.filter { (_, assignment) -> assignment.isSubmitted })
+                            expiredAssignmentDataList.clear()
+                            expiredAssignmentDataList.addAll(assignmentDataList.filter { (_, assignment) -> !assignment.isSubmitted })
+
+                            binding.progressBarHome.visibility = if (isLoading) View.VISIBLE else View.GONE
+                            if (errorMessage != null) Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                        }
+                }
+                launch {
+                    viewModel.uiState
+                        .map { it.isLeftAssignmentExpanded }
+                        .distinctUntilChanged()
+                        .collect { isLeftAssignmentExpanded ->
+                            TransitionManager.beginDelayedTransition(
+                                binding.root as ViewGroup,
+                                AutoTransition().apply { duration = 200 }
+                            )
+                            binding.iconButtonLeftAssignment.setImageResource(if (isLeftAssignmentExpanded) R.drawable.ic_drop_down else R.drawable.ic_drop_up)
+                            binding.recyclerViewLeftAssignment.visibility = if (isLeftAssignmentExpanded) View.VISIBLE else View.GONE
+                        }
+                }
+                launch {
+                    viewModel.uiState
+                        .map { it.isCompletedAssignmentExpanded }
+                        .distinctUntilChanged()
+                        .collect { isCompletedAssignmentExpanded ->
+                            TransitionManager.beginDelayedTransition(
+                                binding.root as ViewGroup,
+                                AutoTransition().apply { duration = 200 }
+                            )
+                            binding.iconButtonCompletedAssignment.setImageResource(if (isCompletedAssignmentExpanded) R.drawable.ic_drop_down else R.drawable.ic_drop_up)
+                            binding.recyclerViewCompletedAssignment.visibility = if (isCompletedAssignmentExpanded) View.VISIBLE else View.GONE
+                        }
+                }
+                launch {
+                    viewModel.uiState
+                        .map { it.isExpiredAssignmentExpanded }
+                        .distinctUntilChanged()
+                        .collect { isExpiredAssignmentExpanded ->
+                            TransitionManager.beginDelayedTransition(
+                                binding.root as ViewGroup,
+                                AutoTransition().apply { duration = 200 }
+                            )
+                            binding.iconButtonExpiredAssignment.setImageResource(if (isExpiredAssignmentExpanded) R.drawable.ic_drop_down else R.drawable.ic_drop_up)
+                            binding.recyclerViewExpiredAssignment.visibility = if (isExpiredAssignmentExpanded) View.VISIBLE else View.GONE
+                        }
+                }
+            }
         }
-
-    }
-
-    private fun toggleLeftAssignment(){
-        isLeftAssignmentExpanded = !isLeftAssignmentExpanded
-
-        val recycler = binding.recyclerViewLeftAssignment
-        val icon = binding.iconButtonLeftAssignment
-
-        TransitionManager.beginDelayedTransition(
-            binding.root as ViewGroup,
-            AutoTransition().apply { duration = 200 }
-        )
-
-        recycler.visibility = if (isLeftAssignmentExpanded) View.VISIBLE else View.GONE
-
-        if (isLeftAssignmentExpanded) {
-            icon.setImageResource(R.drawable.ic_drop_down)
-        } else {
-            icon.setImageResource(R.drawable.ic_drop_up)
-        }
-    }
-
-    private fun toggleCompletedAssignment(){
-        isCompletedAssignmentExpanded = !isCompletedAssignmentExpanded
-
-        val recycler = binding.recyclerViewCompletedAssignment
-        val icon = binding.iconButtonCompletedAssignment
-
-        TransitionManager.beginDelayedTransition(
-            binding.root as ViewGroup,
-            AutoTransition().apply { duration = 200 }
-        )
-
-        recycler.visibility = if (isCompletedAssignmentExpanded) View.VISIBLE else View.GONE
-
-        if (isCompletedAssignmentExpanded) {
-            icon.setImageResource(R.drawable.ic_drop_down)
-        } else {
-            icon.setImageResource(R.drawable.ic_drop_up)
-        }
-    }
-
-    private fun toggleExpiredAssignment(){
-        isExpiredAssignmentExpanded = !isExpiredAssignmentExpanded
-
-        val recycler = binding.recyclerViewExpiredAssignment
-        val icon = binding.iconButtonExpiredAssignment
-
-        TransitionManager.beginDelayedTransition(
-            binding.root as ViewGroup,
-            AutoTransition().apply { duration = 200 }
-        )
-
-        recycler.visibility = if (isExpiredAssignmentExpanded) View.VISIBLE else View.GONE
-
-        if (isExpiredAssignmentExpanded) {
-            icon.setImageResource(R.drawable.ic_drop_down)
-        } else {
-            icon.setImageResource(R.drawable.ic_drop_up)
-        }
-    }
-
-    private fun observeViewModel() {
-        viewModel.homepageData.observe(viewLifecycleOwner) { dataList ->
-            dummyAssignmentList.clear()
-            dummyAssignmentList.addAll(dataList.map { it.assignment })
-        }
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            binding.progressBarHome.visibility = if (isLoading) View.VISIBLE else View.GONE
-        }
-        viewModel.error.observe(viewLifecycleOwner) { errorMessage ->
-            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
-        }
-        // TODO: Flow 기반, CombinedAssignment 재정의
     }
 
     override fun onDestroyView() {

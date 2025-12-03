@@ -11,7 +11,7 @@ interface CanvasApi {
     @GET("api/v1/courses?enrollment_state=active")
     fun getCourses(
         @Header("Authorization") token: String,
-        @Query("per_page") perPage: Int = 150
+        @Query("per_page") perPage: Int = 100
     ): Call<List<Course>>
 
     @GET("api/v1/courses/{courseId}")

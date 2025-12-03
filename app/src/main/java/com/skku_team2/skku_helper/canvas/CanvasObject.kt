@@ -2,6 +2,13 @@ package com.skku_team2.skku_helper.canvas
 
 import com.google.gson.annotations.SerializedName
 
+
+data class AssignmentData(
+    val course: Course,
+    val assignment: Assignment,
+)
+
+
 data class Course(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
@@ -51,6 +58,7 @@ data class Course(
         )
     }
 }
+
 
 data class Assignment(
     @SerializedName("id") val id: Int,
@@ -131,6 +139,8 @@ data class Assignment(
             submission = null
         )
     }
+
+    val isSubmitted get() = submission?.workflowState == "submitted" || submission?.workflowState == "graded"
 }
 
 data class Submission(
@@ -156,4 +166,13 @@ data class Submission(
     @SerializedName("has_seen_results") val hasSeenResults: Boolean,
     @SerializedName("overdue_and_needs_submission") val overdueAndNeedsSubmission: Boolean
      */
-)
+) {
+    companion object {
+        val default get() = Submission(
+            id = 0,
+            userId = 0,
+            workflowState = "untaken",
+            score = null
+        )
+    }
+}
