@@ -1,22 +1,20 @@
 package com.skku_team2.skku_helper.ui.main
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skku_team2.skku_helper.R
-import com.skku_team2.skku_helper.canvas.AssignmentData
 import com.skku_team2.skku_helper.canvas.AssignmentStatus
 import com.skku_team2.skku_helper.databinding.FragmentHomeBinding
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -31,12 +29,13 @@ class HomeFragment : Fragment() {
     private val mainViewModel: MainViewModel by activityViewModels()
     private val viewModel: HomeViewModel by viewModels()
 
-    private val leftAssignmentDataList = mutableListOf<AssignmentData>()
     private lateinit var leftAssignmentAdapter: AssignmentAdapter
-    private val completedAssignmentDataList = mutableListOf<AssignmentData>()
     private lateinit var completedAssignmentAdapter: AssignmentAdapter
-    private val expiredAssignmentDataList = mutableListOf<AssignmentData>()
     private lateinit var expiredAssignmentAdapter: AssignmentAdapter
+
+    private lateinit var leftAssignmentHeaderAdapter: AssignmentHeaderAdapter
+    private lateinit var completedAssignmentHeaderAdapter: AssignmentHeaderAdapter
+    private lateinit var expiredAssignmentHeaderAdapter: AssignmentHeaderAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,33 +45,25 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        leftAssignmentAdapter = AssignmentAdapter(requireContext(), mainViewModel.token, leftAssignmentDataList)
-        binding.recyclerViewLeftAssignment.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerViewLeftAssignment.adapter = leftAssignmentAdapter
+        leftAssignmentAdapter = AssignmentAdapter(requireContext(), mainViewModel.token)
+        completedAssignmentAdapter = AssignmentAdapter(requireContext(), mainViewModel.token)
+        expiredAssignmentAdapter = AssignmentAdapter(requireContext(), mainViewModel.token)
 
-        completedAssignmentAdapter = AssignmentAdapter(requireContext(), mainViewModel.token, completedAssignmentDataList)
-        binding.recyclerViewCompletedAssignment.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerViewCompletedAssignment.adapter = completedAssignmentAdapter
+        leftAssignmentHeaderAdapter = AssignmentHeaderAdapter(requireContext().getString(R.string.main_home_left_assignments)) { viewModel.toggleLeftAssignment() }
+        completedAssignmentHeaderAdapter = AssignmentHeaderAdapter(requireContext().getString(R.string.main_home_completed_assignments)) { viewModel.toggleCompletedAssignment() }
+        expiredAssignmentHeaderAdapter = AssignmentHeaderAdapter(requireContext().getString(R.string.main_home_expired_assignments)) { viewModel.toggleExpiredAssignment() }
 
-        expiredAssignmentAdapter = AssignmentAdapter(requireContext(), mainViewModel.token, expiredAssignmentDataList)
-        binding.recyclerViewExpiredAssignment.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerViewExpiredAssignment.adapter = expiredAssignmentAdapter
+        val concatAdapter = ConcatAdapter(
+            leftAssignmentHeaderAdapter, leftAssignmentAdapter,
+            completedAssignmentHeaderAdapter, completedAssignmentAdapter,
+            expiredAssignmentHeaderAdapter, expiredAssignmentAdapter
+        )
 
-        binding.recyclerViewLeftAssignment.visibility = View.VISIBLE
-        binding.layoutLeftAssignment.setOnClickListener { viewModel.toggleLeftAssignment() }
-        binding.iconButtonLeftAssignment.setOnClickListener { viewModel.toggleLeftAssignment() }
-
-        binding.recyclerViewCompletedAssignment.visibility = View.VISIBLE
-        binding.layoutCompletedAssignment.setOnClickListener { viewModel.toggleCompletedAssignment() }
-        binding.iconButtonCompletedAssignment.setOnClickListener { viewModel.toggleCompletedAssignment() }
-
-        binding.recyclerViewExpiredAssignment.visibility = View.VISIBLE
-        binding.layoutExpiredAssignment.setOnClickListener { viewModel.toggleExpiredAssignment() }
-        binding.iconButtonExpiredAssignment.setOnClickListener { viewModel.toggleExpiredAssignment() }
+        binding.recyclerViewHome.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerViewHome.adapter = concatAdapter
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -80,56 +71,19 @@ class HomeFragment : Fragment() {
                     mainViewModel.uiState
                         .map { Triple(it.assignmentDataList, it.isLoading, it.errorMessage) }
                         .distinctUntilChanged()
-                        .collect { (assignmentDataList, isLoading, errorMessage) ->
-                            leftAssignmentDataList.clear()
-                            leftAssignmentDataList.addAll(assignmentDataList.filter { (_, assignment) -> assignment.status == AssignmentStatus.Left })
-                            completedAssignmentDataList.clear()
-                            completedAssignmentDataList.addAll(assignmentDataList.filter { (_, assignment) -> assignment.status == AssignmentStatus.Completed })
-                            expiredAssignmentDataList.clear()
-                            expiredAssignmentDataList.addAll(assignmentDataList.filter { (_, assignment) -> assignment.status == AssignmentStatus.Expired })
-
-                            leftAssignmentAdapter.notifyDataSetChanged()
-                            completedAssignmentAdapter.notifyDataSetChanged()
-                            expiredAssignmentAdapter.notifyDataSetChanged()
-                        }
+                        .collect { updateLists() }
                 }
                 launch {
                     viewModel.uiState
-                        .map { it.isLeftAssignmentExpanded }
-                        .distinctUntilChanged()
-                        .collect { isLeftAssignmentExpanded ->
+                        .collect { state ->
                             TransitionManager.beginDelayedTransition(
                                 binding.root as ViewGroup,
                                 AutoTransition().apply { duration = 200 }
                             )
-                            binding.iconButtonLeftAssignment.setImageResource(if (isLeftAssignmentExpanded) R.drawable.ic_drop_down else R.drawable.ic_drop_up)
-                            binding.recyclerViewLeftAssignment.visibility = if (isLeftAssignmentExpanded) View.VISIBLE else View.GONE
-                        }
-                }
-                launch {
-                    viewModel.uiState
-                        .map { it.isCompletedAssignmentExpanded }
-                        .distinctUntilChanged()
-                        .collect { isCompletedAssignmentExpanded ->
-                            TransitionManager.beginDelayedTransition(
-                                binding.root as ViewGroup,
-                                AutoTransition().apply { duration = 200 }
-                            )
-                            binding.iconButtonCompletedAssignment.setImageResource(if (isCompletedAssignmentExpanded) R.drawable.ic_drop_down else R.drawable.ic_drop_up)
-                            binding.recyclerViewCompletedAssignment.visibility = if (isCompletedAssignmentExpanded) View.VISIBLE else View.GONE
-                        }
-                }
-                launch {
-                    viewModel.uiState
-                        .map { it.isExpiredAssignmentExpanded }
-                        .distinctUntilChanged()
-                        .collect { isExpiredAssignmentExpanded ->
-                            TransitionManager.beginDelayedTransition(
-                                binding.root as ViewGroup,
-                                AutoTransition().apply { duration = 200 }
-                            )
-                            binding.iconButtonExpiredAssignment.setImageResource(if (isExpiredAssignmentExpanded) R.drawable.ic_drop_down else R.drawable.ic_drop_up)
-                            binding.recyclerViewExpiredAssignment.visibility = if (isExpiredAssignmentExpanded) View.VISIBLE else View.GONE
+                            leftAssignmentHeaderAdapter.updateExpandState(state.isLeftAssignmentExpanded)
+                            completedAssignmentHeaderAdapter.updateExpandState(state.isCompletedAssignmentExpanded)
+                            expiredAssignmentHeaderAdapter.updateExpandState(state.isExpiredAssignmentExpanded)
+                            updateLists()
                         }
                 }
             }
@@ -139,5 +93,15 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun updateLists() {
+        val leftAssignmentDataList = mainViewModel.uiState.value.assignmentDataList.filter { (_, assignment) -> assignment.status == AssignmentStatus.Left }
+        val completedAssignmentDataList = mainViewModel.uiState.value.assignmentDataList.filter { (_, assignment) -> assignment.status == AssignmentStatus.Completed }
+        val expiredAssignmentDataList = mainViewModel.uiState.value.assignmentDataList.filter { (_, assignment) -> assignment.status == AssignmentStatus.Expired }
+
+        leftAssignmentAdapter.submitList(if (viewModel.uiState.value.isLeftAssignmentExpanded) leftAssignmentDataList else emptyList())
+        completedAssignmentAdapter.submitList(if (viewModel.uiState.value.isCompletedAssignmentExpanded) completedAssignmentDataList else emptyList())
+        expiredAssignmentAdapter.submitList(if (viewModel.uiState.value.isExpiredAssignmentExpanded) expiredAssignmentDataList else emptyList())
     }
 }

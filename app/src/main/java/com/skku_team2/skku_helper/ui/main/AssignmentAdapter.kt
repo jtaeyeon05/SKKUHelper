@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.R
@@ -18,19 +19,18 @@ import com.skku_team2.skku_helper.utils.getColorAttr
 class AssignmentAdapter(
     private val context: Context,
     private val token: String,
-    private val assignmentDataList: MutableList<AssignmentData>
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    companion object {
-        private val DiffCallback = object : DiffUtil.ItemCallback<AssignmentData>() {
-            override fun areItemsTheSame(oldItem: AssignmentData, newItem: AssignmentData): Boolean {
-                return oldItem.assignment.id == newItem.assignment.id
-            }
+) : RecyclerView.Adapter<AssignmentAdapter.ItemViewHolder>() {
+    private val diffCallback = object : DiffUtil.ItemCallback<AssignmentData>() {
+        override fun areItemsTheSame(oldItem: AssignmentData, newItem: AssignmentData): Boolean {
+            return oldItem.assignment.id == newItem.assignment.id
+        }
 
-            override fun areContentsTheSame(oldItem: AssignmentData, newItem: AssignmentData): Boolean {
-                return oldItem == newItem
-            }
+        override fun areContentsTheSame(oldItem: AssignmentData, newItem: AssignmentData): Boolean {
+            return oldItem == newItem
         }
     }
+
+    private val differ = AsyncListDiffer(this, diffCallback)
 
     inner class ItemViewHolder(
         private val binding: ItemAssignmentBinding
@@ -77,11 +77,15 @@ class AssignmentAdapter(
         }
     }
 
-    override fun getItemCount(): Int = assignmentDataList.size
+    fun submitList(list: List<AssignmentData>) {
+        differ.submitList(list.toList())
+    }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) = (holder as ItemViewHolder).bind(assignmentDataList[position])
+    override fun getItemCount(): Int = differ.currentList.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) =holder.bind(differ.currentList[position])
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = ItemAssignmentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ItemViewHolder(binding)
     }
