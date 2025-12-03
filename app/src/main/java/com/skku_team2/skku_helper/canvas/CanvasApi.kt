@@ -23,7 +23,8 @@ interface CanvasApi {
     @GET("api/v1/courses/{courseId}/assignments")
     fun getAssignments(
         @Header("Authorization") token: String,
-        @Path("courseId") courseId: Int
+        @Path("courseId") courseId: Int,
+        @Query("include[]") include: String = "submission"
     ): Call<List<Assignment>>
 
     @GET("api/v1/courses/{courseId}/assignments/{assignmentId}")
