@@ -106,7 +106,7 @@ class HomeFragment : Fragment() {
                             completedAssignmentAdapter.notifyDataSetChanged()
                             expiredAssignmentAdapter.notifyDataSetChanged()
 
-                            binding.progressBarHome.visibility = if (isLoading) View.VISIBLE else View.GONE
+                            binding.layoutLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
                             if (errorMessage != null) Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
                         }
                 }

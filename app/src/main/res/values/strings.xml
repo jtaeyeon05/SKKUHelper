@@ -20,6 +20,7 @@
 
     <!-- MainActivity -->
     <!-- MainActivity - Home -->
+    <string name="main_home_loading">Loading Assignments...</string>
     <string name="main_home_left_assignments">Left Assignments</string>
     <string name="main_home_completed_assignments">Completed Assignments</string>
     <string name="main_home_expired_assignments">Expired Assignments</string>
