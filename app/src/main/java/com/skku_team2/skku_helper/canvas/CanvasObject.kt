@@ -1,6 +1,12 @@
 package com.skku_team2.skku_helper.canvas
 
 import com.google.gson.annotations.SerializedName
+import com.skku_team2.skku_helper.utils.DateUtil
+
+
+enum class AssignmentStatus {
+    Left, Completed, Expired
+}
 
 
 data class AssignmentData(
@@ -140,13 +146,19 @@ data class Assignment(
         )
     }
 
-    val isSubmitted get() = submission?.workflowState == "submitted" || submission?.workflowState == "graded"
+    val isSubmitted get() = submission?.workflowState == "submitted" || submission?.workflowState == "graded" || submission?.workflowState == "pending_review"
+    val status: AssignmentStatus get() {
+        val remainingTime = DateUtil.calculateRemainingTime(dueAt)
+        return if (isSubmitted) AssignmentStatus.Completed
+        else if (remainingTime.type == DateUtil.TimeType.UPCOMING) AssignmentStatus.Left
+        else AssignmentStatus.Expired
+    }
 }
 
 data class Submission(
     @SerializedName("id") val id: Int,
     @SerializedName("user_id") val userId: Int,
-    @SerializedName("workflow_state") val workflowState: String, // "submitted", "graded", "untaken" etc.
+    @SerializedName("workflow_state") val workflowState: String, // "submitted", "graded", "pending_review", "unsubmitted", "untaken" etc.
     @SerializedName("score") val score: Double?,
 
     /* Additional Fields

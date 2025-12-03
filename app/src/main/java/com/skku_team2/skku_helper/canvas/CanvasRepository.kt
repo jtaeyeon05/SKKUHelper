@@ -49,6 +49,7 @@ class CanvasRepository(context: Context) {
 
         emit(Result.success(assignmentDataList.sortedBy { it.assignment.dueAt }))
     }.catch { e ->
+        Log.e("CanvasRepository", "[assignmentDataListFlow] error: $e")
         emit(Result.failure(e))
     }.flowOn(Dispatchers.IO)
 }

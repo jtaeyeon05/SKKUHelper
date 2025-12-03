@@ -1,5 +1,6 @@
 package com.skku_team2.skku_helper.ui.main
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.transition.TransitionManager
@@ -21,6 +22,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.skku_team2.skku_helper.canvas.AssignmentData
+import com.skku_team2.skku_helper.canvas.AssignmentStatus
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -48,6 +50,7 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -93,11 +96,15 @@ class HomeFragment : Fragment() {
                         .distinctUntilChanged()
                         .collect { (assignmentDataList, isLoading, errorMessage) ->
                             leftAssignmentDataList.clear()
-                            leftAssignmentDataList.addAll(assignmentDataList.filter { (_, assignment) -> !assignment.isSubmitted })
+                            leftAssignmentDataList.addAll(assignmentDataList.filter { (_, assignment) -> assignment.status == AssignmentStatus.Left })
                             completedAssignmentDataList.clear()
-                            completedAssignmentDataList.addAll(assignmentDataList.filter { (_, assignment) -> assignment.isSubmitted })
+                            completedAssignmentDataList.addAll(assignmentDataList.filter { (_, assignment) -> assignment.status == AssignmentStatus.Completed })
                             expiredAssignmentDataList.clear()
-                            expiredAssignmentDataList.addAll(assignmentDataList.filter { (_, assignment) -> !assignment.isSubmitted })
+                            expiredAssignmentDataList.addAll(assignmentDataList.filter { (_, assignment) -> assignment.status == AssignmentStatus.Expired })
+
+                            leftAssignmentAdapter.notifyDataSetChanged()
+                            completedAssignmentAdapter.notifyDataSetChanged()
+                            expiredAssignmentAdapter.notifyDataSetChanged()
 
                             binding.progressBarHome.visibility = if (isLoading) View.VISIBLE else View.GONE
                             if (errorMessage != null) Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()

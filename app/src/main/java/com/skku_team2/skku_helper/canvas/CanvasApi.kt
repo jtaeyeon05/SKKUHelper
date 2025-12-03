@@ -24,6 +24,7 @@ interface CanvasApi {
     fun getAssignments(
         @Header("Authorization") token: String,
         @Path("courseId") courseId: Int,
+        @Query("per_page") perPage: Int = 100,
         @Query("include[]") include: String = "submission"
     ): Call<List<Assignment>>
 

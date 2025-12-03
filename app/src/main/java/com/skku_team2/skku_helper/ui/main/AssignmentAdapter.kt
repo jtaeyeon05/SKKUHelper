@@ -46,21 +46,18 @@ class AssignmentAdapter(
                 binding.textViewState.text = "Submitted"
                 binding.textViewState.setTextColor(context.getColorAttr(R.attr.colorTertiary))
             } else {
-                when (val remainingTime = DateUtil.calculateRemainingTime(assignment.dueAt)) {
-                    is DateUtil.RemainingTime.Days -> {
-                        binding.textViewState.text = "${remainingTime.value} Days"
+                val remainingTime = DateUtil.calculateRemainingTime(assignment.dueAt)
+                when (remainingTime.type) {
+                    DateUtil.TimeType.UPCOMING -> {
+                        binding.textViewState.text = DateUtil.formatRemainingTime(remainingTime.remainingSeconds)
                         binding.textViewState.setTextColor(context.getColorAttr(R.attr.colorTertiary))
                     }
-                    is DateUtil.RemainingTime.Hours -> {
-                        binding.textViewState.text = "${remainingTime.value} Hours"
-                        binding.textViewState.setTextColor(context.getColorAttr(R.attr.colorTertiary))
-                    }
-                    is DateUtil.RemainingTime.Minutes -> {
-                        binding.textViewState.text = "${remainingTime.value} Minutes"
-                        binding.textViewState.setTextColor(context.getColorAttr(R.attr.colorTertiary))
-                    }
-                    is DateUtil.RemainingTime.Closed -> {
+                    DateUtil.TimeType.OVERDUE -> {
                         binding.textViewState.text = "Closed"
+                        binding.textViewState.setTextColor(context.getColorAttr(R.attr.colorErrorContainer))
+                    }
+                    DateUtil.TimeType.NO_DATA -> {
+                        binding.textViewState.text = "No Data"
                         binding.textViewState.setTextColor(context.getColorAttr(R.attr.colorErrorContainer))
                     }
                     else -> {
@@ -72,7 +69,7 @@ class AssignmentAdapter(
             binding.root.setOnClickListener {
                 val assignmentActivityIntent = Intent(context, AssignmentActivity::class.java).apply {
                     putExtra(IntentKey.EXTRA_TOKEN, token)
-                    putExtra(IntentKey.EXTRA_COURSE_ID, 66262)
+                    putExtra(IntentKey.EXTRA_COURSE_ID, course.id)
                     putExtra(IntentKey.EXTRA_ASSIGNMENT_ID, assignment.id)
                 }
                 context.startActivity(assignmentActivityIntent)
