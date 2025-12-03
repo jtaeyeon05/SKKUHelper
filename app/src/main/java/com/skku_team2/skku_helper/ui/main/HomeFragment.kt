@@ -1,8 +1,8 @@
 package com.skku_team2.skku_helper.ui.main
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
+import android.transition.AutoTransition
 import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
@@ -11,18 +11,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.skku_team2.skku_helper.R
-import com.skku_team2.skku_helper.databinding.FragmentHomeBinding
-import com.skku_team2.skku_helper.key.IntentKey
-import com.skku_team2.skku_helper.ui.assignment.AssignmentActivity
-import kotlin.getValue
-import android.transition.AutoTransition
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.skku_team2.skku_helper.R
 import com.skku_team2.skku_helper.canvas.AssignmentData
 import com.skku_team2.skku_helper.canvas.AssignmentStatus
+import com.skku_team2.skku_helper.databinding.FragmentHomeBinding
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -53,16 +49,6 @@ class HomeFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.buttonTestAssignment.setOnClickListener {
-            val assignmentActivityIntent =
-                Intent(requireContext(), AssignmentActivity::class.java).apply {
-                    putExtra(IntentKey.EXTRA_TOKEN, mainViewModel.token)
-                    putExtra(IntentKey.EXTRA_COURSE_ID, 66262)
-                    putExtra(IntentKey.EXTRA_ASSIGNMENT_ID, 1992814)
-                }
-            startActivity(assignmentActivityIntent)
-        }
 
         leftAssignmentAdapter = AssignmentAdapter(requireContext(), mainViewModel.token, leftAssignmentDataList)
         binding.recyclerViewLeftAssignment.layoutManager = LinearLayoutManager(requireContext())

@@ -15,149 +15,139 @@
         android:fillViewport="true"
         android:scrollbars="none">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingVertical="16dp"
-        android:orientation="vertical">
-
-        <!-- TODO -->
-        <Button
-            android:id="@+id/button_testAssignment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:text="Test Assignment" />
-        <!-- TODO -->
-
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="16dp" />
-
         <LinearLayout
-            android:id="@+id/layout_leftAssignment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_height="match_parent"
+            android:paddingVertical="16dp"
+            android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/layout_leftAssignment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="16dp">
+                android:paddingVertical="8dp"
+                android:orientation="vertical" >
 
-                <TextView
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="28sp"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorOnSurface"
-                    android:text="@string/main_home_left_assignments"/>
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp">
 
-                <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/iconButton_leftAssignment"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:tint="?attr/colorOnSurface"
-                    app:srcCompat="@drawable/ic_drop_down" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:text="@string/main_home_left_assignments"/>
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/iconButton_leftAssignment"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:tint="?attr/colorOnSurface"
+                        app:srcCompat="@drawable/ic_drop_down" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_leftAssignment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fillViewport="true"
+                    android:nestedScrollingEnabled="false"
+                    android:scrollbars="none" />
 
             </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_leftAssignment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fillViewport="true"
-                android:nestedScrollingEnabled="false"
-                android:scrollbars="none" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_completedAssignment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
             <LinearLayout
+                android:id="@+id/layout_completedAssignment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="16dp">
+                android:paddingVertical="8dp"
+                android:orientation="vertical" >
 
-                <TextView
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="28sp"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorOnSurface"
-                    android:text="@string/main_home_completed_assignments"/>
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp">
 
-                <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/iconButton_completedAssignment"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:tint="?attr/colorOnSurface"
-                    app:srcCompat="@drawable/ic_drop_down" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:text="@string/main_home_completed_assignments"/>
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/iconButton_completedAssignment"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:tint="?attr/colorOnSurface"
+                        app:srcCompat="@drawable/ic_drop_down" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_completedAssignment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fillViewport="true"
+                    android:nestedScrollingEnabled="false"
+                    android:scrollbars="none" />
 
             </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_completedAssignment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fillViewport="true"
-                android:nestedScrollingEnabled="false"
-                android:scrollbars="none" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/layout_expiredAssignment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
             <LinearLayout
+                android:id="@+id/layout_expiredAssignment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="16dp">
+                android:paddingVertical="8dp"
+                android:orientation="vertical" >
 
-                <TextView
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="28sp"
-                    android:textStyle="bold"
-                    android:textColor="?attr/colorOnSurface"
-                    android:text="@string/main_home_expired_assignments"/>
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp">
 
-                <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/iconButton_expiredAssignment"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:tint="?attr/colorOnSurface"
-                    app:srcCompat="@drawable/ic_drop_down" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="28sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:text="@string/main_home_expired_assignments"/>
+
+                    <androidx.appcompat.widget.AppCompatImageButton
+                        android:id="@+id/iconButton_expiredAssignment"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:tint="?attr/colorOnSurface"
+                        app:srcCompat="@drawable/ic_drop_down" />
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView_expiredAssignment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fillViewport="true"
+                    android:nestedScrollingEnabled="false"
+                    android:scrollbars="none" />
 
             </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_expiredAssignment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fillViewport="true"
-                android:nestedScrollingEnabled="false"
-                android:scrollbars="none" />
-
         </LinearLayout>
-
-    </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
