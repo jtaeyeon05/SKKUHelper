@@ -1,12 +1,17 @@
 package com.skku_team2.skku_helper.ui.main
 
 import android.os.Bundle
+import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.createGraph
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.fragment
@@ -17,6 +22,9 @@ import com.skku_team2.skku_helper.key.IntentKey
 import com.skku_team2.skku_helper.navigation.MainScreen
 import com.skku_team2.skku_helper.utils.getColorAttr
 import com.skku_team2.skku_helper.utils.isBright
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
@@ -80,6 +88,18 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(binding.main, this.getString(com.skku_team2.skku_helper.R.string.main_message_auto_login), Snackbar.LENGTH_SHORT).apply {
                 anchorView = binding.bottomNavigationViewMain
             }.show()
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState
+                    .map { Triple(it.assignmentDataList, it.isLoading, it.errorMessage) }
+                    .distinctUntilChanged()
+                    .collect { (assignmentDataList, isLoading, errorMessage) ->
+                        binding.layoutLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
+                        if (errorMessage != null) Toast.makeText(this@MainActivity, errorMessage, Toast.LENGTH_SHORT).show()
+                    }
+            }
         }
     }
 }

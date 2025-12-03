@@ -77,7 +77,7 @@ class HomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.uiState
+                    mainViewModel.uiState
                         .map { Triple(it.assignmentDataList, it.isLoading, it.errorMessage) }
                         .distinctUntilChanged()
                         .collect { (assignmentDataList, isLoading, errorMessage) ->
@@ -91,9 +91,6 @@ class HomeFragment : Fragment() {
                             leftAssignmentAdapter.notifyDataSetChanged()
                             completedAssignmentAdapter.notifyDataSetChanged()
                             expiredAssignmentAdapter.notifyDataSetChanged()
-
-                            binding.layoutLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
-                            if (errorMessage != null) Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
                         }
                 }
                 launch {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,170 +9,138 @@
     android:scrollbars="none"
     tools:context=".ui.start.LogInFragment">
 
-    <androidx.core.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:scrollbars="none">
+        android:paddingVertical="16dp"
+        android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/layout_leftAssignment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingVertical="16dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:paddingVertical="8dp"
+            android:orientation="vertical" >
 
             <LinearLayout
-                android:id="@+id/layout_leftAssignment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="8dp"
-                android:orientation="vertical" >
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingHorizontal="16dp">
+                    android:layout_weight="1"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:text="@string/main_home_left_assignments"/>
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="28sp"
-                        android:textStyle="bold"
-                        android:textColor="?attr/colorOnSurface"
-                        android:text="@string/main_home_left_assignments"/>
-
-                    <androidx.appcompat.widget.AppCompatImageButton
-                        android:id="@+id/iconButton_leftAssignment"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:tint="?attr/colorOnSurface"
-                        app:srcCompat="@drawable/ic_drop_down" />
-
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView_leftAssignment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fillViewport="true"
-                    android:nestedScrollingEnabled="false"
-                    android:scrollbars="none" />
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/iconButton_leftAssignment"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:tint="?attr/colorOnSurface"
+                    app:srcCompat="@drawable/ic_drop_down" />
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/layout_completedAssignment"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_leftAssignment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="8dp"
-                android:orientation="vertical" >
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingHorizontal="16dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="28sp"
-                        android:textStyle="bold"
-                        android:textColor="?attr/colorOnSurface"
-                        android:text="@string/main_home_completed_assignments"/>
-
-                    <androidx.appcompat.widget.AppCompatImageButton
-                        android:id="@+id/iconButton_completedAssignment"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:tint="?attr/colorOnSurface"
-                        app:srcCompat="@drawable/ic_drop_down" />
-
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView_completedAssignment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fillViewport="true"
-                    android:nestedScrollingEnabled="false"
-                    android:scrollbars="none" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_expiredAssignment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingVertical="8dp"
-                android:orientation="vertical" >
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingHorizontal="16dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="28sp"
-                        android:textStyle="bold"
-                        android:textColor="?attr/colorOnSurface"
-                        android:text="@string/main_home_expired_assignments"/>
-
-                    <androidx.appcompat.widget.AppCompatImageButton
-                        android:id="@+id/iconButton_expiredAssignment"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:tint="?attr/colorOnSurface"
-                        app:srcCompat="@drawable/ic_drop_down" />
-
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView_expiredAssignment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fillViewport="true"
-                    android:nestedScrollingEnabled="false"
-                    android:scrollbars="none" />
-
-            </LinearLayout>
+                android:fillViewport="true"
+                android:nestedScrollingEnabled="false"
+                android:scrollbars="none" />
 
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
-
-    <LinearLayout
-        android:id="@+id/layout_loading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:background="?attr/colorSurface" >
-
-        <ProgressBar
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/layout_completedAssignment"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="?android:attr/progressBarStyle" />
+            android:paddingVertical="8dp"
+            android:orientation="vertical" >
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="16dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:text="@string/main_home_completed_assignments"/>
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/iconButton_completedAssignment"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:tint="?attr/colorOnSurface"
+                    app:srcCompat="@drawable/ic_drop_down" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_completedAssignment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"
+                android:nestedScrollingEnabled="false"
+                android:scrollbars="none" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_expiredAssignment"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/main_home_loading"/>
+            android:paddingVertical="8dp"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:text="@string/main_home_expired_assignments"/>
+
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/iconButton_expiredAssignment"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:tint="?attr/colorOnSurface"
+                    app:srcCompat="@drawable/ic_drop_down" />
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_expiredAssignment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fillViewport="true"
+                android:nestedScrollingEnabled="false"
+                android:scrollbars="none" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</FrameLayout>
+</androidx.core.widget.NestedScrollView>
