@@ -58,12 +58,81 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_assignment"
+            android:id="@+id/recyclerView_leftAssignment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fillViewport="true"
             android:scrollbars="none" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface"
+                android:text="@string/main_home_completed_assignments"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/iconButton_completedAssignment"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="?attr/colorOnSurface"
+                app:srcCompat="@drawable/ic_drop_down" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_completedAssignment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="none" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface"
+                android:text="@string/main_home_expired_assignments"/>
+
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/iconButton_expiredAssignment"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="?attr/colorOnSurface"
+                app:srcCompat="@drawable/ic_drop_down" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_expiredAssignment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="none" />
+
+
+
     </LinearLayout>
+
+
+
 
 </ScrollView>
