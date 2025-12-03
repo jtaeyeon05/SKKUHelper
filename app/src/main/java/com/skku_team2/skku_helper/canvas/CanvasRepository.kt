@@ -3,6 +3,7 @@ package com.skku_team2.skku_helper.canvas
 import android.content.Context
 import android.util.Log
 import com.skku_team2.skku_helper.key.PrefKey
+import com.skku_team2.skku_helper.utils.DateUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -16,7 +17,7 @@ class CanvasRepository(context: Context) {
     private val sharedPreferences = context.applicationContext.getSharedPreferences(PrefKey.Settings.key, Context.MODE_PRIVATE)
     private val client = CanvasClient.api
 
-    val assignmentDataListFlow = flow {
+    fun getAssignmentDataListFlow(showOnlyThisSemester: Boolean = true) = flow {
         val token = sharedPreferences.getString(PrefKey.Settings.TOKEN, null)
         Log.d("CanvasRepository", "[assignmentDataListFlow] Token: $token")
         if (token.isNullOrBlank()) {
@@ -34,20 +35,28 @@ class CanvasRepository(context: Context) {
 
         val assignmentDataList = coroutineScope {
             courseList.map { course ->
-                async {
-                    val assignmentList = client.getAssignments(apiToken, course.id).execute().body()
-                    Log.d("CanvasRepository", "[assignmentDataListFlow] assignmentList (${course.name}): ${assignmentList?.size}")
-                    assignmentList?.map { assignment ->
-                        AssignmentData(
-                            course = course,
-                            assignment = assignment
-                        )
-                    } ?: emptyList()
+                val remainingSeconds = DateUtil.calculateRemainingTime(course.createdAt).remainingSeconds
+                if (showOnlyThisSemester && remainingSeconds != null && -remainingSeconds > 180 * 24 * 60 * 60) {
+                    async {
+                        emptyList()
+                    }
+                } else {
+                    async {
+                        val assignmentList = client.getAssignments(apiToken, course.id).execute().body()
+                        Log.d("CanvasRepository", "[assignmentDataListFlow] assignmentList (${course.name}): ${assignmentList?.size}")
+                        assignmentList?.map { assignment ->
+                            AssignmentData(
+                                course = course,
+                                assignment = assignment
+                            )
+                        } ?: emptyList()
+                    }
                 }
             }.awaitAll().flatten()
         }
 
-        emit(Result.success(assignmentDataList.sortedBy { it.assignment.dueAt }))
+        val sortedList = assignmentDataList.sortedWith(compareBy(nullsLast()) { it.assignment.dueAt })
+        emit(Result.success(sortedList))
     }.catch { e ->
         Log.e("CanvasRepository", "[assignmentDataListFlow] error: $e")
         emit(Result.failure(e))

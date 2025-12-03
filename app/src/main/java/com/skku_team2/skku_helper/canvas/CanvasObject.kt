@@ -5,7 +5,7 @@ import com.skku_team2.skku_helper.utils.DateUtil
 
 
 enum class AssignmentStatus {
-    Left, Completed, Expired
+    Left, Completed, Expired,
 }
 
 

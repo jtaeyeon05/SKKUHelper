@@ -40,7 +40,7 @@ class MainViewModel(
     suspend fun fetch() {
         _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
-        repository.assignmentDataListFlow
+        repository.getAssignmentDataListFlow()
             .collect { result ->
                 result
                     .onSuccess { assignmentDataList ->
