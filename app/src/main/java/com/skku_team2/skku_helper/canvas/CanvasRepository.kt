@@ -52,4 +52,28 @@ class CanvasRepository(context: Context) {
         Log.e("CanvasRepository", "[assignmentDataListFlow] error: $e")
         emit(Result.failure(e))
     }.flowOn(Dispatchers.IO)
+
+    val userProfileFlow = flow {
+        val token = sharedPreferences.getString(PrefKey.Settings.TOKEN, null)
+        Log.d("CanvasRepository", "[userProfileFlow] Token: $token")
+        if (token.isNullOrBlank()) {
+            emit(Result.failure(Exception("Failed on Token Loading.")))
+            return@flow
+        }
+
+        val apiToken = "Bearer $token"
+        val response = client.getUserProfile(apiToken).execute()
+
+        if (response.isSuccessful && response.body() != null) {
+            val profile = response.body()!!
+            Log.d("CanvasRepository", "[userProfileFlow] Success: ${profile.name}")
+            emit(Result.success(profile))
+        } else {
+            Log.e("CanvasRepository", "[userProfileFlow] Failed: ${response.code()}")
+            emit(Result.failure(Exception("Failed on Profile Loading: ${response.code()}")))
+        }
+    }.catch { e ->
+        Log.e("CanvasRepository", "[userProfileFlow] error: $e")
+        emit(Result.failure(e))
+    }.flowOn(Dispatchers.IO)
 }

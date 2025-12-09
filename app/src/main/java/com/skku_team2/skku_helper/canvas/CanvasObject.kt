@@ -188,3 +188,37 @@ data class Submission(
         )
     }
 }
+
+data class UserProfile(
+    @SerializedName("id") val id: Int,
+    @SerializedName("name") val name: String,
+    @SerializedName("short_name") val shortName: String,
+    @SerializedName("primary_email") val primaryEmail: String?,
+    @SerializedName("login_id") val loginId: String?,
+    @SerializedName("avatar_url") val avatarUrl: String?,
+
+    /* Additional Fields
+    @SerializedName("sortable_name") val sortableName: String?,
+    @SerializedName("title") val title: String?,
+    @SerializedName("bio") val bio: String?,
+    @SerializedName("pronunciation") val pronunciation: String?,
+    @SerializedName("sis_user_id") val sisUserId: String?,
+    @SerializedName("lti_user_id") val ltiUserId: String?,
+    @SerializedName("calendar") val calendar: String?, // Object or String depending on API details
+    @SerializedName("time_zone") val timeZone: String?,
+    @SerializedName("locale") val locale: String?,
+    @SerializedName("k5_user") val k5User: Boolean?,
+    @SerializedName("use_classic_font_in_k5") val useClassicFontInK5: Boolean?
+     */
+) {
+    companion object {
+        val default get() = UserProfile(
+            id = 0,
+            name = "Student Name",
+            shortName = "Student",
+            primaryEmail = "student@skku.edu",
+            loginId = "student",
+            avatarUrl = null
+        )
+    }
+}

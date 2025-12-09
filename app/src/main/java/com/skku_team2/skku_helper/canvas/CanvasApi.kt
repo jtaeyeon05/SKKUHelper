@@ -34,4 +34,9 @@ interface CanvasApi {
         @Path("courseId") courseId: Int,
         @Path("assignmentId") assignmentId: Int
     ): Call<Assignment>
+
+    @GET("api/v1/users/self/profile")
+    fun getUserProfile(
+        @Header("Authorization") token: String
+    ): Call<UserProfile>
 }
