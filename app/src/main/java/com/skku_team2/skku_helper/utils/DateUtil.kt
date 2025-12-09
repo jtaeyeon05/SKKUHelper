@@ -1,5 +1,6 @@
 package com.skku_team2.skku_helper.utils
 
+import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
@@ -49,5 +50,19 @@ object DateUtil {
             minutes > 0 -> "$minutes Minutes"
             else -> ""
         }
+    }
+
+    fun parseOffsetDateTime(dueAt: String?): OffsetDateTime? {
+        if (dueAt == null) return null
+        return try {
+            OffsetDateTime.parse(dueAt, canvasDateTimeFormatter)
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+    fun toLocalDate(dueAt: String?): LocalDate? {
+        val dateTime = parseOffsetDateTime(dueAt) ?: return null
+        return dateTime.toLocalDate()
     }
 }

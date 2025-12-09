@@ -7,59 +7,17 @@
     android:padding="16dp"
     tools:context=".ui.start.LogInFragment">
 
-    <TextView
+    <CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_calendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="calendar" />
-
-    <Space
-        android:layout_width="0dp"
-        android:layout_height="16dp" />
-
-    <TextView
-        android:id="@+id/textView_test"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="calendar" />
-
-    <Space
-        android:layout_width="0dp"
-        android:layout_height="16dp" />
-
-    <Button
-        android:id="@+id/button_test1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TEST1" />
-
-    <Space
-        android:layout_width="0dp"
-        android:layout_height="16dp" />
-
-    <Button
-        android:id="@+id/button_test2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TEST2" />
-
-    <Space
-        android:layout_width="0dp"
-        android:layout_height="16dp" />
-
-    <Button
-        android:id="@+id/button_test3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TEST3" />
-
-    <Space
-        android:layout_width="0dp"
-        android:layout_height="16dp" />
-
-    <Button
-        android:id="@+id/button_test4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TEST4" />
+        android:fillViewport="true"
+        android:nestedScrollingEnabled="false"
+        android:scrollbars="none" />
 
 </LinearLayout>
