@@ -55,6 +55,97 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
+    <TextView
+        android:id="@+id/tv_chart_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Achievement rate"
+        android:textAppearance="?attr/textAppearanceTitleSmall"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card_profile"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_chart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="2dp"
+        app:strokeColor="?attr/colorOutlineVariant"
+        app:strokeWidth="1dp"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:layout_constraintTop_toBottomOf="@id/tv_chart_title">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="24dp">
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progress_achievement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:progress="0"
+                app:trackThickness="12dp"
+                app:indicatorSize="120dp"
+                app:trackColor="?attr/colorSurfaceVariant"
+                app:indicatorColor="?attr/colorPrimary"
+                app:trackCornerRadius="6dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_achievement_percent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0%"
+                android:textAppearance="?attr/textAppearanceHeadlineMedium"
+                android:textStyle="bold"
+                android:textColor="?attr/colorPrimary"
+                app:layout_constraintStart_toStartOf="@id/progress_achievement"
+                app:layout_constraintEnd_toEndOf="@id/progress_achievement"
+                app:layout_constraintTop_toTopOf="@id/progress_achievement"
+                app:layout_constraintBottom_toBottomOf="@id/progress_achievement"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="24dp"
+                app:layout_constraintStart_toEndOf="@id/progress_achievement"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Completed task"
+                    android:textAppearance="?attr/textAppearanceLabelMedium"
+                    android:textColor="?attr/colorOutline"/>
+
+                <TextView
+                    android:id="@+id/tv_achievement_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 / 0"
+                    android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:id="@+id/tv_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cheer up!"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"/>
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
     <Button
         android:id="@+id/btn_logout"
         style="@style/Widget.Material3.Button.OutlinedButton"

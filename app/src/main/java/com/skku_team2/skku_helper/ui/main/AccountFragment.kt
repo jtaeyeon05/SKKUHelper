@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -21,8 +22,8 @@ import kotlinx.coroutines.launch
 class AccountFragment : Fragment() {
     private var _binding: FragmentAccountBinding? = null
     private val binding get() = _binding!!
-
     private val accountViewModel: AccountViewModel by viewModels()
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,12 +40,40 @@ class AccountFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 accountViewModel.uiState.collect { state ->
                     binding.progressBar.visibility = if (state.isLoading) View.VISIBLE else View.GONE
-
                     binding.tvName.text = state.userProfile.name
                     binding.tvEmail.text = state.userProfile.primaryEmail ?: "No Email"
 
                     if (state.errorMessage != null) {
                         Toast.makeText(requireContext(), state.errorMessage, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.uiState.collect { state ->
+                    val totalAssignments = state.assignmentDataList.size
+
+                    val completedAssignments = state.assignmentDataList.count {
+                        it.assignment.isSubmitted
+                    }
+
+                    val percentage = if (totalAssignments > 0) {
+                        (completedAssignments * 100) / totalAssignments
+                    } else {
+                        0
+                    }
+
+                    binding.progressAchievement.setProgress(percentage, true)
+                    binding.tvAchievementPercent.text = "$percentage%"
+                    binding.tvAchievementCount.text = "$completedAssignments / $totalAssignments"
+
+                    binding.tvMessage.text = when {
+                        percentage == 100 -> "Perfect!"
+                        percentage >= 80 -> "Almost done!"
+                        percentage >= 50 -> "More than halfway!"
+                        else -> "Cheer up!"
                     }
                 }
             }
