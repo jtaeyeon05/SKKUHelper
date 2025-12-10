@@ -80,7 +80,7 @@ class DetailFragment : Fragment() {
                                     binding.tableRowGrade.visibility = View.GONE
                                 } else {
                                     binding.tableRowGrade.visibility = View.VISIBLE
-                                    binding.tableTextGrade.text = "$grade / $${assignmentState.pointsPossible}"
+                                    binding.tableTextGrade.text = "$score / ${assignmentState.pointsPossible}"
                                 }
                                 if (submissionType == null) {
                                     binding.tableRowType.visibility = View.GONE
