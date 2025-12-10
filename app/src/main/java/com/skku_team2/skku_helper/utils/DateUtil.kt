@@ -18,6 +18,10 @@ object DateUtil {
         val type: TimeType
     )
 
+    fun parseTime(time: String): OffsetDateTime {
+        return OffsetDateTime.parse(time, canvasDateTimeFormatter)
+    }
+
     fun calculateRemainingTime(dueAt: String?): DateResult {
         if (dueAt == null) return DateResult(null, TimeType.NO_DATA)
 

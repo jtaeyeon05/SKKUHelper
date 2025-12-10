@@ -35,6 +35,22 @@
     <string name="assignment_information">Information</string>
     <!-- AssignmentActivity - Detail -->
     <string name="assignment_detail">Detail</string>
+    <string name="assignment_detail_open_assignment">Open Assignment</string>
+    <string name="assignment_detail_open_submission">Open Submission</string>
+    <string name="assignment_detail_description">Description</string>
+    <string name="assignment_detail_description_fail">Description does not exist</string>
+    <string name="assignment_detail_submission">Submission</string>
+    <string name="assignment_detail_submission_grade">Grade</string>
+    <string name="assignment_detail_submission_grade_default">0.0 / 0.0</string>
+    <string name="assignment_detail_submission_type">Type</string>
+    <string name="assignment_detail_submission_type_default">Assignment</string>
+    <string name="assignment_detail_submission_submission_date">Submission Date</string>
+    <string name="assignment_detail_submission_submission_date_default">2025/12/25 10:10:10</string>
+    <string name="assignment_detail_submission_submission_date_late">Late Submission</string>
+    <string name="assignment_detail_submission_grading_date">Grading Date</string>
+    <string name="assignment_detail_submission_grading_date_default">2025/12/25 10:10:10</string>
+    <string name="assignment_detail_submission_attachments">Attachments</string>
+    <string name="assignment_detail_submission_attachments_default">ABC.pdf</string>
 
     <!-- ETC -->
     <string name="dialog_loading_message">Loading</string>
