@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/deleteItem"
-        android:icon="@drawable/ic_delete"
-        android:title="@string/assignment_menu_delete" />
+        android:id="@+id/item_information"
+        android:icon="@drawable/ic_information"
+        android:title="@string/assignment_information" />
 
     <item
-        android:id="@+id/editItem"
-        android:icon="@drawable/ic_edit"
-        android:title="@string/assignment_menu_edit" />
+        android:id="@+id/item_detail"
+        android:icon="@drawable/ic_docs"
+        android:title="@string/assignment_detail" />
 
 </menu>

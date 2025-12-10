@@ -10,10 +10,15 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.createGraph
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.fragment
 import com.skku_team2.skku_helper.R
 import com.skku_team2.skku_helper.databinding.ActivityAssignmentBinding
+import com.skku_team2.skku_helper.navigation.AssignmentScreen
 import com.skku_team2.skku_helper.utils.getColorAttr
 import com.skku_team2.skku_helper.utils.isBright
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
@@ -42,22 +47,31 @@ class AssignmentActivity : AppCompatActivity() {
             insets
         }
 
+        binding.toolbarLayoutAssignment.title = viewModel.assignmentState.value?.name ?: "Assignment"
+        binding.toolbarLayoutAssignment.subtitle = viewModel.courseState.value?.name ?: "Course"
         binding.topAppBarAssignment.setNavigationOnClickListener { finish() }
 
-        binding.textViewTest.text = """
-            token = ${viewModel.token?.substring(0, 10)}...
-            courseId = ${viewModel.courseId}
-            assignmentId = ${viewModel.assignmentId}
-        """.trimIndent()
+        val navHostFragment = supportFragmentManager.findFragmentById(binding.fragmentContainerView.id) as NavHostFragment
+        val navController = navHostFragment.navController
+        navController.graph = navController.createGraph(AssignmentScreen.Information) {
+            fragment<InformationFragment, AssignmentScreen.Information> {
+                label = "Information"
+            }
+            fragment<DetailFragment, AssignmentScreen.Detail> {
+                label = "Detail"
+            }
+        }
 
-        binding.bottomNavigationViewAssignment.isItemActiveIndicatorEnabled = false
+        if (savedInstanceState == null) binding.bottomNavigationViewAssignment.selectedItemId = R.id.item_information
         binding.bottomNavigationViewAssignment.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.deleteItem -> {
-                    false
+                R.id.item_information -> {
+                    navController.navigate(AssignmentScreen.Information)
+                    true
                 }
-                R.id.editItem -> {
-                    false
+                R.id.item_detail -> {
+                    navController.navigate(AssignmentScreen.Detail)
+                    true
                 }
                 else -> false
             }
@@ -66,31 +80,14 @@ class AssignmentActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.courseState.collect { courseState ->
-                        if (courseState != null) {
-                            binding.textViewTest.text = "${binding.textViewTest.text}\n" +
-                                    "\n" +
-                                    "course name: ${courseState?.name}\n" +
-                                    "course originalName: ${courseState?.originalName}\n" +
-                                    "course courseCode: ${courseState?.courseCode}\n" +
-                                    "course uuid: ${courseState?.uuid}\n" +
-                                    "course accountId: ${courseState?.accountId}\n" +
-                                    "course createdAt: ${courseState?.createdAt}\n"
-                        }
-                    }
-                }
-                launch {
-                    viewModel.assignmentState.collect { assignmentState ->
-                        if (assignmentState != null) {
-                            binding.textViewTest.text = "${binding.textViewTest.text}\n" +
-                                    "\n" +
-                                    "assignment name: ${assignmentState?.name}\n" +
-                                    "assignment description: ${assignmentState?.description}\n" +
-                                    "assignment position: ${assignmentState?.position}\n" +
-                                    "assignment courseId: ${assignmentState?.courseId}\n" +
-                                    "assignment isQuizAssignment: ${assignmentState?.isQuizAssignment}\n" +
-                                    "assignment createdAt: ${assignmentState?.createdAt}\n"
-                        }
+                    combine(
+                        viewModel.courseState,
+                        viewModel.assignmentState
+                    ) { courseState, assignmentState ->
+                        courseState to assignmentState
+                    }.collect { (courseState, assignmentState) ->
+                        binding.toolbarLayoutAssignment?.title = assignmentState?.name ?: "Assignment"
+                        binding.toolbarLayoutAssignment?.subtitle = courseState?.name ?: "Course"
                     }
                 }
                 launch {

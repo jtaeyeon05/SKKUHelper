@@ -33,20 +33,12 @@
             app:navigationIcon="@drawable/ic_back" />
     </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-    <ScrollView
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:fillViewport="true"
-        android:scrollbars="none">
-
-        <TextView
-            android:id="@+id/textView_test"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="TEST" />
-
-    </ScrollView>
+        android:name="androidx.navigation.fragment.NavHostFragment" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView_assignment"

@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
 
+// TODO: Move to MainViewModel, token from savedStateHandle
 class CanvasRepository(context: Context) {
     private val sharedPreferences = context.applicationContext.getSharedPreferences(PrefKey.Settings.key, Context.MODE_PRIVATE)
     private val client = CanvasClient.api

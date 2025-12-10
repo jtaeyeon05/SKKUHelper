@@ -31,9 +31,10 @@
     <string name="main_message_auto_login">Automatic LogIn Success!</string>
 
     <!-- AssignmentActivity -->
-    <string name="assignment_menu_delete">Delete</string>
-    <string name="assignment_menu_edit">Edit</string>
-    <string name="assignment_menu_check">Check</string>
+    <!-- AssignmentActivity - Information -->
+    <string name="assignment_information">Information</string>
+    <!-- AssignmentActivity - Detail -->
+    <string name="assignment_detail">Detail</string>
 
     <!-- ETC -->
     <string name="dialog_loading_message">Loading</string>

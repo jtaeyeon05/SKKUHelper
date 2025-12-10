@@ -24,3 +24,13 @@ sealed interface MainScreen {
     @Serializable
     data object Account: MainScreen
 }
+
+@Serializable
+sealed interface AssignmentScreen {
+
+    @Serializable
+    data object Information: MainScreen
+
+    @Serializable
+    data object Detail: MainScreen
+}
