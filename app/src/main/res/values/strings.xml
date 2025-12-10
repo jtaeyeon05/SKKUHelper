@@ -33,17 +33,40 @@
     <!-- AssignmentActivity -->
     <!-- AssignmentActivity - Information -->
     <string name="assignment_information">Information</string>
+    <string name="assignment_information_description">Description</string>
+    <string name="assignment_information_description_fail">Description does not exist</string>
     <!-- AssignmentActivity - Detail -->
     <string name="assignment_detail">Detail</string>
     <string name="assignment_detail_open_assignment">Open Assignment</string>
     <string name="assignment_detail_open_submission">Open Submission</string>
-    <string name="assignment_detail_description">Description</string>
-    <string name="assignment_detail_description_fail">Description does not exist</string>
+    <string name="assignment_detail_information">Information</string>
+    <string name="assignment_detail_name">Assignment</string>
+    <string name="assignment_detail_name_default">Assignment Name</string>
+    <string name="assignment_detail_course">Course</string>
+    <string name="assignment_detail_course_default">Course Name</string>
+    <string name="assignment_detail_assignmentType">Type</string>
+    <string name="assignment_detail_assignmentType_default">Type</string>
+    <string name="assignment_detail_maxPoints">Max Points</string>
+    <string name="assignment_detail_maxPoints_default">10.0</string>
+    <string name="assignment_detail_submitted">Submitted</string>
+    <string name="assignment_detail_submitted_default">Yes</string>
+    <string name="assignment_detail_locked">Locked</string>
+    <string name="assignment_detail_locked_default">No</string>
+    <string name="assignment_detail_createdDate">Created Date</string>
+    <string name="assignment_detail_createdDate_default">2025/12/25 10:10:10</string>
+    <string name="assignment_detail_updatedDate">Updated Date</string>
+    <string name="assignment_detail_updatedDate_default">2025/12/25 10:10:10</string>
+    <string name="assignment_detail_dueDate">Due Date</string>
+    <string name="assignment_detail_dueDate_default">2025/12/25 10:10:10</string>
+    <string name="assignment_detail_lockedDate">Locked Date</string>
+    <string name="assignment_detail_lockedDate_default">2025/12/25 10:10:10</string>
+    <string name="assignment_detail_unlockedDate">Unlocked Date</string>
+    <string name="assignment_detail_unlockedDate_default">2025/12/25 10:10:10</string>
     <string name="assignment_detail_submission">Submission</string>
     <string name="assignment_detail_submission_grade">Grade</string>
     <string name="assignment_detail_submission_grade_default">0.0 / 0.0</string>
-    <string name="assignment_detail_submission_type">Type</string>
-    <string name="assignment_detail_submission_type_default">Assignment</string>
+    <string name="assignment_detail_submission_submissionType">Type</string>
+    <string name="assignment_detail_submission_submissionType_default">Assignment</string>
     <string name="assignment_detail_submission_submission_date">Submission Date</string>
     <string name="assignment_detail_submission_submission_date_default">2025/12/25 10:10:10</string>
     <string name="assignment_detail_submission_submission_date_late">Late Submission</string>

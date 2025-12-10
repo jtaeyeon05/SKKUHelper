@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.net.toUri
-import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -41,12 +40,11 @@ class DetailFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     combine(
-                        assignmentViewModel.userState,
                         assignmentViewModel.courseState,
                         assignmentViewModel.assignmentState
-                    ) { userState, courseState, assignmentState ->
-                        Triple(userState, courseState, assignmentState)
-                    }.collect { (userState, courseState, assignmentState) ->
+                    ) { courseState, assignmentState ->
+                        courseState to assignmentState
+                    }.collect { (courseState, assignmentState) ->
                         binding.buttonAssignment.setOnClickListener {
                             val intent = Intent(Intent.ACTION_VIEW, assignmentState?.htmlUrl?.toUri())
                             requireContext().startActivity(intent)
@@ -61,14 +59,51 @@ class DetailFragment : Fragment() {
                             }
                         }
 
-                        if (assignmentState?.description == null || assignmentState.description.isEmpty()) {
-                            binding.layoutDescription.visibility = View.GONE
+                        if (assignmentState == null || courseState == null) {
+                            binding.layoutInformation.visibility = View.GONE
                         } else {
-                            binding.layoutDescription.visibility = View.VISIBLE
-                            binding.textViewHtml.text = HtmlCompat.fromHtml(
-                                assignmentState.description,
-                                HtmlCompat.FROM_HTML_MODE_LEGACY
-                            )
+                            binding.layoutInformation.visibility = View.VISIBLE
+                            binding.tableTextName.text = assignmentState.name
+                            binding.tableTextCourse.text = courseState.name
+                            binding.tableTextAssignmentType.text = if (assignmentState.isQuizAssignment) "Quiz" else "Assignment"
+                            if (assignmentState.pointsPossible == null) {
+                                binding.tableRowMaxPoints.visibility = View.GONE
+                            } else {
+                                binding.tableRowMaxPoints.visibility = View.VISIBLE
+                                binding.tableTextMaxPoints.text = assignmentState.pointsPossible.toString()
+                            }
+                            binding.tableTextSubmitted.text = if (assignmentState.isSubmitted) "Yes" else "No"
+                            binding.tableTextLocked.text = if (assignmentState.lockedForUser ?: false) "Yes" else "No"
+                            if (assignmentState.createdAt == null) {
+                                binding.tableRowCreatedDate.visibility = View.GONE
+                            } else {
+                                binding.tableRowCreatedDate.visibility = View.VISIBLE
+                                binding.tableTextCreatedDate.text = DateUtil.parseTime(assignmentState.createdAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
+                            }
+                            if (assignmentState.updatedAt == null) {
+                                binding.tableRowUpdatedDate.visibility = View.GONE
+                            } else {
+                                binding.tableRowUpdatedDate.visibility = View.VISIBLE
+                                binding.tableTextUpdatedDate.text = DateUtil.parseTime(assignmentState.updatedAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
+                            }
+                            if (assignmentState.dueAt == null) {
+                                binding.tableRowDueDate.visibility = View.GONE
+                            } else {
+                                binding.tableRowDueDate.visibility = View.VISIBLE
+                                binding.tableTextDueDate.text = DateUtil.parseTime(assignmentState.dueAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
+                            }
+                            if (assignmentState.lockAt == null || assignmentState.lockedForUser == false) {
+                                binding.tableRowLockedDate.visibility = View.GONE
+                            } else {
+                                binding.tableRowLockedDate.visibility = View.VISIBLE
+                                binding.tableTextLockedDate.text = DateUtil.parseTime(assignmentState.lockAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
+                            }
+                            if (assignmentState.unlockAt == null || assignmentState.lockedForUser == true) {
+                                binding.tableRowUnlockedDate.visibility = View.GONE
+                            } else {
+                                binding.tableRowUnlockedDate.visibility = View.VISIBLE
+                                binding.tableTextUnlockedDate.text = DateUtil.parseTime(assignmentState.unlockAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
+                            }
                         }
 
                         if (!(assignmentState?.isSubmitted ?: true)) {
@@ -83,10 +118,10 @@ class DetailFragment : Fragment() {
                                     binding.tableTextGrade.text = "$score / ${assignmentState.pointsPossible}"
                                 }
                                 if (submissionType == null) {
-                                    binding.tableRowType.visibility = View.GONE
+                                    binding.tableRowSubmissionType.visibility = View.GONE
                                 } else {
-                                    binding.tableRowType.visibility = View.VISIBLE
-                                    binding.tableTextType.text = when (submissionType) {
+                                    binding.tableRowSubmissionType.visibility = View.VISIBLE
+                                    binding.tableTextSubmissionType.text = when (submissionType) {
                                         "online_quiz" -> "Quiz"
                                         "online_upload" -> "Assignment"
                                         else -> submissionType
@@ -96,8 +131,7 @@ class DetailFragment : Fragment() {
                                     binding.tableRowSubmissionDate.visibility = View.GONE
                                 } else {
                                     binding.tableRowSubmissionDate.visibility = View.VISIBLE
-                                    binding.tableTextSubmissionDate.text = DateUtil.parseTime(submittedAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))} ${if (late) (requireContext().getString(
-                                        R.string.assignment_detail_submission_submission_date_late)) else ""}" }
+                                    binding.tableTextSubmissionDate.text = DateUtil.parseTime(submittedAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))} ${if (late) (requireContext().getString(R.string.assignment_detail_submission_submission_date_late)) else ""}" }
                                 }
                                 if (gradedAt == null) {
                                     binding.tableRowGradingDate.visibility = View.GONE

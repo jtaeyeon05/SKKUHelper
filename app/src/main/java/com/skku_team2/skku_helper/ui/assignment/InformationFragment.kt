@@ -5,8 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.skku_team2.skku_helper.databinding.FragmentInformationBinding
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.launch
 import kotlin.getValue
 
 
@@ -26,7 +32,32 @@ class InformationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // TODO
+
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    combine(
+                        assignmentViewModel.courseState,
+                        assignmentViewModel.assignmentState
+                    ) { courseState, assignmentState ->
+                        courseState to assignmentState
+                    }.collect { (courseState, assignmentState) ->
+                        if (assignmentState?.description == null || assignmentState.description.isEmpty()) {
+                            binding.layoutDescription.visibility = View.GONE
+                        } else {
+                            binding.layoutDescription.visibility = View.VISIBLE
+                            binding.textViewHtml.text = HtmlCompat.fromHtml(
+                                assignmentState.description,
+                                HtmlCompat.FROM_HTML_MODE_LEGACY
+                            )
+                        }
+
+                        // TODO: Memo
+                    }
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

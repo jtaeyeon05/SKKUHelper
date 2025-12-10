@@ -31,24 +31,22 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layout_description"
+        android:id="@+id/layout_information"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:minHeight="200dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:minHeight="240dp"
         android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceTitleMedium"
-            android:text="@string/assignment_detail_description" />
+            android:text="@string/assignment_detail_information" />
         <Space
             android:layout_width="match_parent"
             android:layout_height="8dp" />
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             app:cardCornerRadius="12dp"
             app:cardElevation="0dp">
             <ScrollView
@@ -56,11 +54,211 @@
                 android:layout_height="match_parent"
                 android:background="?attr/colorSurfaceContainerLow"
                 android:fillViewport="true">
-                <TextView
-                    android:id="@+id/textView_html"
+                <TableLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="12dp"/>
+                    android:layout_height="match_parent"
+                    android:layout_margin="12dp"
+                    android:showDividers="middle"
+                    android:divider="@drawable/empty_divider_4dp">
+                    <TableRow
+                        android:id="@+id/tableRow_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAppearance="?attr/textAppearanceTitleSmall"
+                            android:text="@string/assignment_detail_name"/>
+                        <TextView
+                            android:id="@+id/tableText_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:text="@string/assignment_detail_name_default"/>
+                    </TableRow>
+                    <TableRow
+                        android:id="@+id/tableRow_course"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAppearance="?attr/textAppearanceTitleSmall"
+                            android:text="@string/assignment_detail_course"/>
+                        <TextView
+                            android:id="@+id/tableText_course"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:text="@string/assignment_detail_course_default"/>
+                    </TableRow>
+                    <TableRow
+                        android:id="@+id/tableRow_assignmentType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAppearance="?attr/textAppearanceTitleSmall"
+                            android:text="@string/assignment_detail_assignmentType"/>
+                        <TextView
+                            android:id="@+id/tableText_assignmentType"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:text="@string/assignment_detail_assignmentType_default"/>
+                    </TableRow>
+                    <TableRow
+                        android:id="@+id/tableRow_maxPoints"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAppearance="?attr/textAppearanceTitleSmall"
+                            android:text="@string/assignment_detail_maxPoints"/>
+                        <TextView
+                            android:id="@+id/tableText_maxPoints"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:text="@string/assignment_detail_maxPoints_default"/>
+                    </TableRow>
+                    <TableRow
+                        android:id="@+id/tableRow_submitted"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAppearance="?attr/textAppearanceTitleSmall"
+                            android:text="@string/assignment_detail_submitted"/>
+                        <TextView
+                            android:id="@+id/tableText_submitted"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:text="@string/assignment_detail_submitted_default"/>
+                    </TableRow>
+                    <TableRow
+                        android:id="@+id/tableRow_locked"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAppearance="?attr/textAppearanceTitleSmall"
+                            android:text="@string/assignment_detail_locked"/>
+                        <TextView
+                            android:id="@+id/tableText_locked"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:text="@string/assignment_detail_locked_default"/>
+                    </TableRow>
+                    <TableRow
+                        android:id="@+id/tableRow_createdDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAppearance="?attr/textAppearanceTitleSmall"
+                            android:text="@string/assignment_detail_createdDate"/>
+                        <TextView
+                            android:id="@+id/tableText_createdDate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:text="@string/assignment_detail_createdDate_default"/>
+                    </TableRow>
+                    <TableRow
+                        android:id="@+id/tableRow_updatedDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAppearance="?attr/textAppearanceTitleSmall"
+                            android:text="@string/assignment_detail_updatedDate"/>
+                        <TextView
+                            android:id="@+id/tableText_updatedDate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:text="@string/assignment_detail_updatedDate_default"/>
+                    </TableRow>
+                    <TableRow
+                        android:id="@+id/tableRow_dueDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAppearance="?attr/textAppearanceTitleSmall"
+                            android:text="@string/assignment_detail_dueDate"/>
+                        <TextView
+                            android:id="@+id/tableText_dueDate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:text="@string/assignment_detail_dueDate_default"/>
+                    </TableRow>
+                    <TableRow
+                        android:id="@+id/tableRow_lockedDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAppearance="?attr/textAppearanceTitleSmall"
+                            android:text="@string/assignment_detail_lockedDate"/>
+                        <TextView
+                            android:id="@+id/tableText_lockedDate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:text="@string/assignment_detail_lockedDate_default"/>
+                    </TableRow>
+                    <TableRow
+                        android:id="@+id/tableRow_unlockedDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textAppearance="?attr/textAppearanceTitleSmall"
+                            android:text="@string/assignment_detail_unlockedDate"/>
+                        <TextView
+                            android:id="@+id/tableText_unlockedDate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:textAppearance="?attr/textAppearanceBodySmall"
+                            android:text="@string/assignment_detail_unlockedDate_default"/>
+                    </TableRow>
+                </TableLayout>
             </ScrollView>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
@@ -69,6 +267,7 @@
         android:id="@+id/layout_submission"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="240dp"
         android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
@@ -113,7 +312,7 @@
                             android:text="@string/assignment_detail_submission_grade_default"/>
                     </TableRow>
                     <TableRow
-                        android:id="@+id/tableRow_type"
+                        android:id="@+id/tableRow_submissionType"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
@@ -121,14 +320,14 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:textAppearance="?attr/textAppearanceTitleSmall"
-                            android:text="@string/assignment_detail_submission_type"/>
+                            android:text="@string/assignment_detail_submission_submissionType"/>
                         <TextView
-                            android:id="@+id/tableText_type"
+                            android:id="@+id/tableText_submissionType"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
                             android:textAppearance="?attr/textAppearanceBodySmall"
-                            android:text="@string/assignment_detail_submission_type_default"/>
+                            android:text="@string/assignment_detail_submission_submissionType_default"/>
                     </TableRow>
                     <TableRow
                         android:id="@+id/tableRow_submission_date"

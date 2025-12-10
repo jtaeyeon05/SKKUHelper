@@ -1,15 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
+    android:showDividers="middle"
+    android:divider="@drawable/empty_divider_8dp"
     tools:context=".ui.assignment.InformationFragment">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/layout_description"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Information" />
+        android:layout_height="0dp"
+        android:minHeight="240dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:text="@string/assignment_information_description" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp">
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/colorSurfaceContainerLow"
+                android:fillViewport="true">
+                <TextView
+                    android:id="@+id/textView_html"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"/>
+            </ScrollView>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+    <!-- TODO: Memo -->
 
 </LinearLayout>
