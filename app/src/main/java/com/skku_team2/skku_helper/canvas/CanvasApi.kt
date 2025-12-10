@@ -8,10 +8,17 @@ import retrofit2.http.Query
 
 
 interface CanvasApi {
-    @GET("api/v1/courses?enrollment_state=active")
+    @GET("api/v1/users/self")
+    fun getUserSelf(
+        @Header("Authorization") token: String,
+        @Query("include[]") include: String = ""
+    ): Call<User>
+
+    @GET("api/v1/courses")
     fun getCourses(
         @Header("Authorization") token: String,
-        @Query("per_page") perPage: Int = 100
+        @Query("per_page") perPage: Int = 100,
+        @Query("enrollment_state") enrollmentState: String = "active",
     ): Call<List<Course>>
 
     @GET("api/v1/courses/{courseId}")
@@ -32,6 +39,16 @@ interface CanvasApi {
     fun getAssignment(
         @Header("Authorization") token: String,
         @Path("courseId") courseId: Int,
-        @Path("assignmentId") assignmentId: Int
+        @Path("assignmentId") assignmentId: Int,
+        @Query("include[]") include: String = "submission"
+    ): Call<Assignment>
+
+    @GET("api/v1/courses/{courseId}/assignments/{assignmentId}/submissions/{userId}")
+    fun getSubmission(
+        @Header("Authorization") token: String,
+        @Path("courseId") courseId: Int,
+        @Path("assignmentId") assignmentId: Int,
+        @Path("userId") userId: Int,
+        @Query("include[]") include: String = "submission"
     ): Call<Assignment>
 }

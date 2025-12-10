@@ -4,15 +4,42 @@ import com.google.gson.annotations.SerializedName
 import com.skku_team2.skku_helper.utils.DateUtil
 
 
-enum class AssignmentStatus {
-    Left, Completed, Expired,
-}
-
-
 data class AssignmentData(
     val course: Course,
     val assignment: Assignment,
 )
+
+
+data class User(
+    @SerializedName("id") val id: Int,
+    @SerializedName("name") val name: String,
+    @SerializedName("sortable_name") val sortableName: String? = null,
+    @SerializedName("short_code") val shortName: String? = null,
+    @SerializedName("avatar_url") val avatarUrl: String? = null,
+
+    @SerializedName("locale") val locale: String? = null,
+    @SerializedName("effective_locale") val effectiveLocale: String? = null,
+    @SerializedName("created_at") val createdAt: String? = null,
+    @SerializedName("permissions") val permissions: Permissions? = null,
+
+    @SerializedName("uuid") val uuid: String? = null,
+    @SerializedName("last_login") val lastLogin: String? = null,
+) {
+    data class Permissions(
+        @SerializedName("can_update_name") val canUpdateName: Boolean? = null,
+        @SerializedName("can_update_avatar") val canUpdateAvatar: Boolean? = null,
+        @SerializedName("limit_parent_app_web_access") val hasLimitParentAppWebAccess: Boolean? = null,
+    ) {
+        val default get() = Permissions()
+    }
+
+    companion object {
+        val default get() = User(
+            id = 0,
+            name = "Name"
+        )
+    }
+}
 
 
 data class Course(
@@ -71,21 +98,21 @@ data class Assignment(
     @SerializedName("name") val name: String,
     @SerializedName("description") val description: String,
 
-    @SerializedName("position") val position: Int?,
-    @SerializedName("course_id") val courseId: Int?,
+    @SerializedName("position") val position: Int? = null,
+    @SerializedName("course_id") val courseId: Int? = null,
     @SerializedName("is_quiz_assignment") val isQuizAssignment: Boolean,
-    @SerializedName("grading_type") val gradingType: String?,
-    @SerializedName("points_possible") val pointsPossible: Double?,
-    @SerializedName("locked_for_user") val lockedForUser: Boolean?,
-    @SerializedName("html_url") val htmlUrl: String?,
+    @SerializedName("grading_type") val gradingType: String? = null,
+    @SerializedName("points_possible") val pointsPossible: Double? = null,
+    @SerializedName("locked_for_user") val lockedForUser: Boolean? = null,
+    @SerializedName("html_url") val htmlUrl: String? = null,
 
-    @SerializedName("created_at") val createdAt: String?,
-    @SerializedName("updated_at") val updatedAt: String?,
-    @SerializedName("due_at") val dueAt: String?,
-    @SerializedName("lock_at") val lockAt: String?,
-    @SerializedName("unlock_at") val unlockAt: String?,
+    @SerializedName("created_at") val createdAt: String? = null,
+    @SerializedName("updated_at") val updatedAt: String? = null,
+    @SerializedName("due_at") val dueAt: String? = null,
+    @SerializedName("lock_at") val lockAt: String? = null,
+    @SerializedName("unlock_at") val unlockAt: String? = null,
 
-    @SerializedName("submission") val submission: Submission?,
+    @SerializedName("submission") val submission: Submission? = null,
 
     /* Additional Fields
     @SerializedName("assignment_group_id") val assignmentGroupId: Int?,
@@ -125,6 +152,8 @@ data class Assignment(
     @SerializedName("submissions_download_url") val submissionsDownloadUrl: String?,
      */
 ) {
+    enum class Status { Left, Completed, Expired }
+
     companion object {
         val default get() = Assignment(
             id = 0,
@@ -132,59 +161,103 @@ data class Assignment(
             description = "Assignment Description",
             position = 1,
             courseId = 0,
-            isQuizAssignment = false,
-            gradingType = null,
-            pointsPossible = null,
-            lockedForUser = null,
-            htmlUrl = null,
-            createdAt = null,
-            updatedAt = null,
-            dueAt = null,
-            lockAt = null,
-            unlockAt = null,
-            submission = null
+            isQuizAssignment = false
         )
     }
 
     val isSubmitted get() = submission?.workflowState == "submitted" || submission?.workflowState == "graded" || submission?.workflowState == "pending_review"
-    val status: AssignmentStatus get() {
+    val status: Status get() {
         val remainingTime = DateUtil.calculateRemainingTime(dueAt)
-        return if (isSubmitted) AssignmentStatus.Completed
-        else if (remainingTime.type == DateUtil.TimeType.UPCOMING) AssignmentStatus.Left
-        else AssignmentStatus.Expired
+        return if (isSubmitted) Status.Completed
+        else if (remainingTime.type == DateUtil.TimeType.UPCOMING) Status.Left
+        else Status.Expired
     }
 }
 
 data class Submission(
     @SerializedName("id") val id: Int,
+    @SerializedName("grade") val grade: String? = null,
+    @SerializedName("score") val score: Double? = null,
+    @SerializedName("workflow_state") val workflowState: String,
+    @SerializedName("submission_type") val submissionType: String, // online_quiz, online_upload..
+    @SerializedName("late") val late: Boolean,
+
+    @SerializedName("body") val body: String? = null,
+    @SerializedName("url") val url: String? = null,
+    @SerializedName("preview_url") val previewUrl: String? = null,
+
+    @SerializedName("submitted_at") val submittedAt: String? = null,
+    @SerializedName("graded_at") val gradedAt: String? = null,
+    @SerializedName("posted_at") val postedAt: String? = null,
+
+    @SerializedName("assignment_id") val assignmentId: Int,
     @SerializedName("user_id") val userId: Int,
-    @SerializedName("workflow_state") val workflowState: String, // "submitted", "graded", "pending_review", "unsubmitted", "untaken" etc.
-    @SerializedName("score") val score: Double?,
+
+    @SerializedName("attempt") val attempt: Int? = null,
+    @SerializedName("extra_attempts") val extraAttempts: Int? = null,
+    @SerializedName("attachments") val attachments: List<Attachment>? = null,
 
     /* Additional Fields
-    @SerializedName("quiz_id") val quizId: Int,
-    @SerializedName("submission_id") val submissionId: Int,
-    @SerializedName("started_at") val startedAt: String?,
-    @SerializedName("finished_at") val finishedAt: String?,
-    @SerializedName("end_at") val endAt: String?,
-    @SerializedName("attempt") val attempt: Int,
-    @SerializedName("extra_attempts") val extraAttempts: Int,
-    @SerializedName("extra_time") val extraTime: Int,
-    @SerializedName("manually_unlocked") val manuallyUnlocked: Boolean,
-    @SerializedName("time_spent") val timeSpent: Int,
-    @SerializedName("score_before_regrade") val scoreBeforeRegrade: Double?,
-    @SerializedName("kept_score") val keptScore: Double?,
-    @SerializedName("fudge_points") val fudgePoints: Double?,
-    @SerializedName("has_seen_results") val hasSeenResults: Boolean,
-    @SerializedName("overdue_and_needs_submission") val overdueAndNeedsSubmission: Boolean
-     */
+    @SerializedName("grade_matches_current_submission") val gradeMatchesCurrentSubmission: Boolean,
+    @SerializedName("grader_id") val graderId: Int?,
+    @SerializedName("cached_due_date") val cachedDueDate: String?,
+    @SerializedName("excused") val excused: Boolean?,
+    @SerializedName("late_policy_status") val latePolicyStatus: String?,
+    @SerializedName("points_deducted") val pointsDeducted: Double?,
+    @SerializedName("grading_period_id") val gradingPeriodId: Int?,
+    @SerializedName("missing") val missing: Boolean,
+    @SerializedName("seconds_late") val secondsLate: Int,
+    @SerializedName("entered_grade") val enteredGrade: String?,
+    @SerializedName("entered_score") val enteredScore: Double?,
+    */
 ) {
+    data class Attachment(
+        @SerializedName("id") val id: Int,
+        @SerializedName("uuid") val uuid: String? = null,
+        @SerializedName("folder_id") val folderId: Int? = null,
+        @SerializedName("display_name") val displayName: String,
+        @SerializedName("filename") val filename: String,
+
+        @SerializedName("upload_status") val uploadStatus: String? = null,
+        @SerializedName("content-type") val contentType: String? = null, // application/pdf, application/zip..
+        @SerializedName("mime_class") val mimeClass: String? = null, // pdf, zip..
+        @SerializedName("url") val url: String? = null, // Download Url
+        @SerializedName("preview_url") val previewUrl: String? = null,
+        @SerializedName("thumbnail_url") val thumbnailUrl: String? = null,
+        @SerializedName("media_entry_id") val mediaEntryId: String? = null,
+        @SerializedName("size") val size: Long? = null, // Bytes
+
+        @SerializedName("created_at") val createdAt: String? = null,
+        @SerializedName("updated_at") val updatedAt: String? = null,
+        @SerializedName("lock_at") val lockAt: String? = null,
+        @SerializedName("unlock_at") val unlockAt: String? = null,
+        @SerializedName("modified_at") val modifiedAt: String? = null,
+
+        @SerializedName("locked") val locked: Boolean? = null,
+        @SerializedName("hidden") val hidden: Boolean? = null,
+        @SerializedName("hidden_for_user") val hiddenForUser: Boolean? = null,
+        @SerializedName("locked_for_user") val lockedForUser: Boolean? = null,
+    ) {
+        companion object {
+            val default get() = Attachment(
+                id = 0,
+                displayName = "Attachment",
+                filename = "Attachment"
+            )
+        }
+    }
+
     companion object {
         val default get() = Submission(
             id = 0,
-            userId = 0,
-            workflowState = "untaken",
-            score = null
+            grade = "0.0",
+            score = 0.0,
+            workflowState = "graded",
+            submissionType = "online_upload",
+            late = false,
+
+            assignmentId = 0,
+            userId = 0
         )
     }
 }

@@ -15,7 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.skku_team2.skku_helper.R
-import com.skku_team2.skku_helper.canvas.AssignmentStatus
+import com.skku_team2.skku_helper.canvas.Assignment
 import com.skku_team2.skku_helper.databinding.FragmentHomeBinding
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -96,9 +96,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateLists() {
-        val leftAssignmentDataList = mainViewModel.uiState.value.assignmentDataList.filter { (_, assignment) -> assignment.status == AssignmentStatus.Left }
-        val completedAssignmentDataList = mainViewModel.uiState.value.assignmentDataList.filter { (_, assignment) -> assignment.status == AssignmentStatus.Completed }
-        val expiredAssignmentDataList = mainViewModel.uiState.value.assignmentDataList.filter { (_, assignment) -> assignment.status == AssignmentStatus.Expired }
+        val leftAssignmentDataList = mainViewModel.uiState.value.assignmentDataList.filter { (_, assignment) -> assignment.status == Assignment.Status.Left }
+        val completedAssignmentDataList = mainViewModel.uiState.value.assignmentDataList.filter { (_, assignment) -> assignment.status == Assignment.Status.Completed }
+        val expiredAssignmentDataList = mainViewModel.uiState.value.assignmentDataList.filter { (_, assignment) -> assignment.status == Assignment.Status.Expired }
 
         leftAssignmentAdapter.submitList(if (viewModel.uiState.value.isLeftAssignmentExpanded) leftAssignmentDataList else emptyList())
         completedAssignmentAdapter.submitList(if (viewModel.uiState.value.isCompletedAssignmentExpanded) completedAssignmentDataList else emptyList())
