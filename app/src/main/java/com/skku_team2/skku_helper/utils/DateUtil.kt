@@ -9,33 +9,29 @@ import kotlin.math.abs
 object DateUtil {
     private val canvasDateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
 
-    enum class TimeType {
-        UPCOMING, OVERDUE, NO_DATA, ERROR
-    }
-
     data class DateResult(
         val remainingSeconds: Long?,
-        val type: TimeType
-    )
+        val type: Type
+    ) { enum class Type { UPCOMING, OVERDUE, NO_DATA, ERROR } }
 
     fun parseTime(time: String): OffsetDateTime {
         return OffsetDateTime.parse(time, canvasDateTimeFormatter)
     }
 
     fun calculateRemainingTime(dueAt: String?): DateResult {
-        if (dueAt == null) return DateResult(null, TimeType.NO_DATA)
+        if (dueAt == null) return DateResult(null, DateResult.Type.NO_DATA)
 
         return try {
             val now = OffsetDateTime.now()
             val dueDate = OffsetDateTime.parse(dueAt, canvasDateTimeFormatter)
 
             val diffInSeconds = ChronoUnit.SECONDS.between(now, dueDate)
-            val type = if (diffInSeconds >= 0) TimeType.UPCOMING else TimeType.OVERDUE
+            val type = if (diffInSeconds >= 0) DateResult.Type.UPCOMING else DateResult.Type.OVERDUE
 
             DateResult(diffInSeconds, type)
         } catch (e: Exception) {
             e.printStackTrace()
-            DateResult(null, TimeType.ERROR)
+            DateResult(null, DateResult.Type.ERROR)
         }
     }
 

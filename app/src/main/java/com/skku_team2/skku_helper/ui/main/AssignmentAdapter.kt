@@ -48,15 +48,15 @@ class AssignmentAdapter(
             } else {
                 val remainingTime = DateUtil.calculateRemainingTime(assignment.dueAt)
                 when (remainingTime.type) {
-                    DateUtil.TimeType.UPCOMING -> {
+                    DateUtil.DateResult.Type.UPCOMING -> {
                         binding.textViewState.text = DateUtil.formatRemainingTime(remainingTime.remainingSeconds)
                         binding.textViewState.setTextColor(context.getColorAttr(R.attr.colorTertiary))
                     }
-                    DateUtil.TimeType.OVERDUE -> {
+                    DateUtil.DateResult.Type.OVERDUE -> {
                         binding.textViewState.text = "Closed"
                         binding.textViewState.setTextColor(context.getColorAttr(R.attr.colorErrorContainer))
                     }
-                    DateUtil.TimeType.NO_DATA -> {
+                    DateUtil.DateResult.Type.NO_DATA -> {
                         binding.textViewState.text = "No Data"
                         binding.textViewState.setTextColor(context.getColorAttr(R.attr.colorErrorContainer))
                     }

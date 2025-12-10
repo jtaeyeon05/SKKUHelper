@@ -169,7 +169,7 @@ data class Assignment(
     val status: Status get() {
         val remainingTime = DateUtil.calculateRemainingTime(dueAt)
         return if (isSubmitted) Status.Completed
-        else if (remainingTime.type == DateUtil.TimeType.UPCOMING) Status.Left
+        else if (remainingTime.type == DateUtil.DateResult.Type.UPCOMING) Status.Left
         else Status.Expired
     }
 }
