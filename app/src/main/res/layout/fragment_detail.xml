@@ -1,65 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:showDividers="middle"
-    android:divider="@drawable/empty_divider_8dp"
+    android:fillViewport="true"
     tools:context=".ui.assignment.DetailFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:showDividers="middle"
-        android:divider="@drawable/empty_divider_8dp">
-        <Button
-            android:id="@+id/button_assignment"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/assignment_detail_open_assignment"/>
-        <Button
-            android:id="@+id/button_submission"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/assignment_detail_open_submission"/>
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:divider="@drawable/empty_divider_8dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:showDividers="middle">
 
-    <LinearLayout
-        android:id="@+id/layout_information"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="240dp"
-        android:orientation="vertical">
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceTitleMedium"
-            android:text="@string/assignment_detail_information" />
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
-        <com.google.android.material.card.MaterialCardView
+            android:divider="@drawable/empty_divider_8dp"
+            android:orientation="horizontal"
+            android:showDividers="middle">
+
+            <Button
+                android:id="@+id/button_assignment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/assignment_detail_open_assignment" />
+
+            <Button
+                android:id="@+id/button_submission"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/assignment_detail_open_submission" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_information"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp">
-            <ScrollView
+            android:orientation="vertical">
+
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="?attr/colorSurfaceContainerLow"
-                android:fillViewport="true">
+                android:layout_height="wrap_content"
+                android:text="@string/assignment_detail_information"
+                android:textAppearance="?attr/textAppearanceTitleMedium" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
                 <TableLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="12dp"
-                    android:showDividers="middle"
-                    android:divider="@drawable/empty_divider_4dp">
+                    android:background="?attr/colorSurfaceContainerLow"
+                    android:divider="@drawable/empty_divider_4dp"
+                    android:padding="12dp"
+                    android:showDividers="middle">
                     <TableRow
                         android:id="@+id/tableRow_name"
                         android:layout_width="match_parent"
@@ -68,15 +75,15 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAppearance="?attr/textAppearanceTitleSmall"
-                            android:text="@string/assignment_detail_name"/>
+                            android:text="@string/assignment_detail_name"
+                            android:textAppearance="?attr/textAppearanceTitleSmall" />
                         <TextView
                             android:id="@+id/tableText_name"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:textAppearance="?attr/textAppearanceBodySmall"
-                            android:text="@string/assignment_detail_name_default"/>
+                            android:text="@string/assignment_detail_name_default"
+                            android:textAppearance="?attr/textAppearanceBodySmall" />
                     </TableRow>
                     <TableRow
                         android:id="@+id/tableRow_course"
@@ -86,15 +93,15 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAppearance="?attr/textAppearanceTitleSmall"
-                            android:text="@string/assignment_detail_course"/>
+                            android:text="@string/assignment_detail_course"
+                            android:textAppearance="?attr/textAppearanceTitleSmall" />
                         <TextView
                             android:id="@+id/tableText_course"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:textAppearance="?attr/textAppearanceBodySmall"
-                            android:text="@string/assignment_detail_course_default"/>
+                            android:text="@string/assignment_detail_course_default"
+                            android:textAppearance="?attr/textAppearanceBodySmall" />
                     </TableRow>
                     <TableRow
                         android:id="@+id/tableRow_assignmentType"
@@ -104,33 +111,34 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAppearance="?attr/textAppearanceTitleSmall"
-                            android:text="@string/assignment_detail_assignmentType"/>
+                            android:text="@string/assignment_detail_assignmentType"
+                            android:textAppearance="?attr/textAppearanceTitleSmall" />
                         <TextView
                             android:id="@+id/tableText_assignmentType"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:textAppearance="?attr/textAppearanceBodySmall"
-                            android:text="@string/assignment_detail_assignmentType_default"/>
+                            android:text="@string/assignment_detail_assignmentType_default"
+                            android:textAppearance="?attr/textAppearanceBodySmall" />
                     </TableRow>
                     <TableRow
                         android:id="@+id/tableRow_maxPoints"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAppearance="?attr/textAppearanceTitleSmall"
-                            android:text="@string/assignment_detail_maxPoints"/>
+                            android:text="@string/assignment_detail_maxPoints"
+                            android:textAppearance="?attr/textAppearanceTitleSmall" />
                         <TextView
                             android:id="@+id/tableText_maxPoints"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:textAppearance="?attr/textAppearanceBodySmall"
-                            android:text="@string/assignment_detail_maxPoints_default"/>
+                            android:text="@string/assignment_detail_maxPoints_default"
+                            android:textAppearance="?attr/textAppearanceBodySmall" />
                     </TableRow>
                     <TableRow
                         android:id="@+id/tableRow_submitted"
@@ -140,15 +148,15 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAppearance="?attr/textAppearanceTitleSmall"
-                            android:text="@string/assignment_detail_submitted"/>
+                            android:text="@string/assignment_detail_submitted"
+                            android:textAppearance="?attr/textAppearanceTitleSmall" />
                         <TextView
                             android:id="@+id/tableText_submitted"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:textAppearance="?attr/textAppearanceBodySmall"
-                            android:text="@string/assignment_detail_submitted_default"/>
+                            android:text="@string/assignment_detail_submitted_default"
+                            android:textAppearance="?attr/textAppearanceBodySmall" />
                     </TableRow>
                     <TableRow
                         android:id="@+id/tableRow_locked"
@@ -158,15 +166,15 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAppearance="?attr/textAppearanceTitleSmall"
-                            android:text="@string/assignment_detail_locked"/>
+                            android:text="@string/assignment_detail_locked"
+                            android:textAppearance="?attr/textAppearanceTitleSmall" />
                         <TextView
                             android:id="@+id/tableText_locked"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:textAppearance="?attr/textAppearanceBodySmall"
-                            android:text="@string/assignment_detail_locked_default"/>
+                            android:text="@string/assignment_detail_locked_default"
+                            android:textAppearance="?attr/textAppearanceBodySmall" />
                     </TableRow>
                     <TableRow
                         android:id="@+id/tableRow_createdDate"
@@ -176,15 +184,15 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAppearance="?attr/textAppearanceTitleSmall"
-                            android:text="@string/assignment_detail_createdDate"/>
+                            android:text="@string/assignment_detail_createdDate"
+                            android:textAppearance="?attr/textAppearanceTitleSmall" />
                         <TextView
                             android:id="@+id/tableText_createdDate"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:textAppearance="?attr/textAppearanceBodySmall"
-                            android:text="@string/assignment_detail_createdDate_default"/>
+                            android:text="@string/assignment_detail_createdDate_default"
+                            android:textAppearance="?attr/textAppearanceBodySmall" />
                     </TableRow>
                     <TableRow
                         android:id="@+id/tableRow_updatedDate"
@@ -194,15 +202,15 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAppearance="?attr/textAppearanceTitleSmall"
-                            android:text="@string/assignment_detail_updatedDate"/>
+                            android:text="@string/assignment_detail_updatedDate"
+                            android:textAppearance="?attr/textAppearanceTitleSmall" />
                         <TextView
                             android:id="@+id/tableText_updatedDate"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:textAppearance="?attr/textAppearanceBodySmall"
-                            android:text="@string/assignment_detail_updatedDate_default"/>
+                            android:text="@string/assignment_detail_updatedDate_default"
+                            android:textAppearance="?attr/textAppearanceBodySmall" />
                     </TableRow>
                     <TableRow
                         android:id="@+id/tableRow_dueDate"
@@ -212,15 +220,15 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAppearance="?attr/textAppearanceTitleSmall"
-                            android:text="@string/assignment_detail_dueDate"/>
+                            android:text="@string/assignment_detail_dueDate"
+                            android:textAppearance="?attr/textAppearanceTitleSmall" />
                         <TextView
                             android:id="@+id/tableText_dueDate"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:textAppearance="?attr/textAppearanceBodySmall"
-                            android:text="@string/assignment_detail_dueDate_default"/>
+                            android:text="@string/assignment_detail_dueDate_default"
+                            android:textAppearance="?attr/textAppearanceBodySmall" />
                     </TableRow>
                     <TableRow
                         android:id="@+id/tableRow_lockedDate"
@@ -230,15 +238,15 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAppearance="?attr/textAppearanceTitleSmall"
-                            android:text="@string/assignment_detail_lockedDate"/>
+                            android:text="@string/assignment_detail_lockedDate"
+                            android:textAppearance="?attr/textAppearanceTitleSmall" />
                         <TextView
                             android:id="@+id/tableText_lockedDate"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:textAppearance="?attr/textAppearanceBodySmall"
-                            android:text="@string/assignment_detail_lockedDate_default"/>
+                            android:text="@string/assignment_detail_lockedDate_default"
+                            android:textAppearance="?attr/textAppearanceBodySmall" />
                     </TableRow>
                     <TableRow
                         android:id="@+id/tableRow_unlockedDate"
@@ -248,51 +256,51 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAppearance="?attr/textAppearanceTitleSmall"
-                            android:text="@string/assignment_detail_unlockedDate"/>
+                            android:text="@string/assignment_detail_unlockedDate"
+                            android:textAppearance="?attr/textAppearanceTitleSmall" />
                         <TextView
                             android:id="@+id/tableText_unlockedDate"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:textAppearance="?attr/textAppearanceBodySmall"
-                            android:text="@string/assignment_detail_unlockedDate_default"/>
+                            android:text="@string/assignment_detail_unlockedDate_default"
+                            android:textAppearance="?attr/textAppearanceBodySmall" />
                     </TableRow>
                 </TableLayout>
-            </ScrollView>
-        </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/layout_submission"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="240dp"
-        android:orientation="vertical">
-        <TextView
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_submission"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceTitleMedium"
-            android:text="@string/assignment_detail_submission" />
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="8dp" />
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp">
-            <ScrollView
+            android:orientation="vertical">
+
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="?attr/colorSurfaceContainerLow"
-                android:fillViewport="true">
+                android:layout_height="wrap_content"
+                android:text="@string/assignment_detail_submission"
+                android:textAppearance="?attr/textAppearanceTitleMedium" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp">
+
                 <TableLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="12dp"
-                    android:showDividers="middle"
-                    android:divider="@drawable/empty_divider_4dp">
+                    android:background="?attr/colorSurfaceContainerLow"
+                    android:divider="@drawable/empty_divider_4dp"
+                    android:padding="12dp"
+                    android:showDividers="middle">
                     <TableRow
                         android:id="@+id/tableRow_grade"
                         android:layout_width="match_parent"
@@ -301,15 +309,15 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAppearance="?attr/textAppearanceTitleSmall"
-                            android:text="@string/assignment_detail_submission_grade"/>
+                            android:text="@string/assignment_detail_submission_grade"
+                            android:textAppearance="?attr/textAppearanceTitleSmall" />
                         <TextView
                             android:id="@+id/tableText_grade"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:textAppearance="?attr/textAppearanceBodySmall"
-                            android:text="@string/assignment_detail_submission_grade_default"/>
+                            android:text="@string/assignment_detail_submission_grade_default"
+                            android:textAppearance="?attr/textAppearanceBodySmall" />
                     </TableRow>
                     <TableRow
                         android:id="@+id/tableRow_submissionType"
@@ -319,15 +327,15 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAppearance="?attr/textAppearanceTitleSmall"
-                            android:text="@string/assignment_detail_submission_submissionType"/>
+                            android:text="@string/assignment_detail_submission_submissionType"
+                            android:textAppearance="?attr/textAppearanceTitleSmall" />
                         <TextView
                             android:id="@+id/tableText_submissionType"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:textAppearance="?attr/textAppearanceBodySmall"
-                            android:text="@string/assignment_detail_submission_submissionType_default"/>
+                            android:text="@string/assignment_detail_submission_submissionType_default"
+                            android:textAppearance="?attr/textAppearanceBodySmall" />
                     </TableRow>
                     <TableRow
                         android:id="@+id/tableRow_submission_date"
@@ -337,15 +345,15 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAppearance="?attr/textAppearanceTitleSmall"
-                            android:text="@string/assignment_detail_submission_submission_date"/>
+                            android:text="@string/assignment_detail_submission_submission_date"
+                            android:textAppearance="?attr/textAppearanceTitleSmall" />
                         <TextView
                             android:id="@+id/tableText_submission_date"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:textAppearance="?attr/textAppearanceBodySmall"
-                            android:text="@string/assignment_detail_submission_submission_date_default"/>
+                            android:text="@string/assignment_detail_submission_submission_date_default"
+                            android:textAppearance="?attr/textAppearanceBodySmall" />
                     </TableRow>
                     <TableRow
                         android:id="@+id/tableRow_grading_date"
@@ -355,15 +363,15 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAppearance="?attr/textAppearanceTitleSmall"
-                            android:text="@string/assignment_detail_submission_grading_date"/>
+                            android:text="@string/assignment_detail_submission_grading_date"
+                            android:textAppearance="?attr/textAppearanceTitleSmall" />
                         <TextView
                             android:id="@+id/tableText_grading_date"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:textAppearance="?attr/textAppearanceBodySmall"
-                            android:text="@string/assignment_detail_submission_grading_date_default"/>
+                            android:text="@string/assignment_detail_submission_grading_date_default"
+                            android:textAppearance="?attr/textAppearanceBodySmall" />
                     </TableRow>
                     <TableRow
                         android:id="@+id/tableRow_attachments"
@@ -373,19 +381,22 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAppearance="?attr/textAppearanceTitleSmall"
-                            android:text="@string/assignment_detail_submission_attachments"/>
+                            android:text="@string/assignment_detail_submission_attachments"
+                            android:textAppearance="?attr/textAppearanceTitleSmall" />
                         <TextView
                             android:id="@+id/tableText_attachments"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="2"
-                            android:textAppearance="?attr/textAppearanceBodySmall"
-                            android:text="@string/assignment_detail_submission_attachments_default"/>
+                            android:text="@string/assignment_detail_submission_attachments_default"
+                            android:textAppearance="?attr/textAppearanceBodySmall" />
                     </TableRow>
                 </TableLayout>
-            </ScrollView>
-        </com.google.android.material.card.MaterialCardView>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>
