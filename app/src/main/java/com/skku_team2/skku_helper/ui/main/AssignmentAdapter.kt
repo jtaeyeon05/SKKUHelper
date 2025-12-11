@@ -1,6 +1,5 @@
 package com.skku_team2.skku_helper.ui.main
 
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import com.skku_team2.skku_helper.utils.getColorAttr
 
 
 class AssignmentAdapter(
-    private val context: Context,
     private val token: String,
     private val onLongClick: ((AssignmentData) -> Boolean)? = null
 ) : RecyclerView.Adapter<AssignmentAdapter.ItemViewHolder>() {
@@ -46,35 +44,35 @@ class AssignmentAdapter(
 
             if (assignmentData.isSubmitted) {
                 binding.textViewState.text = "Submitted"
-                binding.textViewState.setTextColor(context.getColorAttr(R.attr.colorTertiary))
+                binding.textViewState.setTextColor(binding.root.context.getColorAttr(R.attr.colorTertiary))
             } else {
                 val remainingTime = DateUtil.calculateRemainingTime(custom?.dueAt ?: assignment.dueAt)
                 when (remainingTime.type) {
                     DateUtil.DateResult.Type.UPCOMING -> {
                         binding.textViewState.text = DateUtil.formatRemainingTime(remainingTime.remainingSeconds)
-                        binding.textViewState.setTextColor(context.getColorAttr(R.attr.colorTertiary))
+                        binding.textViewState.setTextColor(binding.root.context.getColorAttr(R.attr.colorTertiary))
                     }
                     DateUtil.DateResult.Type.OVERDUE -> {
                         binding.textViewState.text = "Closed"
-                        binding.textViewState.setTextColor(context.getColorAttr(R.attr.colorErrorContainer))
+                        binding.textViewState.setTextColor(binding.root.context.getColorAttr(R.attr.colorErrorContainer))
                     }
                     DateUtil.DateResult.Type.NO_DATA -> {
                         binding.textViewState.text = "No Data"
-                        binding.textViewState.setTextColor(context.getColorAttr(R.attr.colorErrorContainer))
+                        binding.textViewState.setTextColor(binding.root.context.getColorAttr(R.attr.colorErrorContainer))
                     }
                     else -> {
                         binding.textViewState.text = "Error"
-                        binding.textViewState.setTextColor(context.getColorAttr(R.attr.colorErrorContainer))
+                        binding.textViewState.setTextColor(binding.root.context.getColorAttr(R.attr.colorErrorContainer))
                     }
                 }
             }
             binding.root.setOnClickListener {
-                val assignmentActivityIntent = Intent(context, AssignmentActivity::class.java).apply {
+                val assignmentActivityIntent = Intent(binding.root.context, AssignmentActivity::class.java).apply {
                     putExtra(IntentKey.EXTRA_TOKEN, token)
                     putExtra(IntentKey.EXTRA_COURSE_ID, course.id)
                     putExtra(IntentKey.EXTRA_ASSIGNMENT_ID, assignment.id)
                 }
-                context.startActivity(assignmentActivityIntent)
+                binding.root.context.startActivity(assignmentActivityIntent)
             }
             if (onLongClick != null) {
                 binding.root.setOnLongClickListener {
@@ -90,7 +88,7 @@ class AssignmentAdapter(
 
     override fun getItemCount(): Int = differ.currentList.size
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) =holder.bind(differ.currentList[position])
+    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) = holder.bind(differ.currentList[position])
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         val binding = ItemAssignmentBinding.inflate(LayoutInflater.from(parent.context), parent, false)

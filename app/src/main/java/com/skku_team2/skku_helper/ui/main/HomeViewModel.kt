@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.update
 
 
 data class HomeUiState(
+    val selectedCourseId: Int? = null,
     val isLeftAssignmentExpanded: Boolean = true,
     val isCompletedAssignmentExpanded: Boolean = true,
     val isExpiredAssignmentExpanded: Boolean = true
@@ -18,6 +19,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(HomeUiState())
 
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+
+    fun selectCourse(courseId: Int?) {
+        _uiState.update {
+            it.copy(selectedCourseId = courseId)
+        }
+    }
 
     fun toggleLeftAssignment() = setLeftAssignmentExpanded(!uiState.value.isLeftAssignmentExpanded)
     fun setLeftAssignmentExpanded(isExpanded: Boolean) {

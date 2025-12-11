@@ -3,6 +3,7 @@ package com.skku_team2.skku_helper.ui.main
 import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import kotlin.comparisons.compareBy
 
 
 class HomeFragment : Fragment() {
@@ -31,6 +33,8 @@ class HomeFragment : Fragment() {
 
     private val mainViewModel: MainViewModel by activityViewModels()
     private val viewModel: HomeViewModel by viewModels()
+
+    private lateinit var courseBadgeAdapter: CourseBadgeAdapter
 
     private lateinit var leftAssignmentAdapter: AssignmentAdapter
     private lateinit var completedAssignmentAdapter: AssignmentAdapter
@@ -51,6 +55,22 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        courseBadgeAdapter = CourseBadgeAdapter(
+            onClick = { course ->
+                if (viewModel.uiState.value.selectedCourseId != course.id) {
+                    viewModel.selectCourse(course.id)
+                    courseBadgeAdapter.selectCourse(course.id)
+                    updateLists()
+                } else {
+                    viewModel.selectCourse(null)
+                    courseBadgeAdapter.selectCourse(null)
+                    updateLists()
+                }
+            }
+        )
+        binding.recyclerViewBadge.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerViewBadge.adapter = courseBadgeAdapter
+
         val onItemLongClickListener: (AssignmentData) -> Boolean = { assignmentData ->
             CoroutineScope(Dispatchers.Main).launch {
                 MaterialAlertDialogBuilder(requireContext()).apply {
@@ -70,17 +90,14 @@ class HomeFragment : Fragment() {
         }
 
         leftAssignmentAdapter = AssignmentAdapter(
-            context = requireContext(),
             token = mainViewModel.token,
             onLongClick = onItemLongClickListener
         )
         completedAssignmentAdapter = AssignmentAdapter(
-            context = requireContext(),
             token = mainViewModel.token,
             onLongClick = onItemLongClickListener
         )
         expiredAssignmentAdapter = AssignmentAdapter(
-            context = requireContext(),
             token = mainViewModel.token,
             onLongClick = onItemLongClickListener
         )
@@ -95,8 +112,8 @@ class HomeFragment : Fragment() {
             expiredAssignmentHeaderAdapter, expiredAssignmentAdapter
         )
 
-        binding.recyclerViewHome.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerViewHome.adapter = concatAdapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter = concatAdapter
 
         binding.swipeRefreshLayoutHome.setOnRefreshListener {
             lifecycleScope.launch {
@@ -115,7 +132,12 @@ class HomeFragment : Fragment() {
                         Triple(assignmentDataListState, uiState.isLoading, uiState.errorMessage)
                     }
                         .distinctUntilChanged()
-                        .collect { updateLists() }
+                        .collect {
+                            val courseList = mainViewModel.assignmentDataListState.value?.map { it.course }?.distinctBy { it.id }?.sortedBy { it.createdAt }?.reversed()
+                            courseBadgeAdapter.submitList(courseList ?: emptyList())
+                            Log.e("TEEST", courseList.toString())
+                            updateLists()
+                        }
                 }
                 launch {
                     viewModel.uiState
@@ -144,7 +166,7 @@ class HomeFragment : Fragment() {
             compareBy(nullsLast()) {
                 it.custom?.dueAt ?: it.assignment.dueAt
             }
-        )?.filter { it.custom?.isDeleted != true }
+        )?.filter { it.custom?.isDeleted != true && (viewModel.uiState.value.selectedCourseId == null || it.course.id == viewModel.uiState.value.selectedCourseId) }
 
         val leftAssignmentDataList = assignmentDataList?.filter { assignmentData -> assignmentData.status == AssignmentData.Status.Left } ?: emptyList()
         val completedAssignmentDataList = assignmentDataList?.filter { assignmentData -> assignmentData.status == AssignmentData.Status.Completed } ?: emptyList()
