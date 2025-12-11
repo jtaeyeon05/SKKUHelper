@@ -41,6 +41,7 @@ class InformationFragment : Fragment() {
                 launch {
                     assignmentViewModel.assignmentDataState.collect { assignmentData ->
                         val assignment = assignmentData?.assignment
+                        val custom = assignmentData?.custom
                         if (assignment?.description == null || assignment.description.isEmpty()) {
                             binding.layoutDescription.visibility = View.GONE
                         } else {
@@ -50,13 +51,9 @@ class InformationFragment : Fragment() {
                                 HtmlCompat.FROM_HTML_MODE_LEGACY
                             )
                         }
-                    }
-                }
-                launch {
-                    assignmentViewModel.customAssignmentDataState.collect { customAssignmentData ->
-                        val memoFromState = customAssignmentData?.memo ?: ""
+                        val memoFromState = custom?.memo ?: ""
                         if (binding.editTextMemo.text.toString() != memoFromState) {
-                            binding.editTextMemo.setText(assignmentViewModel.customAssignmentDataState.value?.memo)
+                            binding.editTextMemo.setText(memoFromState)
                             binding.editTextMemo.setSelection(memoFromState.length)
                         }
                     }

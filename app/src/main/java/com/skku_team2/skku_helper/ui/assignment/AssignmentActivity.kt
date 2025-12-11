@@ -26,7 +26,6 @@ import com.skku_team2.skku_helper.utils.getColorAttr
 import com.skku_team2.skku_helper.utils.isBright
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 
@@ -98,8 +97,10 @@ class AssignmentActivity : AppCompatActivity() {
                             setMessage(R.string.assignment_dialog_delete_message)
                             setNegativeButton(R.string.assignment_dialog_delete_cancel, null)
                             setPositiveButton(R.string.assignment_dialog_delete_confirm) { _, _ ->
-                                viewModel.deleteAssignment()
-                                finish()
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    viewModel.deleteAssignment()
+                                    finish()
+                                }
                             }
                             create().show()
                         }
@@ -139,15 +140,11 @@ class AssignmentActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    combine(
-                        viewModel.assignmentDataState,
-                        viewModel.customAssignmentDataState
-                    ) { assignmentDataState, customAssignmentDataState ->
-                        assignmentDataState to customAssignmentDataState
-                    }.collect { (assignmentData, customAssignmentData) ->
+                    viewModel.assignmentDataState.collect { assignmentData ->
                         val course = assignmentData?.course
                         val assignment = assignmentData?.assignment
-                        binding.toolbarLayoutAssignment.title = customAssignmentData?.name ?: assignment?.name ?: "Assignment"
+                        val custom = assignmentData?.custom
+                        binding.toolbarLayoutAssignment.title = custom?.name ?: assignment?.name ?: "Assignment"
                         binding.toolbarLayoutAssignment.subtitle = course?.name ?: "Course"
                     }
                 }

@@ -19,7 +19,6 @@ import com.skku_team2.skku_helper.canvas.Assignment
 import com.skku_team2.skku_helper.databinding.FragmentHomeBinding
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 
@@ -101,9 +100,15 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateLists() {
-        val leftAssignmentDataList = mainViewModel.assignmentDataListState.value?.filter { (_, assignment) -> assignment.status == Assignment.Status.Left } ?: emptyList()
-        val completedAssignmentDataList = mainViewModel.assignmentDataListState.value?.filter { (_, assignment) -> assignment.status == Assignment.Status.Completed } ?: emptyList()
-        val expiredAssignmentDataList = mainViewModel.assignmentDataListState.value?.filter { (_, assignment) -> assignment.status == Assignment.Status.Expired } ?: emptyList()
+        val assignmentDataList = mainViewModel.assignmentDataListState.value?.sortedWith(
+            compareBy(nullsLast()) {
+                it.custom?.dueAt ?: it.assignment.dueAt
+            }
+        )?.filter { it.custom?.isDeleted != true }
+
+        val leftAssignmentDataList = assignmentDataList?.filter { (_, assignment) -> assignment.status == Assignment.Status.Left } ?: emptyList()
+        val completedAssignmentDataList = assignmentDataList?.filter { (_, assignment) -> assignment.status == Assignment.Status.Completed } ?: emptyList()
+        val expiredAssignmentDataList = assignmentDataList?.filter { (_, assignment) -> assignment.status == Assignment.Status.Expired } ?: emptyList()
 
         leftAssignmentAdapter.submitList(if (viewModel.uiState.value.isLeftAssignmentExpanded) leftAssignmentDataList else emptyList())
         completedAssignmentAdapter.submitList(if (viewModel.uiState.value.isCompletedAssignmentExpanded) completedAssignmentDataList else emptyList())

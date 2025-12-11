@@ -38,15 +38,16 @@ class AssignmentAdapter(
         fun bind(assignmentData: AssignmentData) {
             val course = assignmentData.course
             val assignment = assignmentData.assignment
+            val custom = assignmentData.custom
 
-            binding.textViewTitle.text = assignment.name
+            binding.textViewTitle.text = custom?.name ?: assignment.name
             binding.textViewSubTitle.text = "${course.name} - ${if (assignment.isQuizAssignment) "Quiz" else "Assignment"}"
 
             if (assignment.isSubmitted) {
                 binding.textViewState.text = "Submitted"
                 binding.textViewState.setTextColor(context.getColorAttr(R.attr.colorTertiary))
             } else {
-                val remainingTime = DateUtil.calculateRemainingTime(assignment.dueAt)
+                val remainingTime = DateUtil.calculateRemainingTime(custom?.dueAt ?: assignment.dueAt)
                 when (remainingTime.type) {
                     DateUtil.DateResult.Type.UPCOMING -> {
                         binding.textViewState.text = DateUtil.formatRemainingTime(remainingTime.remainingSeconds)
