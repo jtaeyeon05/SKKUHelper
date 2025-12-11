@@ -86,6 +86,7 @@ class AssignmentAdapter(
         differ.submitList(list.toList())
     }
 
+
     override fun getItemCount(): Int = differ.currentList.size
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) = holder.bind(differ.currentList[position])
