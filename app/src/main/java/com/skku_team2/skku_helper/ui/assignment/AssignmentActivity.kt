@@ -86,7 +86,7 @@ class AssignmentActivity : AppCompatActivity() {
                     }
                 }
                 launch {
-                    viewModel.uiState.collect { uiState ->
+                    viewModel.customAssignmentDataState.collect { customAssignmentData ->
                         // TODO
                     }
                 }

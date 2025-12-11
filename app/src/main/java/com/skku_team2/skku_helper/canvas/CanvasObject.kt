@@ -4,12 +4,6 @@ import com.google.gson.annotations.SerializedName
 import com.skku_team2.skku_helper.utils.DateUtil
 
 
-data class AssignmentData(
-    val course: Course,
-    val assignment: Assignment,
-)
-
-
 data class User(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,

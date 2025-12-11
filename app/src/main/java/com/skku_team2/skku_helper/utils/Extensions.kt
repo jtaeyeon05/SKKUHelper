@@ -7,6 +7,7 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import java.security.MessageDigest
 
 
 fun Context.getColorAttr(@AttrRes colorAttr: Int): Int {
@@ -21,4 +22,10 @@ fun @receiver:ColorInt Int.isBright(threshold: Double = 0.5): Boolean {
     } else this
     val luminance = ColorUtils.calculateLuminance(visibleColor)
     return luminance > threshold
+}
+
+fun String.toSha256(): String {
+    val digest = MessageDigest.getInstance("SHA-256")
+    val hashBytes = digest.digest(this.toByteArray(Charsets.UTF_8))
+    return hashBytes.joinToString("") { "%02x".format(it) }
 }

@@ -4,19 +4,27 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.toObject
 import com.skku_team2.skku_helper.canvas.AssignmentData
 import com.skku_team2.skku_helper.canvas.CanvasClient
+import com.skku_team2.skku_helper.canvas.CustomAssignmentData
 import com.skku_team2.skku_helper.key.IntentKey
+import com.skku_team2.skku_helper.utils.toSha256
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 
 class AssignmentRepository {
+    private val db = FirebaseFirestore.getInstance()
+
     suspend fun getAssignmentData(
         token: String,
         courseId: Int,
@@ -34,26 +42,57 @@ class AssignmentRepository {
             }
         }
     }
+
+    suspend fun getCustomAssignmentData(
+        token: String,
+        courseId: Int,
+        assignmentId: Int
+    ): CustomAssignmentData? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val hashedToken = token.toSha256()
+                val docId = "${courseId}_${assignmentId}"
+                val document = db.collection("userData").document(hashedToken)
+                    .collection("customAssignments").document(docId)
+                    .get().await()
+                document.toObject<CustomAssignmentData>()
+            } catch (_: Exception) {
+                null
+            }
+        }
+    }
+
+    suspend fun saveCustomAssignmentData(
+        token: String,
+        courseId: Int,
+        assignmentId: Int,
+        data: CustomAssignmentData
+    ) {
+        withContext(Dispatchers.IO) {
+            val hashedToken = token.toSha256()
+            val docId = "${courseId}_${assignmentId}"
+            val docRef = db.collection("userData").document(hashedToken)
+                .collection("customAssignments").document(docId)
+            docRef.set(data, SetOptions.merge()).await()
+        }
+    }
 }
 
-data class AssignmentUiState(
-    val memo: String? = null
-) // TODO: 메모, 수정 사항 등
 
 class AssignmentViewModel(
     application: Application,
     savedStateHandle: SavedStateHandle
 ): AndroidViewModel(application) {
-    val token = savedStateHandle.get<String>(IntentKey.EXTRA_TOKEN) ?: null
-    val courseId = savedStateHandle.get<Int>(IntentKey.EXTRA_COURSE_ID) ?: null
-    val assignmentId = savedStateHandle.get<Int>(IntentKey.EXTRA_ASSIGNMENT_ID) ?: null
+    val token = savedStateHandle.get<String>(IntentKey.EXTRA_TOKEN)
+    private val courseId = savedStateHandle.get<Int>(IntentKey.EXTRA_COURSE_ID)
+    private val assignmentId = savedStateHandle.get<Int>(IntentKey.EXTRA_ASSIGNMENT_ID)
 
     private val repository = AssignmentRepository()
     private val _assignmentDataState = MutableStateFlow<AssignmentData?>(null)
-    private val _uiState = MutableStateFlow(AssignmentUiState())
+    private val _customAssignmentDataState = MutableStateFlow<CustomAssignmentData?>(null)
 
     val assignmentDataState: StateFlow<AssignmentData?> = _assignmentDataState.asStateFlow()
-    val uiState: StateFlow<AssignmentUiState> = _uiState.asStateFlow()
+    val customAssignmentDataState: StateFlow<CustomAssignmentData?> = _customAssignmentDataState.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -65,7 +104,26 @@ class AssignmentViewModel(
         if (token != null && courseId != null && assignmentId != null) {
             val assignmentData = repository.getAssignmentData(token, courseId, assignmentId)
             _assignmentDataState.update { assignmentData }
+
+            val customAssignmentData = repository.getCustomAssignmentData(token, courseId, assignmentId)
+            _customAssignmentDataState.update { customAssignmentData }
         }
-        // TODO: UiState, FireBase
+    }
+
+    fun onMemoChanged(memo: String) {
+        if (token == null || courseId == null || assignmentId == null) return
+
+        val currentCustomAssignmentData = customAssignmentDataState.value ?: CustomAssignmentData()
+        val updatedCustomAssignmentData = currentCustomAssignmentData.copy(memo = memo)
+        _customAssignmentDataState.update { updatedCustomAssignmentData }
+
+        viewModelScope.launch {
+            repository.saveCustomAssignmentData(
+                token = token,
+                courseId = courseId,
+                assignmentId = assignmentId,
+                data = updatedCustomAssignmentData
+            )
+        }
     }
 }

@@ -1,18 +1,18 @@
 package com.skku_team2.skku_helper.ui.assignment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
+import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.skku_team2.skku_helper.databinding.FragmentInformationBinding
 import kotlinx.coroutines.launch
-import kotlin.getValue
 
 
 class InformationFragment : Fragment() {
@@ -32,6 +32,10 @@ class InformationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.editTextMemo.doOnTextChanged { editable, _, _, _ ->
+            assignmentViewModel.onMemoChanged(editable.toString())
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
@@ -48,8 +52,15 @@ class InformationFragment : Fragment() {
                         }
                     }
                 }
-
-                // TODO: Memo
+                launch {
+                    assignmentViewModel.customAssignmentDataState.collect { customAssignmentData ->
+                        val memoFromState = customAssignmentData?.memo ?: ""
+                        if (binding.editTextMemo.text.toString() != memoFromState) {
+                            binding.editTextMemo.setText(assignmentViewModel.customAssignmentDataState.value?.memo)
+                            binding.editTextMemo.setSelection(memoFromState.length)
+                        }
+                    }
+                }
             }
         }
     }
