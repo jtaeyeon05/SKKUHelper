@@ -1,27 +1,32 @@
 package com.skku_team2.skku_helper.ui.main
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuItemCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.forEach
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.createGraph
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.fragment
-import com.google.android.material.R
 import com.google.android.material.snackbar.Snackbar
+import com.skku_team2.skku_helper.R
 import com.skku_team2.skku_helper.databinding.ActivityMainBinding
 import com.skku_team2.skku_helper.key.IntentKey
 import com.skku_team2.skku_helper.navigation.MainScreen
 import com.skku_team2.skku_helper.utils.getColorAttr
 import com.skku_team2.skku_helper.utils.isBright
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -38,17 +43,37 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setSupportActionBar(binding.topAppBarMain)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             val insetsController = WindowInsetsControllerCompat(window, window.decorView)
-            insetsController.isAppearanceLightStatusBars = !this.getColorAttr(R.attr.colorOnPrimary).isBright()
+            insetsController.isAppearanceLightStatusBars = !this.getColorAttr(com.google.android.material.R.attr.colorOnPrimary).isBright()
 
             view.setPadding(systemBars.left, 0, systemBars.right, 0)
 
             binding.topSystemBarMain.layoutParams.height = systemBars.top
             insets
+        }
+
+        binding.topAppBarMain.inflateMenu(R.menu.menu_toolbar_main)
+        binding.topAppBarMain.menu.forEach { menuItem ->
+            MenuItemCompat.setIconTintList(
+                menuItem,
+                ColorStateList.valueOf(
+                    this.getColorAttr(com.google.android.material.R.attr.colorOnPrimary)
+                )
+            )
+        }
+        binding.topAppBarMain.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.item_menu_refresh -> {
+                    lifecycleScope.launch {
+                        viewModel.fetch()
+                    }
+                    true
+                }
+                else -> false
+            }
         }
 
         val navHostFragment = supportFragmentManager.findFragmentById(binding.fragmentContainerViewMain.id) as NavHostFragment

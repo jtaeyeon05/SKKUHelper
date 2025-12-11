@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.skku_team2.skku_helper.canvas.AssignmentData
 import com.skku_team2.skku_helper.canvas.CanvasRepository
+import com.skku_team2.skku_helper.canvas.CustomAssignmentData
 import com.skku_team2.skku_helper.key.IntentKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -56,6 +57,23 @@ class MainViewModel(
                     errorMessage = null
                 )
             }
+        }
+    }
+
+    fun deleteAssignment(courseId: Int, assignmentId: Int) {
+        val assignmentData = assignmentDataListState.value?.find { assignmentData ->
+            assignmentData.course.id == courseId && assignmentData.assignment.id == assignmentId
+        }
+        val currentCustomAssignmentData = assignmentData?.custom ?: CustomAssignmentData()
+        val updatedCustomAssignmentData = currentCustomAssignmentData.copy(isDeleted = true)
+
+        viewModelScope.launch {
+            repository.saveCustomAssignmentData(
+                token = token,
+                courseId = courseId,
+                assignmentId = assignmentId,
+                data = updatedCustomAssignmentData
+            )
         }
     }
 }

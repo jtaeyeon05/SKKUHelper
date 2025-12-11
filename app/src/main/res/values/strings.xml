@@ -19,6 +19,11 @@
     <string name="start_login_login_failed_dismiss">Dismiss</string>
 
     <!-- MainActivity -->
+    <string name="main_menu_refresh">Loading Assignments...</string>
+    <string name="main_dialog_delete_title">Delete</string>
+    <string name="main_dialog_delete_message">Are you sure to delete this assignment?\nIf you delete this assignment, it will no longer be visible on the main screen.</string>
+    <string name="main_dialog_delete_cancel">Cancel</string>
+    <string name="main_dialog_delete_confirm">Delete</string>
     <!-- MainActivity - Home -->
     <string name="main_home_loading">Loading Assignments...</string>
     <string name="main_home_left_assignments">Left Assignments</string>

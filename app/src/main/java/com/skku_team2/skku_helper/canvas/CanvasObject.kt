@@ -1,7 +1,6 @@
 package com.skku_team2.skku_helper.canvas
 
 import com.google.gson.annotations.SerializedName
-import com.skku_team2.skku_helper.utils.DateUtil
 
 
 data class User(
@@ -146,8 +145,6 @@ data class Assignment(
     @SerializedName("submissions_download_url") val submissionsDownloadUrl: String?,
      */
 ) {
-    enum class Status { Left, Completed, Expired }
-
     companion object {
         val default get() = Assignment(
             id = 0,
@@ -158,15 +155,8 @@ data class Assignment(
             isQuizAssignment = false
         )
     }
-
-    val isSubmitted get() = submission?.workflowState == "submitted" || submission?.workflowState == "graded" || submission?.workflowState == "pending_review"
-    val status: Status get() {
-        val remainingTime = DateUtil.calculateRemainingTime(dueAt)
-        return if (isSubmitted) Status.Completed
-        else if (remainingTime.type == DateUtil.DateResult.Type.UPCOMING) Status.Left
-        else Status.Expired
-    }
 }
+
 
 data class Submission(
     @SerializedName("id") val id: Int,

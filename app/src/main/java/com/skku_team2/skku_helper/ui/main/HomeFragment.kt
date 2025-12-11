@@ -14,9 +14,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.skku_team2.skku_helper.R
-import com.skku_team2.skku_helper.canvas.Assignment
+import com.skku_team2.skku_helper.canvas.AssignmentData
 import com.skku_team2.skku_helper.databinding.FragmentHomeBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -48,9 +51,39 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        leftAssignmentAdapter = AssignmentAdapter(requireContext(), mainViewModel.token)
-        completedAssignmentAdapter = AssignmentAdapter(requireContext(), mainViewModel.token)
-        expiredAssignmentAdapter = AssignmentAdapter(requireContext(), mainViewModel.token)
+        val onItemLongClickListener: (AssignmentData) -> Boolean = { assignmentData ->
+            CoroutineScope(Dispatchers.Main).launch {
+                MaterialAlertDialogBuilder(requireContext()).apply {
+                    setTitle(R.string.main_dialog_delete_title)
+                    setMessage(R.string.main_dialog_delete_message)
+                    setNegativeButton(R.string.main_dialog_delete_cancel, null)
+                    setPositiveButton(R.string.main_dialog_delete_confirm) { _, _ ->
+                        lifecycleScope.launch {
+                            mainViewModel.deleteAssignment(assignmentData.course.id, assignmentData.assignment.id)
+                            mainViewModel.fetch()
+                        }
+                    }
+                    create().show()
+                }
+            }
+            true
+        }
+
+        leftAssignmentAdapter = AssignmentAdapter(
+            context = requireContext(),
+            token = mainViewModel.token,
+            onLongClick = onItemLongClickListener
+        )
+        completedAssignmentAdapter = AssignmentAdapter(
+            context = requireContext(),
+            token = mainViewModel.token,
+            onLongClick = onItemLongClickListener
+        )
+        expiredAssignmentAdapter = AssignmentAdapter(
+            context = requireContext(),
+            token = mainViewModel.token,
+            onLongClick = onItemLongClickListener
+        )
 
         leftAssignmentHeaderAdapter = AssignmentHeaderAdapter(requireContext().getString(R.string.main_home_left_assignments)) { viewModel.toggleLeftAssignment() }
         completedAssignmentHeaderAdapter = AssignmentHeaderAdapter(requireContext().getString(R.string.main_home_completed_assignments)) { viewModel.toggleCompletedAssignment() }
@@ -64,6 +97,13 @@ class HomeFragment : Fragment() {
 
         binding.recyclerViewHome.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewHome.adapter = concatAdapter
+
+        binding.swipeRefreshLayoutHome.setOnRefreshListener {
+            lifecycleScope.launch {
+                mainViewModel.fetch()
+                binding.swipeRefreshLayoutHome.isRefreshing = false
+            }
+        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -106,9 +146,9 @@ class HomeFragment : Fragment() {
             }
         )?.filter { it.custom?.isDeleted != true }
 
-        val leftAssignmentDataList = assignmentDataList?.filter { (_, assignment) -> assignment.status == Assignment.Status.Left } ?: emptyList()
-        val completedAssignmentDataList = assignmentDataList?.filter { (_, assignment) -> assignment.status == Assignment.Status.Completed } ?: emptyList()
-        val expiredAssignmentDataList = assignmentDataList?.filter { (_, assignment) -> assignment.status == Assignment.Status.Expired } ?: emptyList()
+        val leftAssignmentDataList = assignmentDataList?.filter { assignmentData -> assignmentData.status == AssignmentData.Status.Left } ?: emptyList()
+        val completedAssignmentDataList = assignmentDataList?.filter { assignmentData -> assignmentData.status == AssignmentData.Status.Completed } ?: emptyList()
+        val expiredAssignmentDataList = assignmentDataList?.filter { assignmentData -> assignmentData.status == AssignmentData.Status.Expired } ?: emptyList()
 
         leftAssignmentAdapter.submitList(if (viewModel.uiState.value.isLeftAssignmentExpanded) leftAssignmentDataList else emptyList())
         completedAssignmentAdapter.submitList(if (viewModel.uiState.value.isCompletedAssignmentExpanded) completedAssignmentDataList else emptyList())

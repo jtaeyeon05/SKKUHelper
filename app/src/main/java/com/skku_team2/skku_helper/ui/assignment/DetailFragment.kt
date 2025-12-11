@@ -41,12 +41,13 @@ class DetailFragment : Fragment() {
                     assignmentViewModel.assignmentDataState.collect { assignmentData ->
                         val course = assignmentData?.course
                         val assignment = assignmentData?.assignment
+                        val custom = assignmentData?.custom
 
                         binding.buttonAssignment.setOnClickListener {
                             val intent = Intent(Intent.ACTION_VIEW, assignment?.htmlUrl?.toUri())
                             requireContext().startActivity(intent)
                         }
-                        if (!(assignment?.isSubmitted ?: true)) {
+                        if (!(assignmentData?.isSubmitted ?: true)) {
                             binding.buttonSubmission.visibility = View.GONE
                         } else {
                             binding.buttonSubmission.visibility = View.VISIBLE
@@ -60,7 +61,8 @@ class DetailFragment : Fragment() {
                             binding.layoutInformation.visibility = View.GONE
                         } else {
                             binding.layoutInformation.visibility = View.VISIBLE
-                            binding.tableTextName.text = assignment.name
+
+                            binding.tableTextName.text = if (custom?.name == null) assignment.name else "${custom.name} (${assignment.name})"
                             binding.tableTextCourse.text = course.name
                             binding.tableTextAssignmentType.text = if (assignment.isQuizAssignment) "Quiz" else "Assignment"
                             if (assignment.pointsPossible == null) {
@@ -69,7 +71,7 @@ class DetailFragment : Fragment() {
                                 binding.tableRowMaxPoints.visibility = View.VISIBLE
                                 binding.tableTextMaxPoints.text = assignment.pointsPossible.toString()
                             }
-                            binding.tableTextSubmitted.text = if (assignment.isSubmitted) "Yes" else "No"
+                            binding.tableTextSubmitted.text = if (assignmentData.isSubmitted) "Yes" else "No"
                             binding.tableTextLocked.text = if (assignment.lockedForUser ?: false) "Yes" else "No"
                             if (assignment.createdAt == null) {
                                 binding.tableRowCreatedDate.visibility = View.GONE
@@ -87,7 +89,9 @@ class DetailFragment : Fragment() {
                                 binding.tableRowDueDate.visibility = View.GONE
                             } else {
                                 binding.tableRowDueDate.visibility = View.VISIBLE
-                                binding.tableTextDueDate.text = DateUtil.parseTime(assignment.dueAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
+                                binding.tableTextDueDate.text =
+                                    if (custom?.dueAt == null) DateUtil.parseTime(assignment.dueAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
+                                    else "${DateUtil.parseTime(custom!!.dueAt!!).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }} (${DateUtil.parseTime(assignment.dueAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }})"
                             }
                             if (assignment.lockAt == null || assignment.lockedForUser == false) {
                                 binding.tableRowLockedDate.visibility = View.GONE
@@ -103,7 +107,7 @@ class DetailFragment : Fragment() {
                             }
                         }
 
-                        if (!(assignment?.isSubmitted ?: true)) {
+                        if (!(assignmentData?.isSubmitted ?: true)) {
                             binding.layoutSubmission.visibility = View.GONE
                         } else if (assignment?.submission != null) {
                             binding.layoutSubmission.visibility = View.VISIBLE

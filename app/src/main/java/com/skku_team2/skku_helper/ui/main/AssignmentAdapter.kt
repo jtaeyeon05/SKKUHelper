@@ -19,6 +19,7 @@ import com.skku_team2.skku_helper.utils.getColorAttr
 class AssignmentAdapter(
     private val context: Context,
     private val token: String,
+    private val onLongClick: ((AssignmentData) -> Boolean)? = null
 ) : RecyclerView.Adapter<AssignmentAdapter.ItemViewHolder>() {
     private val diffCallback = object : DiffUtil.ItemCallback<AssignmentData>() {
         override fun areItemsTheSame(oldItem: AssignmentData, newItem: AssignmentData): Boolean {
@@ -43,7 +44,7 @@ class AssignmentAdapter(
             binding.textViewTitle.text = custom?.name ?: assignment.name
             binding.textViewSubTitle.text = "${course.name} - ${if (assignment.isQuizAssignment) "Quiz" else "Assignment"}"
 
-            if (assignment.isSubmitted) {
+            if (assignmentData.isSubmitted) {
                 binding.textViewState.text = "Submitted"
                 binding.textViewState.setTextColor(context.getColorAttr(R.attr.colorTertiary))
             } else {
@@ -74,6 +75,11 @@ class AssignmentAdapter(
                     putExtra(IntentKey.EXTRA_ASSIGNMENT_ID, assignment.id)
                 }
                 context.startActivity(assignmentActivityIntent)
+            }
+            if (onLongClick != null) {
+                binding.root.setOnLongClickListener {
+                    onLongClick(assignmentData)
+                }
             }
         }
     }
