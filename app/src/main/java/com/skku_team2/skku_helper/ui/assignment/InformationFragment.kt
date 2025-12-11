@@ -11,7 +11,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.skku_team2.skku_helper.databinding.FragmentInformationBinding
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import kotlin.getValue
 
@@ -33,16 +32,10 @@ class InformationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    combine(
-                        assignmentViewModel.courseState,
-                        assignmentViewModel.assignmentState
-                    ) { courseState, assignmentState ->
-                        courseState to assignmentState
-                    }.collect { (courseState, assignmentState) ->
+                    assignmentViewModel.assignmentState.collect { assignmentState ->
                         if (assignmentState?.description == null || assignmentState.description.isEmpty()) {
                             binding.layoutDescription.visibility = View.GONE
                         } else {
@@ -52,10 +45,10 @@ class InformationFragment : Fragment() {
                                 HtmlCompat.FROM_HTML_MODE_LEGACY
                             )
                         }
-
-                        // TODO: Memo
                     }
                 }
+
+                // TODO: Memo
             }
         }
     }

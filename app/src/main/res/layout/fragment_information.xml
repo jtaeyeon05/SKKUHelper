@@ -14,37 +14,97 @@
         android:id="@+id/layout_description"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:minHeight="240dp"
-        android:layout_weight="1"
+        android:minHeight="320dp"
+        android:layout_weight="3"
         android:orientation="vertical">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?attr/textAppearanceTitleMedium"
             android:text="@string/assignment_information_description" />
+
         <Space
             android:layout_width="match_parent"
             android:layout_height="8dp" />
+
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             app:cardCornerRadius="12dp"
             app:cardElevation="0dp">
+
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="?attr/colorSurfaceContainerLow"
                 android:fillViewport="true">
+
                 <TextView
                     android:id="@+id/textView_html"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="12dp"/>
+
             </ScrollView>
+
         </com.google.android.material.card.MaterialCardView>
+
     </LinearLayout>
 
-    <!-- TODO: Memo -->
+    <LinearLayout
+        android:id="@+id/layout_memo"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:minHeight="320dp"
+        android:layout_weight="2"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:text="@string/assignment_information_memo" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="8dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="?attr/colorSurfaceContainerLow"
+                android:fillViewport="true">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout_memo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    app:boxBackgroundMode="none"
+                    app:hintEnabled="false">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editText_memo"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="top|start"
+                        android:maxLength="200"
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:hint="@string/assignment_information_memo_hint" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </ScrollView>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
 
 </LinearLayout>

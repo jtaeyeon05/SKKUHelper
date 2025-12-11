@@ -15,12 +15,8 @@
         android:theme="@style/Theme.SKKUHelper"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.assignment.AssignmentActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.start.StartActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustPan">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,6 +26,10 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.assignment.AssignmentActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 
 </manifest>

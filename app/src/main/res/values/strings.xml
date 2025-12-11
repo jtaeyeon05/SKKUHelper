@@ -35,6 +35,8 @@
     <string name="assignment_information">Information</string>
     <string name="assignment_information_description">Description</string>
     <string name="assignment_information_description_fail">Description does not exist</string>
+    <string name="assignment_information_memo">Memo</string>
+    <string name="assignment_information_memo_hint">Write a memo about this assignment</string>
     <!-- AssignmentActivity - Detail -->
     <string name="assignment_detail">Detail</string>
     <string name="assignment_detail_open_assignment">Open Assignment</string>
