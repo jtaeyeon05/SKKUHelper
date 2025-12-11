@@ -53,7 +53,7 @@ class AssignmentRepository {
                 val hashedToken = token.toSha256()
                 val docId = "${courseId}_${assignmentId}"
                 val document = db.collection("userData").document(hashedToken)
-                    .collection("customAssignments").document(docId)
+                    .collection("customAssignmentData").document(docId)
                     .get().await()
                 document.toObject<CustomAssignmentData>()
             } catch (_: Exception) {
@@ -72,7 +72,7 @@ class AssignmentRepository {
             val hashedToken = token.toSha256()
             val docId = "${courseId}_${assignmentId}"
             val docRef = db.collection("userData").document(hashedToken)
-                .collection("customAssignments").document(docId)
+                .collection("customAssignmentData").document(docId)
             docRef.set(data, SetOptions.merge()).await()
         }
     }
@@ -110,11 +110,70 @@ class AssignmentViewModel(
         }
     }
 
-    fun onMemoChanged(memo: String) {
+    fun deleteAssignment() {
+        if (token == null || courseId == null || assignmentId == null) return
+
+        val currentCustomAssignmentData = customAssignmentDataState.value ?: CustomAssignmentData()
+        val updatedCustomAssignmentData = currentCustomAssignmentData.copy(isDeleted = true)
+        _customAssignmentDataState.update { updatedCustomAssignmentData }
+
+        viewModelScope.launch {
+            repository.saveCustomAssignmentData(
+                token = token,
+                courseId = courseId,
+                assignmentId = assignmentId,
+                data = updatedCustomAssignmentData
+            )
+        }
+    }
+
+    /*
+    fun restoreAssignment() {
+        if (token == null || courseId == null || assignmentId == null) return
+
+        val currentCustomAssignmentData = customAssignmentDataState.value ?: CustomAssignmentData()
+        val updatedCustomAssignmentData = currentCustomAssignmentData.copy(isDeleted = false)
+        _customAssignmentDataState.update { updatedCustomAssignmentData }
+
+        viewModelScope.launch {
+            repository.saveCustomAssignmentData(
+                token = token,
+                courseId = courseId,
+                assignmentId = assignmentId,
+                data = updatedCustomAssignmentData
+            )
+        }
+    }
+    */
+
+    fun changeAssignmentMemo(memo: String) {
         if (token == null || courseId == null || assignmentId == null) return
 
         val currentCustomAssignmentData = customAssignmentDataState.value ?: CustomAssignmentData()
         val updatedCustomAssignmentData = currentCustomAssignmentData.copy(memo = memo)
+        _customAssignmentDataState.update { updatedCustomAssignmentData }
+
+        viewModelScope.launch {
+            repository.saveCustomAssignmentData(
+                token = token,
+                courseId = courseId,
+                assignmentId = assignmentId,
+                data = updatedCustomAssignmentData
+            )
+        }
+    }
+
+    fun changeAssignmentData(
+        name: String? = null,
+        dueAt: String? = null
+    ) {
+        if (token == null || courseId == null || assignmentId == null) return
+
+        val currentCustomAssignmentData = customAssignmentDataState.value ?: CustomAssignmentData()
+        val updatedCustomAssignmentData = currentCustomAssignmentData.copy(
+            name = name.let { if (it?.trim().isNullOrBlank()) null else it.trim() },
+            dueAt = dueAt.let { if (it?.trim().isNullOrBlank()) null else it.trim() }
+        )
         _customAssignmentDataState.update { updatedCustomAssignmentData }
 
         viewModelScope.launch {

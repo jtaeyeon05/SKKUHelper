@@ -31,6 +31,17 @@
     <string name="main_message_auto_login">Automatic LogIn Success!</string>
 
     <!-- AssignmentActivity -->
+    <string name="assignment_menu_edit">Edit</string>
+    <string name="assignment_dialog_edit_title">Edit</string>
+    <string name="assignment_dialog_edit_assignment_name">Assignment Name</string>
+    <string name="assignment_dialog_edit_due_date">Due Date</string>
+    <string name="assignment_dialog_edit_cancel">Cancel</string>
+    <string name="assignment_dialog_edit_confirm">Confirm</string>
+    <string name="assignment_menu_delete">Delete</string>
+    <string name="assignment_dialog_delete_title">Delete</string>
+    <string name="assignment_dialog_delete_message">Are you sure to delete this assignment?\nIf you delete this assignment, it will no longer be visible on the main screen.</string>
+    <string name="assignment_dialog_delete_cancel">Cancel</string>
+    <string name="assignment_dialog_delete_confirm">Delete</string>
     <!-- AssignmentActivity - Information -->
     <string name="assignment_information">Information</string>
     <string name="assignment_information_description">Description</string>

@@ -33,7 +33,7 @@ class InformationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.editTextMemo.doOnTextChanged { editable, _, _, _ ->
-            assignmentViewModel.onMemoChanged(editable.toString())
+            assignmentViewModel.changeAssignmentMemo(editable.toString())
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
