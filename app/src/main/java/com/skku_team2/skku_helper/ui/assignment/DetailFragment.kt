@@ -14,7 +14,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.skku_team2.skku_helper.R
 import com.skku_team2.skku_helper.databinding.FragmentDetailBinding
 import com.skku_team2.skku_helper.utils.DateUtil
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.time.format.DateTimeFormatter
 
@@ -39,93 +38,87 @@ class DetailFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    combine(
-                        assignmentViewModel.courseState,
-                        assignmentViewModel.assignmentState
-                    ) { courseState, assignmentState ->
-                        courseState to assignmentState
-                    }.collect { (courseState, assignmentState) ->
+                    assignmentViewModel.assignmentDataState.collect { assignmentData ->
+                        val course = assignmentData?.course
+                        val assignment = assignmentData?.assignment
+
                         binding.buttonAssignment.setOnClickListener {
-                            val intent = Intent(Intent.ACTION_VIEW, assignmentState?.htmlUrl?.toUri())
+                            val intent = Intent(Intent.ACTION_VIEW, assignment?.htmlUrl?.toUri())
                             requireContext().startActivity(intent)
                         }
-                        if (!(assignmentState?.isSubmitted ?: true)) {
+                        if (!(assignment?.isSubmitted ?: true)) {
                             binding.buttonSubmission.visibility = View.GONE
                         } else {
                             binding.buttonSubmission.visibility = View.VISIBLE
                             binding.buttonSubmission.setOnClickListener {
-                                val intent = Intent(Intent.ACTION_VIEW, assignmentState?.submission?.previewUrl?.toUri())
+                                val intent = Intent(Intent.ACTION_VIEW, assignment?.submission?.previewUrl?.toUri())
                                 requireContext().startActivity(intent)
                             }
                         }
 
-                        if (assignmentState == null || courseState == null) {
+                        if (assignment == null || course == null) {
                             binding.layoutInformation.visibility = View.GONE
                         } else {
                             binding.layoutInformation.visibility = View.VISIBLE
-                            binding.tableTextName.text = assignmentState.name
-                            binding.tableTextCourse.text = courseState.name
-                            binding.tableTextAssignmentType.text = if (assignmentState.isQuizAssignment) "Quiz" else "Assignment"
-                            if (assignmentState.pointsPossible == null) {
+                            binding.tableTextName.text = assignment.name
+                            binding.tableTextCourse.text = course.name
+                            binding.tableTextAssignmentType.text = if (assignment.isQuizAssignment) "Quiz" else "Assignment"
+                            if (assignment.pointsPossible == null) {
                                 binding.tableRowMaxPoints.visibility = View.GONE
                             } else {
                                 binding.tableRowMaxPoints.visibility = View.VISIBLE
-                                binding.tableTextMaxPoints.text = assignmentState.pointsPossible.toString()
+                                binding.tableTextMaxPoints.text = assignment.pointsPossible.toString()
                             }
-                            binding.tableTextSubmitted.text = if (assignmentState.isSubmitted) "Yes" else "No"
-                            binding.tableTextLocked.text = if (assignmentState.lockedForUser ?: false) "Yes" else "No"
-                            if (assignmentState.createdAt == null) {
+                            binding.tableTextSubmitted.text = if (assignment.isSubmitted) "Yes" else "No"
+                            binding.tableTextLocked.text = if (assignment.lockedForUser ?: false) "Yes" else "No"
+                            if (assignment.createdAt == null) {
                                 binding.tableRowCreatedDate.visibility = View.GONE
                             } else {
                                 binding.tableRowCreatedDate.visibility = View.VISIBLE
-                                binding.tableTextCreatedDate.text = DateUtil.parseTime(assignmentState.createdAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
+                                binding.tableTextCreatedDate.text = DateUtil.parseTime(assignment.createdAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
                             }
-                            if (assignmentState.updatedAt == null) {
+                            if (assignment.updatedAt == null) {
                                 binding.tableRowUpdatedDate.visibility = View.GONE
                             } else {
                                 binding.tableRowUpdatedDate.visibility = View.VISIBLE
-                                binding.tableTextUpdatedDate.text = DateUtil.parseTime(assignmentState.updatedAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
+                                binding.tableTextUpdatedDate.text = DateUtil.parseTime(assignment.updatedAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
                             }
-                            if (assignmentState.dueAt == null) {
+                            if (assignment.dueAt == null) {
                                 binding.tableRowDueDate.visibility = View.GONE
                             } else {
                                 binding.tableRowDueDate.visibility = View.VISIBLE
-                                binding.tableTextDueDate.text = DateUtil.parseTime(assignmentState.dueAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
+                                binding.tableTextDueDate.text = DateUtil.parseTime(assignment.dueAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
                             }
-                            if (assignmentState.lockAt == null || assignmentState.lockedForUser == false) {
+                            if (assignment.lockAt == null || assignment.lockedForUser == false) {
                                 binding.tableRowLockedDate.visibility = View.GONE
                             } else {
                                 binding.tableRowLockedDate.visibility = View.VISIBLE
-                                binding.tableTextLockedDate.text = DateUtil.parseTime(assignmentState.lockAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
+                                binding.tableTextLockedDate.text = DateUtil.parseTime(assignment.lockAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
                             }
-                            if (assignmentState.unlockAt == null || assignmentState.lockedForUser == true) {
+                            if (assignment.unlockAt == null || assignment.lockedForUser == true) {
                                 binding.tableRowUnlockedDate.visibility = View.GONE
                             } else {
                                 binding.tableRowUnlockedDate.visibility = View.VISIBLE
-                                binding.tableTextUnlockedDate.text = DateUtil.parseTime(assignmentState.unlockAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
+                                binding.tableTextUnlockedDate.text = DateUtil.parseTime(assignment.unlockAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
                             }
                         }
 
-                        if (!(assignmentState?.isSubmitted ?: true)) {
+                        if (!(assignment?.isSubmitted ?: true)) {
                             binding.layoutSubmission.visibility = View.GONE
-                        } else if (assignmentState?.submission != null) {
+                        } else if (assignment?.submission != null) {
                             binding.layoutSubmission.visibility = View.VISIBLE
-                            assignmentState.submission.run {
+                            assignment.submission.run {
                                 if (grade == null) {
                                     binding.tableRowGrade.visibility = View.GONE
                                 } else {
                                     binding.tableRowGrade.visibility = View.VISIBLE
-                                    binding.tableTextGrade.text = "$score / ${assignmentState.pointsPossible}"
+                                    binding.tableTextGrade.text = "$score / ${assignment.pointsPossible}"
                                 }
-                                if (submissionType == null) {
-                                    binding.tableRowSubmissionType.visibility = View.GONE
-                                } else {
-                                    binding.tableRowSubmissionType.visibility = View.VISIBLE
-                                    binding.tableTextSubmissionType.text = when (submissionType) {
-                                        "online_quiz" -> "Quiz"
-                                        "online_upload" -> "Assignment"
-                                        else -> submissionType
-                                    }
+                                binding.tableRowSubmissionType.visibility = View.VISIBLE
+                                binding.tableTextSubmissionType.text = when (submissionType) {
+                                    "online_quiz" -> "Quiz"
+                                    "online_upload" -> "Assignment"
+                                    else -> submissionType
                                 }
                                 if (submittedAt == null) {
                                     binding.tableRowSubmissionDate.visibility = View.GONE

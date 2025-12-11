@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.skku_team2.skku_helper.R
 import com.skku_team2.skku_helper.canvas.Assignment
 import com.skku_team2.skku_helper.databinding.FragmentHomeBinding
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -68,8 +69,12 @@ class HomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    mainViewModel.uiState
-                        .map { Triple(it.assignmentDataList, it.isLoading, it.errorMessage) }
+                    combine(
+                        mainViewModel.assignmentDataListState,
+                        mainViewModel.uiState
+                    ) { assignmentDataListState, uiState ->
+                        Triple(assignmentDataListState, uiState.isLoading, uiState.errorMessage)
+                    }
                         .distinctUntilChanged()
                         .collect { updateLists() }
                 }
@@ -96,9 +101,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateLists() {
-        val leftAssignmentDataList = mainViewModel.uiState.value.assignmentDataList.filter { (_, assignment) -> assignment.status == Assignment.Status.Left }
-        val completedAssignmentDataList = mainViewModel.uiState.value.assignmentDataList.filter { (_, assignment) -> assignment.status == Assignment.Status.Completed }
-        val expiredAssignmentDataList = mainViewModel.uiState.value.assignmentDataList.filter { (_, assignment) -> assignment.status == Assignment.Status.Expired }
+        val leftAssignmentDataList = mainViewModel.assignmentDataListState.value?.filter { (_, assignment) -> assignment.status == Assignment.Status.Left } ?: emptyList()
+        val completedAssignmentDataList = mainViewModel.assignmentDataListState.value?.filter { (_, assignment) -> assignment.status == Assignment.Status.Completed } ?: emptyList()
+        val expiredAssignmentDataList = mainViewModel.assignmentDataListState.value?.filter { (_, assignment) -> assignment.status == Assignment.Status.Expired } ?: emptyList()
 
         leftAssignmentAdapter.submitList(if (viewModel.uiState.value.isLeftAssignmentExpanded) leftAssignmentDataList else emptyList())
         completedAssignmentAdapter.submitList(if (viewModel.uiState.value.isCompletedAssignmentExpanded) completedAssignmentDataList else emptyList())

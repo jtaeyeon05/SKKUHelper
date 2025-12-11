@@ -22,6 +22,7 @@ import com.skku_team2.skku_helper.key.IntentKey
 import com.skku_team2.skku_helper.navigation.MainScreen
 import com.skku_team2.skku_helper.utils.getColorAttr
 import com.skku_team2.skku_helper.utils.isBright
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -92,10 +93,14 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState
-                    .map { Triple(it.assignmentDataList, it.isLoading, it.errorMessage) }
+                combine(
+                    viewModel.assignmentDataListState,
+                    viewModel.uiState
+                ) { assignmentDataListState, uiState ->
+                    Triple(assignmentDataListState, uiState.isLoading, uiState.errorMessage)
+                }
                     .distinctUntilChanged()
-                    .collect { (assignmentDataList, isLoading, errorMessage) ->
+                    .collect { (_, isLoading, errorMessage) ->
                         binding.layoutLoading.visibility = if (isLoading) View.VISIBLE else View.GONE
                         if (errorMessage != null) Toast.makeText(this@MainActivity, errorMessage, Toast.LENGTH_SHORT).show()
                     }

@@ -21,19 +21,49 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.collections.map
 
 
 class MainRepository {
-    fun getAssignmentDataListFlow(token: String, showOnlyThisSemester: Boolean = true) = flow {
-        Log.d("CanvasRepository", "[assignmentDataListFlow] Token: $token")
-        if (token.isNullOrBlank()) {
-            emit(Result.failure(Exception("Failed on Token Loading.")))
-            return@flow
-        }
+    suspend fun getAssignmentDataList(
+        token: String,
+        showOnlyThisSemester: Boolean = true
+    ): List<AssignmentData>? {
+        return withContext(Dispatchers.IO) {
+            val authorizationToken = "Bearer $token"
 
-        val apiToken = "Bearer $token"
-        val courseList = CanvasClient.api.getCourses(apiToken).execute().body()
+            val courseList = CanvasClient.api.getCourses(authorizationToken).execute().body()
+            Log.d("CanvasRepository", "[assignmentDataListFlow] courseList: ${courseList?.size}")
+
+            val assignmentDataList = coroutineScope {
+                courseList?.map { course ->
+                    val remainingSeconds = DateUtil.calculateRemainingTime(course.createdAt).remainingSeconds
+                    async {
+                        if (showOnlyThisSemester && -(remainingSeconds ?: Long.MIN_VALUE) > 180 * 24 * 60 * 60) {
+                            emptyList()
+                        } else {
+                            val assignmentList = CanvasClient.api.getAssignments(authorizationToken, course.id).execute().body()
+                            Log.d("CanvasRepository", "[assignmentDataListFlow] assignmentList (${course.name}): ${assignmentList?.size}")
+                            assignmentList?.map { assignment ->
+                                AssignmentData(
+                                    course = course,
+                                    assignment = assignment
+                                )
+                            } ?: emptyList()
+                        }
+                    }
+                }
+            }?.awaitAll()?.flatten()
+
+            assignmentDataList?.sortedWith(compareBy(nullsLast()) { it.assignment.dueAt })
+        }
+    }
+
+    fun getAssignmentDataListFlow(token: String, showOnlyThisSemester: Boolean = true) = flow {
+        val authorizationToken = "Bearer $token"
+
+        val courseList = CanvasClient.api.getCourses(authorizationToken).execute().body()
         Log.d("CanvasRepository", "[assignmentDataListFlow] courseList: ${courseList?.size}")
         if (courseList == null || courseList.isEmpty()) {
             emit(Result.success(emptyList()))
@@ -44,12 +74,10 @@ class MainRepository {
             courseList.map { course ->
                 val remainingSeconds = DateUtil.calculateRemainingTime(course.createdAt).remainingSeconds
                 if (showOnlyThisSemester && remainingSeconds != null && -remainingSeconds > 180 * 24 * 60 * 60) {
-                    async {
-                        emptyList()
-                    }
+                    async { emptyList() }
                 } else {
                     async {
-                        val assignmentList = CanvasClient.api.getAssignments(apiToken, course.id).execute().body()
+                        val assignmentList = CanvasClient.api.getAssignments(authorizationToken, course.id).execute().body()
                         Log.d("CanvasRepository", "[assignmentDataListFlow] assignmentList (${course.name}): ${assignmentList?.size}")
                         assignmentList?.map { assignment ->
                             AssignmentData(
@@ -71,7 +99,6 @@ class MainRepository {
 }
 
 data class MainUiState(
-    val assignmentDataList: List<AssignmentData> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )
@@ -83,8 +110,10 @@ class MainViewModel(
     val token = savedStateHandle.get<String>(IntentKey.EXTRA_TOKEN) ?: ""
 
     private val repository = MainRepository()
+    private val _assignmentDataListState = MutableStateFlow<List<AssignmentData>?>(null)
     private val _uiState = MutableStateFlow(MainUiState())
 
+    val assignmentDataListState = _assignmentDataListState.asStateFlow()
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
 
     init {
@@ -96,26 +125,21 @@ class MainViewModel(
     suspend fun fetch() {
         _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
-        repository.getAssignmentDataListFlow(token)
-            .collect { result ->
-                result
-                    .onSuccess { assignmentDataList ->
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                assignmentDataList = assignmentDataList
-                            )
-                        }
-                    }
-                    .onFailure { exception ->
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                assignmentDataList = emptyList(),
-                                errorMessage = exception.message ?: "Failed on Fetching Data."
-                            )
-                        }
-                    }
+        _assignmentDataListState.update { repository.getAssignmentDataList(token) }
+        if (assignmentDataListState.value == null) {
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    errorMessage = "Failed on Fetching Data."
+                )
             }
+        } else {
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    errorMessage = null
+                )
+            }
+        }
     }
 }

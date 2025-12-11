@@ -18,7 +18,6 @@ import com.skku_team2.skku_helper.databinding.ActivityAssignmentBinding
 import com.skku_team2.skku_helper.navigation.AssignmentScreen
 import com.skku_team2.skku_helper.utils.getColorAttr
 import com.skku_team2.skku_helper.utils.isBright
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 
@@ -46,8 +45,8 @@ class AssignmentActivity : AppCompatActivity() {
             insets
         }
 
-        binding.toolbarLayoutAssignment.title = viewModel.assignmentState.value?.name ?: "Assignment"
-        binding.toolbarLayoutAssignment.subtitle = viewModel.courseState.value?.name ?: "Course"
+        binding.toolbarLayoutAssignment.title = viewModel.assignmentDataState.value?.assignment?.name ?: "Assignment"
+        binding.toolbarLayoutAssignment.subtitle = viewModel.assignmentDataState.value?.course?.name ?: "Course"
         binding.topAppBarAssignment.setNavigationOnClickListener { finish() }
 
         val navHostFragment = supportFragmentManager.findFragmentById(binding.fragmentContainerView.id) as NavHostFragment
@@ -79,14 +78,11 @@ class AssignmentActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    combine(
-                        viewModel.courseState,
-                        viewModel.assignmentState
-                    ) { courseState, assignmentState ->
-                        courseState to assignmentState
-                    }.collect { (courseState, assignmentState) ->
-                        binding.toolbarLayoutAssignment?.title = assignmentState?.name ?: "Assignment"
-                        binding.toolbarLayoutAssignment?.subtitle = courseState?.name ?: "Course"
+                    viewModel.assignmentDataState.collect { assignmentData ->
+                        val course = assignmentData?.course
+                        val assignment = assignmentData?.assignment
+                        binding.toolbarLayoutAssignment?.title = assignment?.name ?: "Assignment"
+                        binding.toolbarLayoutAssignment?.subtitle = course?.name ?: "Course"
                     }
                 }
                 launch {

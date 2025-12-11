@@ -35,13 +35,14 @@ class InformationFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    assignmentViewModel.assignmentState.collect { assignmentState ->
-                        if (assignmentState?.description == null || assignmentState.description.isEmpty()) {
+                    assignmentViewModel.assignmentDataState.collect { assignmentData ->
+                        val assignment = assignmentData?.assignment
+                        if (assignment?.description == null || assignment.description.isEmpty()) {
                             binding.layoutDescription.visibility = View.GONE
                         } else {
                             binding.layoutDescription.visibility = View.VISIBLE
                             binding.textViewHtml.text = HtmlCompat.fromHtml(
-                                assignmentState.description,
+                                assignment.description,
                                 HtmlCompat.FROM_HTML_MODE_LEGACY
                             )
                         }
