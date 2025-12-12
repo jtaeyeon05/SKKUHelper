@@ -143,10 +143,13 @@ class HomeFragment : Fragment() {
                 launch {
                     viewModel.uiState
                         .collect { state ->
+                            if (_binding == null) return@collect
+
                             TransitionManager.beginDelayedTransition(
                                 binding.root as ViewGroup,
                                 AutoTransition().apply { duration = 200 }
                             )
+
                             leftAssignmentHeaderAdapter.updateExpandState(state.isLeftAssignmentExpanded)
                             completedAssignmentHeaderAdapter.updateExpandState(state.isCompletedAssignmentExpanded)
                             expiredAssignmentHeaderAdapter.updateExpandState(state.isExpiredAssignmentExpanded)

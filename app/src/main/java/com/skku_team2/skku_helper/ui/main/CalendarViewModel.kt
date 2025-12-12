@@ -29,7 +29,9 @@ class CalendarViewModel : ViewModel() {
             val date = DateUtil.parseLocalDate(assignmentDate.custom?.dueAt ?: assignmentDate.assignment.dueAt ?: "")
             selectedDate == date
         }?.sortedWith(
-            compareBy(nullsLast()) {
+            compareBy<AssignmentData> {
+                it.status
+            }.thenBy(nullsLast()) {
                 it.custom?.dueAt ?: it.assignment.dueAt
             }
         )

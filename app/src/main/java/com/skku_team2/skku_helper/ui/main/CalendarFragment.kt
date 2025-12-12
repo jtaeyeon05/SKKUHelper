@@ -104,11 +104,11 @@ class CalendarFragment : Fragment() {
             val weeksInMonth = yearMonth.atEndOfMonth().get(weekFields.weekOfMonth())
 
             val tileHeightPx = 48.dpToPx()
-            val headerHeightPx = 44.dpToPx()
-            val paddingBottomPx = binding.calendarView.paddingBottom
+            val headerHeightPx = 96.dpToPx()
+            val paddingVerticalPx = binding.calendarView.paddingTop + binding.calendarView.paddingBottom
 
             val startHeight = widget.height
-            val targetHeight = headerHeightPx + ((weeksInMonth + 1) * tileHeightPx) + paddingBottomPx
+            val targetHeight = headerHeightPx + (weeksInMonth * tileHeightPx) + paddingVerticalPx
 
             if (startHeight != targetHeight) {
                 TransitionManager.beginDelayedTransition(

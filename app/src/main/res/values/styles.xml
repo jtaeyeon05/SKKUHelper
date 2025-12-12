@@ -2,11 +2,24 @@
     <style name="ThemeOverlay.SKKUHelper.LogIn.TextInputLayout.CursorColor" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
         <item name="colorControlActivated">?attr/colorOnSurfaceVariant</item>
     </style>
-
     <style name="Widget.SKKUHelper.LogIn.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="boxStrokeColor">@android:color/transparent</item>
         <item name="boxStrokeWidth">0dp</item>
         <item name="boxStrokeWidthFocused">0dp</item>
         <item name="android:theme">@style/ThemeOverlay.SKKUHelper.LogIn.TextInputLayout.CursorColor</item>
+    </style>
+
+    <style name="Widget.SKKUHelper.MaterialCalendarView" parent="Theme.AppCompat">
+        <item name="android:textColor">@drawable/selector_calendar_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="Widget.SKKUHelper.MaterialCalendarView.DateText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">@drawable/selector_calendar_text</item>
+    </style>
+    <style name="Widget.SKKUHelper.MaterialCalendarView.WeekText" parent="android:TextAppearance.DeviceDefault.Small">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+    <style name="Widget.SKKUHelper.MaterialCalendarView.HeaderText" parent="android:TextAppearance.DeviceDefault.Medium">
+        <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 </resources>

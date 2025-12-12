@@ -15,7 +15,12 @@
         android:paddingBottom="16dp"
         android:paddingHorizontal="16dp"
         app:mcv_tileHeight="48dp"
-        app:mcv_calendarMode="month"/>
+        app:mcv_calendarMode="month"
+        app:mcv_arrowColor="?attr/colorOnSurface"
+        android:theme="@style/Widget.SKKUHelper.MaterialCalendarView"
+        app:mcv_dateTextAppearance="@style/Widget.SKKUHelper.MaterialCalendarView.DateText"
+        app:mcv_headerTextAppearance="@style/Widget.SKKUHelper.MaterialCalendarView.HeaderText"
+        app:mcv_weekDayTextAppearance="@style/Widget.SKKUHelper.MaterialCalendarView.WeekText"/>
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"
