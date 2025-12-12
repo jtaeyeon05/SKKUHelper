@@ -3,7 +3,6 @@ package com.skku_team2.skku_helper.ui.main
 import android.os.Bundle
 import android.transition.AutoTransition
 import android.transition.TransitionManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -138,7 +137,6 @@ class HomeFragment : Fragment() {
                         .collect {
                             val courseList = mainViewModel.assignmentDataListState.value?.map { it.course }?.distinctBy { it.id }?.sortedBy { it.createdAt }?.reversed()
                             courseBadgeAdapter.submitList(courseList ?: emptyList())
-                            Log.e("TEEST", courseList.toString())
                             updateLists()
                         }
                 }

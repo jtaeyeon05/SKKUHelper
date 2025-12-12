@@ -15,6 +15,8 @@
         android:id="@+id/recyclerView_badge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingHorizontal="4dp"
+        android:clipToPadding="false"
         android:orientation="horizontal"
         android:scrollbars="none"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
