@@ -91,14 +91,17 @@ class HomeFragment : Fragment() {
 
         leftAssignmentAdapter = AssignmentAdapter(
             token = mainViewModel.token,
+            emptyItemMessage = requireContext().getString(R.string.main_home_left_empty_item_message),
             onLongClick = onItemLongClickListener
         )
         completedAssignmentAdapter = AssignmentAdapter(
             token = mainViewModel.token,
+            emptyItemMessage = requireContext().getString(R.string.main_home_completed_empty_item_message),
             onLongClick = onItemLongClickListener
         )
         expiredAssignmentAdapter = AssignmentAdapter(
             token = mainViewModel.token,
+            emptyItemMessage = requireContext().getString(R.string.main_home_expired_empty_item_message),
             onLongClick = onItemLongClickListener
         )
 

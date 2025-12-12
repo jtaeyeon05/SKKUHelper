@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.R
 import com.skku_team2.skku_helper.canvas.AssignmentData
 import com.skku_team2.skku_helper.databinding.ItemAssignmentBinding
+import com.skku_team2.skku_helper.databinding.ItemAssignmentEmptyBinding
 import com.skku_team2.skku_helper.key.IntentKey
 import com.skku_team2.skku_helper.ui.assignment.AssignmentActivity
 import com.skku_team2.skku_helper.utils.DateUtil
@@ -17,14 +18,29 @@ import com.skku_team2.skku_helper.utils.getColorAttr
 
 class AssignmentAdapter(
     private val token: String,
+    private val emptyItemMessage: String,
     private val onLongClick: ((AssignmentData) -> Boolean)? = null
-) : RecyclerView.Adapter<AssignmentAdapter.ItemViewHolder>() {
-    private val diffCallback = object : DiffUtil.ItemCallback<AssignmentData>() {
-        override fun areItemsTheSame(oldItem: AssignmentData, newItem: AssignmentData): Boolean {
-            return oldItem.assignment.id == newItem.assignment.id
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    sealed interface AssignmentItem {
+        data class Real(val data: AssignmentData) : AssignmentItem
+        data object Empty : AssignmentItem
+    }
+
+    companion object {
+        private const val VIEW_TYPE_ITEM = 0
+        private const val VIEW_TYPE_EMPTY = 1
+    }
+
+    private val diffCallback = object : DiffUtil.ItemCallback<AssignmentItem>() {
+        override fun areItemsTheSame(oldItem: AssignmentItem, newItem: AssignmentItem): Boolean {
+            return when (oldItem) {
+                is AssignmentItem.Real if newItem is AssignmentItem.Real -> oldItem.data.assignment.id == newItem.data.assignment.id
+                is AssignmentItem.Empty if newItem is AssignmentItem.Empty -> true
+                else -> false
+            }
         }
 
-        override fun areContentsTheSame(oldItem: AssignmentData, newItem: AssignmentData): Boolean {
+        override fun areContentsTheSame(oldItem: AssignmentItem, newItem: AssignmentItem): Boolean {
             return oldItem == newItem
         }
     }
@@ -82,17 +98,38 @@ class AssignmentAdapter(
         }
     }
 
-    fun submitList(list: List<AssignmentData>) {
-        differ.submitList(list.toList())
+    inner class EmptyItemHolder(
+        private val binding: ItemAssignmentEmptyBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+        fun bind() {
+            binding.textViewMessage.text = emptyItemMessage
+        }
     }
 
+    fun submitList(list: List<AssignmentData>) {
+        if (list.isNotEmpty()) {
+            differ.submitList(list.map { AssignmentItem.Real(it) })
+        } else {
+            differ.submitList(listOf(AssignmentItem.Empty))
+        }
+    }
 
-    override fun getItemCount(): Int = differ.currentList.size
+    override fun getItemCount(): Int =  differ.currentList.size
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) = holder.bind(differ.currentList[position])
+    override fun getItemViewType(position: Int) = if (differ.currentList[position] is AssignmentItem.Real) VIEW_TYPE_ITEM else VIEW_TYPE_EMPTY
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val binding = ItemAssignmentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ItemViewHolder(binding)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is ItemViewHolder) holder.bind((differ.currentList[position] as AssignmentItem.Real).data)
+        else if (holder is EmptyItemHolder) holder.bind()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return if (viewType == VIEW_TYPE_ITEM) {
+            val binding = ItemAssignmentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemViewHolder(binding)
+        } else {
+            val binding = ItemAssignmentEmptyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            EmptyItemHolder(binding)
+        }
     }
 }

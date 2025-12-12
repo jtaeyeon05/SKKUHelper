@@ -24,11 +24,16 @@
     <string name="main_dialog_delete_message">Are you sure to delete this assignment?\nIf you delete this assignment, it will no longer be visible on the main screen.</string>
     <string name="main_dialog_delete_cancel">Cancel</string>
     <string name="main_dialog_delete_confirm">Delete</string>
+    <!-- MainActivity - Calendar -->
+    <string name="main_calendar_empty_item_message">There are no assignments for this date.</string>
     <!-- MainActivity - Home -->
     <string name="main_home_loading">Loading Assignments...</string>
     <string name="main_home_left_assignments">Left Assignments</string>
+    <string name="main_home_left_empty_item_message">There are no left assignments.</string>
     <string name="main_home_completed_assignments">Completed Assignments</string>
+    <string name="main_home_completed_empty_item_message">There are no completed assignments.</string>
     <string name="main_home_expired_assignments">Expired Assignments</string>
+    <string name="main_home_expired_empty_item_message">There are no expired assignments.</string>
     <!-- MainActivity - Menu -->
     <string name="main_menu_calendar">Calendar</string>
     <string name="main_menu_home">Home</string>

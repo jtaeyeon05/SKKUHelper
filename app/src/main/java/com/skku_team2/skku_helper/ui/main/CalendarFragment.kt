@@ -53,6 +53,7 @@ class CalendarFragment : Fragment() {
 
         calendarAssignmentAdapter = AssignmentAdapter(
             token = mainViewModel.token,
+            emptyItemMessage = requireContext().getString(R.string.main_calendar_empty_item_message),
             onLongClick = { assignmentData ->
                 CoroutineScope(Dispatchers.Main).launch {
                     MaterialAlertDialogBuilder(requireContext()).apply {
