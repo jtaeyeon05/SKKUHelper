@@ -173,8 +173,17 @@ class HomeFragment : Fragment() {
         val completedAssignmentDataList = assignmentDataList?.filter { assignmentData -> assignmentData.status == AssignmentData.Status.Completed } ?: emptyList()
         val expiredAssignmentDataList = assignmentDataList?.filter { assignmentData -> assignmentData.status == AssignmentData.Status.Expired } ?: emptyList()
 
-        leftAssignmentAdapter.submitList(if (viewModel.uiState.value.isLeftAssignmentExpanded) leftAssignmentDataList else emptyList())
-        completedAssignmentAdapter.submitList(if (viewModel.uiState.value.isCompletedAssignmentExpanded) completedAssignmentDataList else emptyList())
-        expiredAssignmentAdapter.submitList(if (viewModel.uiState.value.isExpiredAssignmentExpanded) expiredAssignmentDataList else emptyList())
+        leftAssignmentAdapter.submitList(
+            list = if (viewModel.uiState.value.isLeftAssignmentExpanded) leftAssignmentDataList else emptyList(),
+            hide = !viewModel.uiState.value.isLeftAssignmentExpanded
+        )
+        completedAssignmentAdapter.submitList(
+            list = if (viewModel.uiState.value.isCompletedAssignmentExpanded) completedAssignmentDataList else emptyList(),
+            hide = !viewModel.uiState.value.isCompletedAssignmentExpanded
+        )
+        expiredAssignmentAdapter.submitList(
+            list = if (viewModel.uiState.value.isExpiredAssignmentExpanded) expiredAssignmentDataList else emptyList(),
+            hide = !viewModel.uiState.value.isExpiredAssignmentExpanded
+        )
     }
 }

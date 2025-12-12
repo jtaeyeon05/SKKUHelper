@@ -25,9 +25,11 @@ import com.skku_team2.skku_helper.utils.getColorAttr
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.temporal.WeekFields
+import java.util.Calendar
 import java.util.Locale
 
 
@@ -77,6 +79,25 @@ class CalendarFragment : Fragment() {
 
         binding.calendarView.isDynamicHeightEnabled = true
         binding.calendarView.selectedDate = LocalDate.now().run { CalendarDay.from(year, monthValue - 1, dayOfMonth) }
+        binding.calendarView.state().edit()
+            .setMinimumDate(CalendarDay.from(Calendar.getInstance().apply { add(Calendar.MONTH, -6) }))
+            .setMaximumDate(CalendarDay.from(Calendar.getInstance().apply { add(Calendar.MONTH, +6) }))
+            .commit()
+        binding.calendarView.setTitleFormatter { calendarDay ->
+            SimpleDateFormat("yyyy/MM", Locale.getDefault()).format(calendarDay.date)
+        }
+        binding.calendarView.setWeekDayFormatter { dayOfWeek ->
+            when (dayOfWeek) {
+                1 -> requireContext().getString(R.string.main_calendar_sun)
+                2 -> requireContext().getString(R.string.main_calendar_mon)
+                3 -> requireContext().getString(R.string.main_calendar_tue)
+                4 -> requireContext().getString(R.string.main_calendar_wed)
+                5 -> requireContext().getString(R.string.main_calendar_thu)
+                6 -> requireContext().getString(R.string.main_calendar_fri)
+                7 -> requireContext().getString(R.string.main_calendar_sat)
+                else -> requireContext().getString(R.string.main_calendar_undefined)
+            }
+        }
         binding.calendarView.setOnMonthChangedListener { widget, date ->
             val yearMonth = YearMonth.of(date.year, date.month + 1)
             val weekFields = WeekFields.of(Locale.getDefault())

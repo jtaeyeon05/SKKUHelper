@@ -106,8 +106,8 @@ class AssignmentAdapter(
         }
     }
 
-    fun submitList(list: List<AssignmentData>) {
-        if (list.isNotEmpty()) {
+    fun submitList(list: List<AssignmentData>, hide: Boolean = false) {
+        if (list.isNotEmpty() || hide) {
             differ.submitList(list.map { AssignmentItem.Real(it) })
         } else {
             differ.submitList(listOf(AssignmentItem.Empty))

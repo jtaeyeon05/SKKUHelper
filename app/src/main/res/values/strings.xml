@@ -25,6 +25,14 @@
     <string name="main_dialog_delete_cancel">Cancel</string>
     <string name="main_dialog_delete_confirm">Delete</string>
     <!-- MainActivity - Calendar -->
+    <string name="main_calendar_sun">SUN</string>
+    <string name="main_calendar_mon">MON</string>
+    <string name="main_calendar_tue">TUE</string>
+    <string name="main_calendar_wed">WED</string>
+    <string name="main_calendar_thu">THU</string>
+    <string name="main_calendar_fri">FRI</string>
+    <string name="main_calendar_sat">SAT</string>
+    <string name="main_calendar_undefined">Undefined</string>
     <string name="main_calendar_empty_item_message">There are no assignments for this date.</string>
     <!-- MainActivity - Home -->
     <string name="main_home_loading">Loading Assignments...</string>
