@@ -39,7 +39,7 @@ class CalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        calendarAssignmentAdapter = AssignmentAdapter(requireContext(), mainViewModel.token)
+        calendarAssignmentAdapter = AssignmentAdapter(mainViewModel.token)
         binding.recyclerViewCalendar.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerViewCalendar.adapter = calendarAssignmentAdapter
 
@@ -50,8 +50,8 @@ class CalendarFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.uiState.collect { homeState ->
-                    viewModel.setAssignments(homeState.assignmentDataList)
+                mainViewModel.assignmentDataListState.collect { assignmentDataList ->
+                    viewModel.setAssignments(assignmentDataList ?: emptyList())
                 }
             }
         }

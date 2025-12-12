@@ -77,33 +77,33 @@ class DetailFragment : Fragment() {
                                 binding.tableRowCreatedDate.visibility = View.GONE
                             } else {
                                 binding.tableRowCreatedDate.visibility = View.VISIBLE
-                                binding.tableTextCreatedDate.text = DateUtil.parseTime(assignment.createdAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
+                                binding.tableTextCreatedDate.text = DateUtil.parseOffsetDateTime(assignment.createdAt)?.let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
                             }
                             if (assignment.updatedAt == null) {
                                 binding.tableRowUpdatedDate.visibility = View.GONE
                             } else {
                                 binding.tableRowUpdatedDate.visibility = View.VISIBLE
-                                binding.tableTextUpdatedDate.text = DateUtil.parseTime(assignment.updatedAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
+                                binding.tableTextUpdatedDate.text = DateUtil.parseOffsetDateTime(assignment.updatedAt)?.let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
                             }
                             if (assignment.dueAt == null) {
                                 binding.tableRowDueDate.visibility = View.GONE
                             } else {
                                 binding.tableRowDueDate.visibility = View.VISIBLE
                                 binding.tableTextDueDate.text =
-                                    if (custom?.dueAt == null) DateUtil.parseTime(assignment.dueAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
-                                    else "${DateUtil.parseTime(custom!!.dueAt!!).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }} (${DateUtil.parseTime(assignment.dueAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }})"
+                                    if (custom?.dueAt == null) DateUtil.parseOffsetDateTime(assignment.dueAt)?.let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
+                                    else "${DateUtil.parseOffsetDateTime(custom.dueAt)?.let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }} (${DateUtil.parseOffsetDateTime(assignment.dueAt)?.let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }})"
                             }
                             if (assignment.lockAt == null || assignment.lockedForUser == false) {
                                 binding.tableRowLockedDate.visibility = View.GONE
                             } else {
                                 binding.tableRowLockedDate.visibility = View.VISIBLE
-                                binding.tableTextLockedDate.text = DateUtil.parseTime(assignment.lockAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
+                                binding.tableTextLockedDate.text = DateUtil.parseOffsetDateTime(assignment.lockAt)?.let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
                             }
                             if (assignment.unlockAt == null || assignment.lockedForUser == true) {
                                 binding.tableRowUnlockedDate.visibility = View.GONE
                             } else {
                                 binding.tableRowUnlockedDate.visibility = View.VISIBLE
-                                binding.tableTextUnlockedDate.text = DateUtil.parseTime(assignment.unlockAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
+                                binding.tableTextUnlockedDate.text = DateUtil.parseOffsetDateTime(assignment.unlockAt)?.let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
                             }
                         }
 
@@ -128,13 +128,13 @@ class DetailFragment : Fragment() {
                                     binding.tableRowSubmissionDate.visibility = View.GONE
                                 } else {
                                     binding.tableRowSubmissionDate.visibility = View.VISIBLE
-                                    binding.tableTextSubmissionDate.text = DateUtil.parseTime(submittedAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))} ${if (late) (requireContext().getString(R.string.assignment_detail_submission_submission_date_late)) else ""}" }
+                                    binding.tableTextSubmissionDate.text = DateUtil.parseOffsetDateTime(submittedAt)?.let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))} ${if (late) (requireContext().getString(R.string.assignment_detail_submission_submission_date_late)) else ""}" }
                                 }
                                 if (gradedAt == null) {
                                     binding.tableRowGradingDate.visibility = View.GONE
                                 } else {
                                     binding.tableRowGradingDate.visibility = View.VISIBLE
-                                    binding.tableTextGradingDate.text = DateUtil.parseTime(gradedAt).let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
+                                    binding.tableTextGradingDate.text = DateUtil.parseOffsetDateTime(gradedAt)?.let { "${it.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"))}" }
                                 }
                                 if (attachments == null || attachments.isEmpty()) {
                                     binding.tableRowAttachments.visibility = View.GONE

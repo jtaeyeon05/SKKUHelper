@@ -15,8 +15,20 @@ object DateUtil {
         val type: Type
     ) { enum class Type { UPCOMING, OVERDUE, NO_DATA, ERROR } }
 
-    fun parseTime(time: String): OffsetDateTime {
-        return OffsetDateTime.parse(time, canvasDateTimeFormatter)
+    fun parseOffsetDateTime(time: String): OffsetDateTime? {
+        return try {
+            OffsetDateTime.parse(time, canvasDateTimeFormatter)
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    fun parseLocalDate(time: String): LocalDate? {
+        return try {
+            OffsetDateTime.parse(time, canvasDateTimeFormatter).toLocalDate()
+        } catch (_: Exception) {
+            null
+        }
     }
 
     fun calculateRemainingTime(dueAt: String?): DateResult {
@@ -50,19 +62,5 @@ object DateUtil {
             minutes > 0 -> "$minutes Minutes"
             else -> ""
         }
-    }
-
-    fun parseOffsetDateTime(dueAt: String?): OffsetDateTime? {
-        if (dueAt == null) return null
-        return try {
-            OffsetDateTime.parse(dueAt, canvasDateTimeFormatter)
-        } catch (e: Exception) {
-            null
-        }
-    }
-
-    fun toLocalDate(dueAt: String?): LocalDate? {
-        val dateTime = parseOffsetDateTime(dueAt) ?: return null
-        return dateTime.toLocalDate()
     }
 }

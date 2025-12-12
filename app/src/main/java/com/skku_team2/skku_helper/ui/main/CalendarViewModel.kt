@@ -9,12 +9,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.time.LocalDate
 
+
 data class CalendarUiState(
     val assignmentDataList: List<AssignmentData> = emptyList(),
     val assignmentsByDate: Map<LocalDate, List<AssignmentData>> = emptyMap(),
     val selectedDate: LocalDate = LocalDate.now(),
     val selectedDateAssignments: List<AssignmentData> = emptyList()
 )
+
 
 class CalendarViewModel : ViewModel() {
 
@@ -27,7 +29,7 @@ class CalendarViewModel : ViewModel() {
         val groupedByDate: Map<LocalDate, List<AssignmentData>> =
             assignmentDataList
                 .groupBy { data ->
-                    DateUtil.toLocalDate(data.assignment.dueAt)   // LocalDate?
+                    DateUtil.parseLocalDate(data.assignment.dueAt ?: "")   // LocalDate?
                 }
                 .filterKeys { it != null }
                 .mapKeys { (key, _) -> key!! }
