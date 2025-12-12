@@ -11,50 +11,44 @@ import java.time.LocalDate
 
 
 data class CalendarUiState(
-    val assignmentDataList: List<AssignmentData> = emptyList(),
-    val assignmentsByDate: Map<LocalDate, List<AssignmentData>> = emptyMap(),
-    val selectedDate: LocalDate = LocalDate.now(),
-    val selectedDateAssignments: List<AssignmentData> = emptyList()
+    val selectedDate: LocalDate? = LocalDate.now(),
+    val selectedDateAssignmentDataList: List<AssignmentData> = emptyList()
 )
 
 
 class CalendarViewModel : ViewModel() {
-
     private val _uiState = MutableStateFlow(CalendarUiState())
+
     val uiState: StateFlow<CalendarUiState> = _uiState.asStateFlow()
 
-    fun setAssignments(assignmentDataList: List<AssignmentData>) {
-        val currentSelectedDate = _uiState.value.selectedDate
+    fun selectDate(
+        selectedDate: LocalDate?,
+        assignmentDataList: List<AssignmentData>?
+    ) {
+        val selectedDateAssignmentDataList = assignmentDataList?.filter { assignmentDate ->
+            val date = DateUtil.parseLocalDate(assignmentDate.custom?.dueAt ?: assignmentDate.assignment.dueAt ?: "")
+            selectedDate == date
+        }?.sortedWith(
+            compareBy(nullsLast()) {
+                it.custom?.dueAt ?: it.assignment.dueAt
+            }
+        )
 
-        val groupedByDate: Map<LocalDate, List<AssignmentData>> =
-            assignmentDataList
-                .groupBy { data ->
-                    DateUtil.parseLocalDate(data.assignment.dueAt ?: "")   // LocalDate?
-                }
-                .filterKeys { it != null }
-                .mapKeys { (key, _) -> key!! }
-
-        val selectedDateAssignments =
-            groupedByDate[currentSelectedDate] ?: emptyList()
-
-        _uiState.update { state ->
-            state.copy(
-                assignmentDataList = assignmentDataList,
-                assignmentsByDate = groupedByDate,
-                selectedDateAssignments = selectedDateAssignments
+        _uiState.update {
+            it.copy(
+                selectedDate = selectedDate,
+                selectedDateAssignmentDataList = selectedDateAssignmentDataList ?: emptyList()
             )
         }
     }
 
-    fun onDateSelected(date: LocalDate) {
-        val assignmentsForDate =
-            _uiState.value.assignmentsByDate[date] ?: emptyList()
-
-        _uiState.update {
-            it.copy(
-                selectedDate = date,
-                selectedDateAssignments = assignmentsForDate
-            )
-        }
+    fun getDateList(
+        assignmentDataList: List<AssignmentData>
+    ): List<LocalDate> {
+        return assignmentDataList
+            .mapNotNull { assignmentDate ->
+                DateUtil.parseLocalDate(assignmentDate.custom?.dueAt ?: assignmentDate.assignment.dueAt ?: "")
+            }
+            .distinct()
     }
 }
