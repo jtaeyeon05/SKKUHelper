@@ -65,7 +65,7 @@ class CalendarFragment : Fragment() {
                         setPositiveButton(R.string.main_dialog_delete_confirm) { _, _ ->
                             lifecycleScope.launch {
                                 mainViewModel.deleteAssignment(assignmentData.course.id, assignmentData.assignment.id)
-                                mainViewModel.fetch()
+                                mainViewModel.update()
                             }
                         }
                         create().show()

@@ -3,31 +3,24 @@ package com.skku_team2.skku_helper.canvas
 import com.google.gson.annotations.SerializedName
 
 
-data class User(
+data class Profile(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
     @SerializedName("sortable_name") val sortableName: String? = null,
-    @SerializedName("short_code") val shortName: String? = null,
+    @SerializedName("login_id") val loginId: String? = null,
+    @SerializedName("primary_email") val primaryEmail: String? = null,
     @SerializedName("avatar_url") val avatarUrl: String? = null,
 
+    @SerializedName("title") val title: String? = null,
+    @SerializedName("bio") val bio: String? = null,
+    @SerializedName("integration_id") val integrationId: String? = null,
+    @SerializedName("time_zone") val timeZone: String? = null,
     @SerializedName("locale") val locale: String? = null,
     @SerializedName("effective_locale") val effectiveLocale: String? = null,
-    @SerializedName("created_at") val createdAt: String? = null,
-    @SerializedName("permissions") val permissions: Permissions? = null,
-
-    @SerializedName("uuid") val uuid: String? = null,
-    @SerializedName("last_login") val lastLogin: String? = null,
+    @SerializedName("lti_user_id") val ltiUserId: String? = null,
 ) {
-    data class Permissions(
-        @SerializedName("can_update_name") val canUpdateName: Boolean? = null,
-        @SerializedName("can_update_avatar") val canUpdateAvatar: Boolean? = null,
-        @SerializedName("limit_parent_app_web_access") val hasLimitParentAppWebAccess: Boolean? = null,
-    ) {
-        val default get() = Permissions()
-    }
-
-    companion object {
-        val default get() = User(
+    companion object Companion {
+        val default get() = Profile(
             id = 0,
             name = "Name"
         )

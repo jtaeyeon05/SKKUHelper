@@ -20,6 +20,8 @@
 
     <!-- MainActivity -->
     <string name="main_menu_refresh">Loading Assignments...</string>
+    <string name="main_loading">Loading Data...</string>
+    <string name="main_message_auto_login">Automatic LogIn Success!</string>
     <string name="main_dialog_delete_title">Delete</string>
     <string name="main_dialog_delete_message">Are you sure to delete this assignment?\nIf you delete this assignment, it will no longer be visible on the main screen.</string>
     <string name="main_dialog_delete_cancel">Cancel</string>
@@ -35,18 +37,30 @@
     <string name="main_calendar_undefined">Undefined</string>
     <string name="main_calendar_empty_item_message">There are no assignments for this date.</string>
     <!-- MainActivity - Home -->
-    <string name="main_home_loading">Loading Assignments...</string>
     <string name="main_home_left_assignments">Left Assignments</string>
     <string name="main_home_left_empty_item_message">There are no left assignments.</string>
     <string name="main_home_completed_assignments">Completed Assignments</string>
     <string name="main_home_completed_empty_item_message">There are no completed assignments.</string>
     <string name="main_home_expired_assignments">Expired Assignments</string>
     <string name="main_home_expired_empty_item_message">There are no expired assignments.</string>
-    <!-- MainActivity - Menu -->
-    <string name="main_menu_calendar">Calendar</string>
-    <string name="main_menu_home">Home</string>
-    <string name="main_menu_account">Account</string>
-    <string name="main_message_auto_login">Automatic LogIn Success!</string>
+    <!-- MainActivity - Account -->
+    <string name="main_account_profile_name_default">User Name</string>
+    <string name="main_account_profile_email_default">example@skku.edu</string>
+    <string name="main_account_profile_email_none">No Email</string>
+    <string name="main_account_achievement_title">Achievement</string>
+    <string name="main_account_achievement_rate_default">0%</string>
+    <string name="main_account_achievement_count_title">Completed Tasks</string>
+    <string name="main_account_achievement_count_default">0 / 0</string>
+    <string name="main_account_achievement_message_100">Perfect!</string>
+    <string name="main_account_achievement_message_80">Almost done!</string>
+    <string name="main_account_achievement_message_50">More than halfway!</string>
+    <string name="main_account_achievement_message_0">Cheer up!</string>
+    <string name="main_account_invalidate">Invalidate Remote Data</string>
+    <string name="main_account_logout">Log Out</string>
+    <!-- MainActivity - BottomNavigation -->
+    <string name="main_bottomNavigation_calendar">Calendar</string>
+    <string name="main_bottomNavigation_home">Home</string>
+    <string name="main_bottomNavigation_account">Account</string>
 
     <!-- AssignmentActivity -->
     <string name="assignment_menu_edit">Edit</string>

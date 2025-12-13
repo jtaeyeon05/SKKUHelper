@@ -4,16 +4,16 @@
     <item
         android:id="@+id/calendarItem"
         android:icon="@drawable/ic_calendar"
-        android:title="@string/main_menu_calendar" />
+        android:title="@string/main_bottomNavigation_calendar" />
 
     <item
         android:id="@+id/homeItem"
         android:icon="@drawable/ic_home"
-        android:title="@string/main_menu_home" />
+        android:title="@string/main_bottomNavigation_home" />
 
     <item
         android:id="@+id/accountItem"
         android:icon="@drawable/ic_account"
-        android:title="@string/main_menu_account" />
+        android:title="@string/main_bottomNavigation_account" />
 
 </menu>

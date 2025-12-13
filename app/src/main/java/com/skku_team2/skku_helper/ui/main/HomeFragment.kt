@@ -79,7 +79,7 @@ class HomeFragment : Fragment() {
                     setPositiveButton(R.string.main_dialog_delete_confirm) { _, _ ->
                         lifecycleScope.launch {
                             mainViewModel.deleteAssignment(assignmentData.course.id, assignmentData.assignment.id)
-                            mainViewModel.fetch()
+                            mainViewModel.update()
                         }
                     }
                     create().show()
@@ -119,7 +119,7 @@ class HomeFragment : Fragment() {
 
         binding.swipeRefreshLayoutHome.setOnRefreshListener {
             lifecycleScope.launch {
-                mainViewModel.fetch()
+                mainViewModel.update()
                 binding.swipeRefreshLayoutHome.isRefreshing = false
             }
         }

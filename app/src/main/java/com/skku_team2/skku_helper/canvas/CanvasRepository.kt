@@ -51,6 +51,25 @@ class CanvasRepository {
         }
     }
 
+    suspend fun getProfileSelf(token: String): Profile? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val authorizationToken = "Bearer $token"
+                val response = CanvasClient.api.getProfileSelf(authorizationToken).execute()
+                if (response.isSuccessful) {
+                    Log.d("CanvasRepository", "[getProfileSelf] Success: ${response.body()?.name}")
+                    response.body()
+                } else {
+                    Log.e("CanvasRepository", "[getProfileSelf] Failed: ${response.code()}")
+                    null
+                }
+            } catch (exception: Exception) {
+                Log.e("CanvasRepository", "[getProfileSelf] Error: $exception")
+                null
+            }
+        }
+    }
+
     suspend fun getAssignmentData(
         token: String,
         courseId: Int,

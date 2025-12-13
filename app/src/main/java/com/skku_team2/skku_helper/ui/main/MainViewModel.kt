@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.skku_team2.skku_helper.canvas.AssignmentData
 import com.skku_team2.skku_helper.canvas.CanvasRepository
 import com.skku_team2.skku_helper.canvas.CustomAssignmentData
+import com.skku_team2.skku_helper.canvas.Profile
 import com.skku_team2.skku_helper.key.IntentKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,21 +29,24 @@ class MainViewModel(
 
     private val repository = CanvasRepository()
     private val _assignmentDataListState = MutableStateFlow<List<AssignmentData>?>(null)
+    private val _userState = MutableStateFlow<Profile?>(null)
     private val _uiState = MutableStateFlow(MainUiState())
 
     val assignmentDataListState = _assignmentDataListState.asStateFlow()
+    val userState: StateFlow<Profile?> = _userState.asStateFlow()
     val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            fetch()
+            update()
         }
     }
 
-    suspend fun fetch() {
+    suspend fun update() {
         _uiState.update { it.copy(isLoading = true, errorMessage = null) }
 
         _assignmentDataListState.update { repository.getAssignmentDataList(token) }
+        _userState.update { repository.getProfileSelf(token) }
         if (assignmentDataListState.value == null) {
             _uiState.update {
                 it.copy(

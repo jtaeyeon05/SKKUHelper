@@ -8,11 +8,11 @@ import retrofit2.http.Query
 
 
 interface CanvasApi {
-    @GET("api/v1/users/self")
-    fun getUserSelf(
+    @GET("api/v1/users/self/profile")
+    fun getProfileSelf(
         @Header("Authorization") token: String,
         @Query("include[]") include: String = ""
-    ): Call<User>
+    ): Call<Profile>
 
     @GET("api/v1/courses")
     fun getCourses(

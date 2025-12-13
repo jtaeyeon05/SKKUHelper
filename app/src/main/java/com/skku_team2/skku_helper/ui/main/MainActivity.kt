@@ -25,8 +25,6 @@ import com.skku_team2.skku_helper.key.IntentKey
 import com.skku_team2.skku_helper.navigation.MainScreen
 import com.skku_team2.skku_helper.utils.getColorAttr
 import com.skku_team2.skku_helper.utils.isBright
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -68,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             when (menuItem.itemId) {
                 R.id.item_menu_refresh -> {
                     lifecycleScope.launch {
-                        viewModel.fetch()
+                        viewModel.update()
                     }
                     true
                 }
@@ -90,18 +88,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        if (savedInstanceState == null) binding.bottomNavigationViewMain.selectedItemId = com.skku_team2.skku_helper.R.id.homeItem
+        if (savedInstanceState == null) binding.bottomNavigationViewMain.selectedItemId = R.id.homeItem
         binding.bottomNavigationViewMain.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                com.skku_team2.skku_helper.R.id.calendarItem -> {
+                R.id.calendarItem -> {
                     navController.navigate(MainScreen.Calendar)
                     true
                 }
-                com.skku_team2.skku_helper.R.id.homeItem -> {
+                R.id.homeItem -> {
                     navController.navigate(MainScreen.Home)
                     true
                 }
-                com.skku_team2.skku_helper.R.id.accountItem -> {
+                R.id.accountItem -> {
                     navController.navigate(MainScreen.Account)
                     true
                 }
@@ -110,7 +108,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (intent.getBooleanExtra(IntentKey.EXTRA_IS_AUTO_LOGIN, false)) {
-            Snackbar.make(binding.main, this.getString(com.skku_team2.skku_helper.R.string.main_message_auto_login), Snackbar.LENGTH_SHORT).apply {
+            Snackbar.make(binding.main, this.getString(R.string.main_message_auto_login), Snackbar.LENGTH_SHORT).apply {
                 anchorView = binding.bottomNavigationViewMain
             }.show()
         }
