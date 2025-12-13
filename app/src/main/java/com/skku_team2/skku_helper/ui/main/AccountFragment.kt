@@ -41,10 +41,10 @@ class AccountFragment : Fragment() {
 
         binding.buttonInvalidate.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext()).apply {
-                setTitle(R.string.main_dialog_delete_title)
-                setMessage(R.string.main_dialog_delete_message)
-                setNegativeButton(R.string.main_dialog_delete_cancel, null)
-                setPositiveButton(R.string.main_dialog_delete_confirm) { _, _ ->
+                setTitle(R.string.main_account_dialog_invalidate_title)
+                setMessage(R.string.main_account_dialog_invalidate_message)
+                setNegativeButton(R.string.main_account_dialog_invalidate_cancel, null)
+                setPositiveButton(R.string.main_account_dialog_invalidate_confirm) { _, _ ->
                     lifecycleScope.launch {
                         mainViewModel.invalidateFirebaseData()
                         mainViewModel.update()
