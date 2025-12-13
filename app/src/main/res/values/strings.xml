@@ -56,7 +56,15 @@
     <string name="main_account_achievement_message_50">More than halfway!</string>
     <string name="main_account_achievement_message_0">Cheer up!</string>
     <string name="main_account_invalidate">Invalidate Remote Data</string>
+    <string name="main_account_dialog_invalidate_title">Invalidate Remote Data</string>
+    <string name="main_account_dialog_invalidate_message">Are you sure to invalidate remote data? This operation is irreversible.</string>
+    <string name="main_account_dialog_invalidate_cancel">Cancel</string>
+    <string name="main_account_dialog_invalidate_confirm">Invalidate</string>
     <string name="main_account_logout">Log Out</string>
+    <string name="main_account_dialog_logout_title">Log Out</string>
+    <string name="main_account_dialog_logout_message">Are you sure to log out?</string>
+    <string name="main_account_dialog_logout_cancel">Cancel</string>
+    <string name="main_account_dialog_logout_confirm">Log Out</string>
     <!-- MainActivity - BottomNavigation -->
     <string name="main_bottomNavigation_calendar">Calendar</string>
     <string name="main_bottomNavigation_home">Home</string>

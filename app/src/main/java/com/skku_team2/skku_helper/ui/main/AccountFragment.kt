@@ -1,16 +1,23 @@
 package com.skku_team2.skku_helper.ui.main
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.skku_team2.skku_helper.R
 import com.skku_team2.skku_helper.databinding.FragmentAccountBinding
+import com.skku_team2.skku_helper.key.PrefKey
+import com.skku_team2.skku_helper.ui.start.StartActivity
 import kotlinx.coroutines.launch
 
 
@@ -28,21 +35,43 @@ class AccountFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonInvalidate.setOnClickListener {
-            // TODO
+            MaterialAlertDialogBuilder(requireContext()).apply {
+                setTitle(R.string.main_dialog_delete_title)
+                setMessage(R.string.main_dialog_delete_message)
+                setNegativeButton(R.string.main_dialog_delete_cancel, null)
+                setPositiveButton(R.string.main_dialog_delete_confirm) { _, _ ->
+                    lifecycleScope.launch {
+                        mainViewModel.invalidateFirebaseData()
+                        mainViewModel.update()
+                    }
+                }
+                create().show()
+            }
         }
         binding.buttonLogout.setOnClickListener {
-            /*val sharedPreferences = requireContext().getSharedPreferences(PrefKey.Settings.key, Context.MODE_PRIVATE)
-            sharedPreferences.edit {
-                remove(PrefKey.Settings.TOKEN)
-            }
+            MaterialAlertDialogBuilder(requireContext()).apply {
+                setTitle(R.string.main_account_dialog_logout_title)
+                setMessage(R.string.main_account_dialog_logout_message)
+                setNegativeButton(R.string.main_account_dialog_logout_cancel, null)
+                setPositiveButton(R.string.main_account_dialog_logout_confirm) { _, _ ->
+                    lifecycleScope.launch {
+                        val sharedPreferences = requireContext().getSharedPreferences(PrefKey.Settings.key, Context.MODE_PRIVATE)
+                        sharedPreferences.edit {
+                            remove(PrefKey.Settings.TOKEN)
+                        }
 
-            val intent = Intent(requireContext(), StartActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)*/
+                        val intent = Intent(requireContext(), StartActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                    }
+                }
+                create().show()
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {

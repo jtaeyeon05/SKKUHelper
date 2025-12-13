@@ -122,4 +122,23 @@ class CanvasRepository {
             docRef.set(data, SetOptions.merge()).await()
         }
     }
+
+    suspend fun invalidateFirebaseData(token: String) {
+        withContext(Dispatchers.IO) {
+            val hashedToken = token.toSha256()
+            val parentDocRef = db.collection("userData").document(hashedToken)
+            val subDocRef = parentDocRef.collection("customAssignmentData")
+            val snapshot = subDocRef.get().await()
+
+            val batch = db.batch()
+            for (document in snapshot.documents) {
+                batch.delete(document.reference)
+            }
+
+            if (!snapshot.isEmpty) {
+                batch.commit().await()
+            }
+            parentDocRef.delete().await()
+        }
+    }
 }

@@ -80,4 +80,8 @@ class MainViewModel(
             )
         }
     }
+
+    suspend fun invalidateFirebaseData() {
+        repository.invalidateFirebaseData(token)
+    }
 }
