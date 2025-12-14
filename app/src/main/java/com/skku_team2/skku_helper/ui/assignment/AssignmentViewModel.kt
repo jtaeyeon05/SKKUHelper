@@ -14,16 +14,23 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * AssignmentActivity 단위 ViewModel
+ */
 
 class AssignmentViewModel(
     application: Application,
     savedStateHandle: SavedStateHandle
 ): AndroidViewModel(application) {
+    // SavedStateHandle에서 Token, CourseId, AssignmentId를 불러옴
     val token = savedStateHandle.get<String>(IntentKey.EXTRA_TOKEN)
     private val courseId = savedStateHandle.get<Int>(IntentKey.EXTRA_COURSE_ID)
     private val assignmentId = savedStateHandle.get<Int>(IntentKey.EXTRA_ASSIGNMENT_ID)
 
+    // CanvasRepository 객체 생성
     private val repository = CanvasRepository()
+
+    // UI 상태 관리
     private val _assignmentDataState = MutableStateFlow<AssignmentData?>(null)
     val assignmentDataState: StateFlow<AssignmentData?> = _assignmentDataState.asStateFlow()
 
@@ -33,6 +40,9 @@ class AssignmentViewModel(
         }
     }
 
+    /**
+     * 데이터 새로고침 함수
+     */
     suspend fun update() {
         if (token != null && courseId != null && assignmentId != null) {
             val assignmentData = repository.getAssignmentData(token, courseId, assignmentId)
@@ -40,6 +50,9 @@ class AssignmentViewModel(
         }
     }
 
+    /**
+     * 과제 삭제 함수
+     */
     fun deleteAssignment() {
         if (token == null || courseId == null || assignmentId == null) return
 
@@ -57,6 +70,9 @@ class AssignmentViewModel(
         }
     }
 
+    /**
+     * 삭제 과제 복구 함수 (미사용)
+     */
     /*
     fun restoreAssignment() {
         if (token == null || courseId == null || assignmentId == null) return
@@ -76,6 +92,9 @@ class AssignmentViewModel(
     }
     */
 
+    /**
+     * 과제 메모 작성 함수
+     */
     fun changeAssignmentMemo(memo: String) {
         if (token == null || courseId == null || assignmentId == null) return
 
@@ -93,6 +112,9 @@ class AssignmentViewModel(
         }
     }
 
+    /**
+     * 커스텀 과제 데이터 변경 함수
+     */
     fun changeAssignmentData(
         name: String? = null,
         dueAt: String? = null

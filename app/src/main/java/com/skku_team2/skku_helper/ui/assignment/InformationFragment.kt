@@ -14,11 +14,15 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.skku_team2.skku_helper.databinding.FragmentInformationBinding
 import kotlinx.coroutines.launch
 
+/**
+ * 과제의 기본 정보와 메모를 보여주는 AssignmentActivity 내 Fragment
+ */
 
 class InformationFragment : Fragment() {
     private var _binding: FragmentInformationBinding? = null
     private val binding get() = _binding!!
 
+    // AssignmentActivity 단위 ViewModel
     private val assignmentViewModel: AssignmentViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -32,14 +36,18 @@ class InformationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Memo EditText의 내용 변화를 관측
         binding.editTextMemo.doOnTextChanged { editable, _, _, _ ->
             assignmentViewModel.changeAssignmentMemo(editable.toString())
         }
 
+        // ViewModel 관측
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // ViewModel 기반 Fragment 내용 변경
                 launch {
                     assignmentViewModel.assignmentDataState.collect { assignmentData ->
+                        // Description 내용 변경
                         val assignment = assignmentData?.assignment
                         val custom = assignmentData?.custom
                         if (assignment?.description == null || assignment.description.isEmpty()) {
@@ -51,6 +59,7 @@ class InformationFragment : Fragment() {
                                 HtmlCompat.FROM_HTML_MODE_LEGACY
                             )
                         }
+                        // Memo 내용 변경
                         val memoFromState = custom?.memo ?: ""
                         if (binding.editTextMemo.text.toString() != memoFromState) {
                             binding.editTextMemo.setText(memoFromState)

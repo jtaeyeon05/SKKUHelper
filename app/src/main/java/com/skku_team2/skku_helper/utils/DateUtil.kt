@@ -6,8 +6,12 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import kotlin.math.abs
 
+/**
+ * 날짜 및 시간 관련 처리를 담당하는 유틸리티 객체
+ */
 
 object DateUtil {
+    // Canvas LMS API 표준 날짜 포멧
     private val canvasDateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
 
     data class DateResult(
@@ -15,6 +19,10 @@ object DateUtil {
         val type: Type
     ) { enum class Type { UPCOMING, OVERDUE, NO_DATA, ERROR } }
 
+    /**
+     * Canvas LMS API 표준 날짜 포멧으로부터 OffsetDateTime 객체로 변환
+     * 파싱 실패 시 null을 반환
+     */
     fun parseOffsetDateTime(time: String): OffsetDateTime? {
         return try {
             OffsetDateTime.parse(time, canvasDateTimeFormatter)
@@ -23,6 +31,10 @@ object DateUtil {
         }
     }
 
+    /**
+     * Canvas LMS API 표준 날짜 포멧으로부터 LocalDate 객체로 변환
+     * 파싱 실패 시 null을 반환
+     */
     fun parseLocalDate(time: String): LocalDate? {
         return try {
             OffsetDateTime.parse(time, canvasDateTimeFormatter).toLocalDate()
@@ -31,6 +43,9 @@ object DateUtil {
         }
     }
 
+    /**
+     * 마감일 문자열을 받아 현재 시간과의 차이를 계산
+     */
     fun calculateRemainingTime(dueAt: String?): DateResult {
         if (dueAt == null) return DateResult(null, DateResult.Type.NO_DATA)
 
@@ -48,6 +63,9 @@ object DateUtil {
         }
     }
 
+    /**
+    * 초 단위의 시간을 입력받아 사용자 친화적인 문자열로 변환
+    */
     fun formatRemainingTime(seconds: Long?): String {
         if (seconds == null) return ""
         val absSeconds = abs(seconds)

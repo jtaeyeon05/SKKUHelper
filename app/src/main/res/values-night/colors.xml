@@ -1,3 +1,4 @@
+<!-- Dark Mode 색상 -->
 <resources>
     <color name="md_theme_primary">#9CECD3</color>
     <color name="md_theme_onPrimary">#002C22</color>

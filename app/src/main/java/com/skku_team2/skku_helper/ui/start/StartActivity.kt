@@ -8,6 +8,9 @@ import androidx.navigation.fragment.fragment
 import com.skku_team2.skku_helper.databinding.ActivityStartBinding
 import com.skku_team2.skku_helper.navigation.StartScreen
 
+/**
+ * 앱을 실행했을 떄 보여지는 Activity
+ */
 
 class StartActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStartBinding
@@ -18,6 +21,7 @@ class StartActivity : AppCompatActivity() {
         binding = ActivityStartBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Navigation 설정
         val navHostFragment = supportFragmentManager.findFragmentById(binding.fragmentContainerViewStart.id) as NavHostFragment
         val navController = navHostFragment.navController
         navController.graph = navController.createGraph(StartScreen.Start) {

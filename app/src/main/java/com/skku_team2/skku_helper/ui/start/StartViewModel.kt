@@ -15,10 +15,19 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * StartActivity 단위 ViewModel
+ */
 
+/**
+ * StartViewModel을 위한 데이터 레이어
+ */
 class StartRepository(context: Context) {
     private val sharedPreferences = context.applicationContext.getSharedPreferences(PrefKey.Settings.key, Context.MODE_PRIVATE)
 
+    /**
+     * Canvas LMS API 토큰 저장 함수
+     */
     suspend fun saveToken(token: String) {
         withContext(Dispatchers.IO) {
             sharedPreferences.edit {
@@ -27,12 +36,18 @@ class StartRepository(context: Context) {
         }
     }
 
+    /**
+     * Canvas LMS API 토큰 조회 함수
+     */
     suspend fun loadToken(): String? {
         return withContext(Dispatchers.IO) {
             sharedPreferences.getString(PrefKey.Settings.TOKEN, null)
         }
     }
 
+    /**
+     * Canvas LMS API 토큰 검증 함수
+     */
     suspend fun verifyToken(token: String): Boolean {
         return withContext(Dispatchers.IO) {
             try {
@@ -46,15 +61,23 @@ class StartRepository(context: Context) {
     }
 }
 
+/**
+ * StartActivity UI 상태 저장 클래스
+ */
 data class StartUiState(
     val token: String? = null,
     val isTokenVerified: Boolean? = null,
 )
 
+/**
+ * StartActivity 단위 ViewModel
+ */
 class StartViewModel(application: Application) : AndroidViewModel(application) {
+    // StartRepository 객체 생성
     private val repository = StartRepository(application)
-    private val _uiState = MutableStateFlow(StartUiState())
 
+    // UI 상태 관리
+    private val _uiState = MutableStateFlow(StartUiState())
     val uiState: StateFlow<StartUiState> = _uiState.asStateFlow()
 
     init {
@@ -71,6 +94,9 @@ class StartViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /**
+     * 토큰 변경 함수
+     */
     fun changeToken(token: String) {
         _uiState.update {
             it.copy(
@@ -80,6 +106,9 @@ class StartViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /**
+     * 토큰 검증 함수
+     */
     suspend fun verifyToken(): Boolean {
         val token = uiState.value.token ?: ""
         val isTokenVerified = repository.verifyToken(token)

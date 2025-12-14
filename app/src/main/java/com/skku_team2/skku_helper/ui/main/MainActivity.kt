@@ -29,10 +29,14 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
+/**
+ * 앱의 메인 화면을 보여주는 Activity
+ */
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
+    // MainActivity 단위 ViewModel
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +57,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        // TopAppBar 설정
         binding.topAppBarMain.inflateMenu(R.menu.menu_toolbar_main)
         binding.topAppBarMain.menu.forEach { menuItem ->
             MenuItemCompat.setIconTintList(
@@ -74,6 +79,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Navigation 설정
         val navHostFragment = supportFragmentManager.findFragmentById(binding.fragmentContainerViewMain.id) as NavHostFragment
         val navController = navHostFragment.navController
         navController.graph = navController.createGraph(MainScreen.Home) {
@@ -88,6 +94,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // BottomNavigation 설정
         if (savedInstanceState == null) binding.bottomNavigationViewMain.selectedItemId = R.id.homeItem
         binding.bottomNavigationViewMain.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -107,14 +114,17 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // 자동 로그인 성공 여부 Snackbar로 표시
         if (intent.getBooleanExtra(IntentKey.EXTRA_IS_AUTO_LOGIN, false)) {
             Snackbar.make(binding.main, this.getString(R.string.main_message_auto_login), Snackbar.LENGTH_SHORT).apply {
                 anchorView = binding.bottomNavigationViewMain
             }.show()
         }
 
+        // ViewModel 관측
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // ViewModel 기반 버튼 로딩 상태 표시
                 combine(
                     viewModel.assignmentDataListState,
                     viewModel.uiState

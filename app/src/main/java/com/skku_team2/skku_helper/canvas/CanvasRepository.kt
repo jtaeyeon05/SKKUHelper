@@ -13,10 +13,17 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
+/*
+ * 데이터 로직 레이어
+ */
 
 class CanvasRepository {
+    // 파이어베이스 통신 인스턴스
     private val db = FirebaseFirestore.getInstance()
 
+    /**
+     * 사용자가 수강하는 모든 코스의 모든 과제를 조회
+     */
     suspend fun getAssignmentDataList(
         token: String,
         showOnlyThisSemester: Boolean = true
@@ -51,6 +58,9 @@ class CanvasRepository {
         }
     }
 
+    /**
+     * 사용자의 프로필을 조회
+     */
     suspend fun getProfileSelf(token: String): Profile? {
         return withContext(Dispatchers.IO) {
             try {
@@ -70,6 +80,9 @@ class CanvasRepository {
         }
     }
 
+    /**
+     * 사용자가 수강하는 특정 코스의 특정 과제를 조회
+     */
     suspend fun getAssignmentData(
         token: String,
         courseId: Int,
@@ -89,6 +102,9 @@ class CanvasRepository {
         }
     }
 
+    /**
+     * 사용자가 수강하는 특정 코스의 특정 과제의 커스텀 데이터를 조회
+     */
     suspend fun getCustomAssignmentData(
         token: String,
         courseId: Int,
@@ -108,6 +124,9 @@ class CanvasRepository {
         }
     }
 
+    /**
+     * 사용자가 수강하는 특정 코스의 특정 과제의 커스텀 데이터를 저장
+     */
     suspend fun saveCustomAssignmentData(
         token: String,
         courseId: Int,
@@ -123,6 +142,9 @@ class CanvasRepository {
         }
     }
 
+    /**
+     * 커스텀 데이터를 초기화
+     */
     suspend fun invalidateFirebaseData(token: String) {
         withContext(Dispatchers.IO) {
             val hashedToken = token.toSha256()

@@ -28,10 +28,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+/**
+ * 과제의 상세한 정보를 보여주는 Activity
+ */
 
 class AssignmentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAssignmentBinding
 
+    // AssignmentActivity 단위 ViewModel
     private val viewModel: AssignmentViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +56,7 @@ class AssignmentActivity : AppCompatActivity() {
             insets
         }
 
+        // TopAppBar 설정
         binding.toolbarLayoutAssignment.title = viewModel.assignmentDataState.value?.assignment?.name ?: "Assignment"
         binding.toolbarLayoutAssignment.subtitle = viewModel.assignmentDataState.value?.course?.name ?: "Course"
         binding.topAppBarAssignment.setNavigationOnClickListener { finish() }
@@ -111,6 +116,7 @@ class AssignmentActivity : AppCompatActivity() {
             }
         }
 
+        // Navigation 설정
         val navHostFragment = supportFragmentManager.findFragmentById(binding.fragmentContainerView.id) as NavHostFragment
         val navController = navHostFragment.navController
         navController.graph = navController.createGraph(AssignmentScreen.Information) {
@@ -122,6 +128,7 @@ class AssignmentActivity : AppCompatActivity() {
             }
         }
 
+        // BottomNavigation 설정
         if (savedInstanceState == null) binding.bottomNavigationViewAssignment.selectedItemId = R.id.item_information
         binding.bottomNavigationViewAssignment.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -137,8 +144,10 @@ class AssignmentActivity : AppCompatActivity() {
             }
         }
 
+        // ViewModel 관측
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // ViewModel 기반 TopAppBar 내용 변경
                 launch {
                     viewModel.assignmentDataState.collect { assignmentData ->
                         val course = assignmentData?.course

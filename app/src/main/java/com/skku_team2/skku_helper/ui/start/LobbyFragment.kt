@@ -21,11 +21,15 @@ import com.skku_team2.skku_helper.ui.main.MainActivity
 import com.skku_team2.skku_helper.utils.getColorAttr
 import kotlinx.coroutines.launch
 
+/**
+ * 앱을 실행했을 떄 보여지는 StartActivity 내 Fragment
+ */
 
 class LobbyFragment : Fragment() {
     private var _binding: FragmentLobbyBinding? = null
     private val binding get() = _binding!!
 
+    // StartActivity 단위 ViewModel
     private val startViewModel: StartViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -39,6 +43,7 @@ class LobbyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Log In Button을 눌렀을 때 처리 (저장된 토큰이 옳으면 MainActivity, 저장된 토큰이 없거나 옳지 않으면 LogInFragment)
         binding.buttonLogin.setOnClickListener {
             if (startViewModel.uiState.value.isTokenVerified == true) {
                 val mainActivityIntent = Intent(requireContext(), MainActivity::class.java).apply {
@@ -58,8 +63,10 @@ class LobbyFragment : Fragment() {
             }
         }
 
+        // ViewModel 관측
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // ViewModel 기반 버튼 상태 관리
                 startViewModel.uiState.collect { state ->
                     binding.buttonLogin.isEnabled = state.isTokenVerified != null
                     if (state.isTokenVerified != null) {

@@ -24,11 +24,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+/**
+ * 로그인 화면을 보여주는 StartActivity 내 Fragment
+ */
 
 class LogInFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
+    // StartActivity 단위 ViewModel
     private val startViewModel: StartViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -42,10 +46,12 @@ class LogInFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Token EditText의 내용 변화를 관측
         binding.textInputLayoutToken.editText?.addTextChangedListener {
             startViewModel.changeToken(it?.toString().orEmpty())
         }
 
+        // Help Button을 눌렀을 때 Dialog를 보여줌
         binding.buttonTokenHelp.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext()).apply {
                 setTitle(R.string.start_login_token_help_title)
@@ -62,6 +68,7 @@ class LogInFragment : Fragment() {
             }
         }
 
+        // Log In Button을 눌렀을 때 처리
         binding.buttonLogin.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
                 val dialog = MaterialAlertDialogBuilder(requireContext()).apply {
@@ -91,8 +98,10 @@ class LogInFragment : Fragment() {
             }
         }
 
+        // ViewModel 관측
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // ViewModel 기반 버튼 상태 관리
                 startViewModel.uiState.collect { state ->
                     binding.buttonLogin.isEnabled = !state.token.isNullOrBlank()
                     if (binding.buttonLogin.isEnabled) {

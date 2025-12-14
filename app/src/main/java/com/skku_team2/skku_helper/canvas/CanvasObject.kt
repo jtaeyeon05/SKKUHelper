@@ -2,7 +2,13 @@ package com.skku_team2.skku_helper.canvas
 
 import com.google.gson.annotations.SerializedName
 
+/**
+ * Canvas LMS API와 통신하기 위한 데이터 클래스 모음
+ */
 
+/**
+ * 사용자 프로필 클래스
+ */
 data class Profile(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
@@ -27,7 +33,9 @@ data class Profile(
     }
 }
 
-
+/**
+ * 수강 과목 클래스
+ */
 data class Course(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
@@ -78,7 +86,9 @@ data class Course(
     }
 }
 
-
+/**
+ * 과제 클래스
+ */
 data class Assignment(
     @SerializedName("id") val id: Int,
     @SerializedName("name") val name: String,
@@ -150,7 +160,9 @@ data class Assignment(
     }
 }
 
-
+/**
+ * 과제 제출물 클래스
+ */
 data class Submission(
     @SerializedName("id") val id: Int,
     @SerializedName("grade") val grade: String? = null,

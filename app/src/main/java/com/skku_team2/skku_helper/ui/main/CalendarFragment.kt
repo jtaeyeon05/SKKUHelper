@@ -32,14 +32,20 @@ import java.time.temporal.WeekFields
 import java.util.Calendar
 import java.util.Locale
 
+/**
+ * 캘린더를 보여주는 MainActivity 내 Fragment
+ */
 
 class CalendarFragment : Fragment() {
     private var _binding: FragmentCalendarBinding? = null
     private val binding get() = _binding!!
 
+    // MainActivity 단위 ViewModel
     private val mainViewModel: MainViewModel by activityViewModels()
+    // HomeFragment 단위 ViewModel
     private val viewModel: CalendarViewModel by viewModels()
 
+    // 과제 목록 RecyclerView Adapter
     private lateinit var calendarAssignmentAdapter: AssignmentAdapter
 
     override fun onCreateView(
@@ -53,6 +59,7 @@ class CalendarFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // 과제 목록 RecyclerView Adapter 설정
         calendarAssignmentAdapter = AssignmentAdapter(
             token = mainViewModel.token,
             emptyItemMessage = requireContext().getString(R.string.main_calendar_empty_item_message),
@@ -77,6 +84,7 @@ class CalendarFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView.adapter = calendarAssignmentAdapter
 
+        // CalendarView 설정
         binding.calendarView.isDynamicHeightEnabled = true
         binding.calendarView.selectedDate = LocalDate.now().run { CalendarDay.from(year, monthValue - 1, dayOfMonth) }
         binding.calendarView.state().edit()
@@ -98,6 +106,7 @@ class CalendarFragment : Fragment() {
                 else -> requireContext().getString(R.string.main_calendar_undefined)
             }
         }
+        // CalendarView 크기 변경 및 애니메이션 설정
         binding.calendarView.setOnMonthChangedListener { widget, date ->
             val yearMonth = YearMonth.of(date.year, date.month + 1)
             val weekFields = WeekFields.of(Locale.getDefault())
@@ -128,8 +137,10 @@ class CalendarFragment : Fragment() {
             )
         }
 
+        // ViewModel 관측
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // MainViewModel 기반 Fragment 내용 변경
                 launch {
                     mainViewModel.assignmentDataListState.collect { assignmentDataList ->
                         viewModel.selectDate(
@@ -137,6 +148,7 @@ class CalendarFragment : Fragment() {
                             assignmentDataList = assignmentDataList
                         )
 
+                        // CalendarView 내 과제가 있는 날짜 강조
                         if (assignmentDataList == null) {
                             binding.calendarView.removeDecorators()
                             binding.calendarView.invalidateDecorators()
@@ -167,6 +179,7 @@ class CalendarFragment : Fragment() {
                         }
                     }
                 }
+                // CalendarViewModel 기반 Fragment 내용 변경
                 launch {
                     viewModel.uiState.collect { uiState ->
                         calendarAssignmentAdapter.submitList(uiState.selectedDateAssignmentDataList)

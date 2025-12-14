@@ -1,3 +1,4 @@
+<!-- Widget 커스텀 스타일 -->
 <resources>
     <style name="ThemeOverlay.SKKUHelper.LogIn.TextInputLayout.CursorColor" parent="ThemeOverlay.MaterialComponents.TextInputEditText.OutlinedBox">
         <item name="colorControlActivated">?attr/colorOnSurfaceVariant</item>

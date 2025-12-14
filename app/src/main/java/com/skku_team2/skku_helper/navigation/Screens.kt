@@ -2,7 +2,13 @@ package com.skku_team2.skku_helper.navigation
 
 import kotlinx.serialization.Serializable
 
+/**
+ * 액티비티 내 Navigation을 정의하는 실드 인터페이스 모음
+ */
 
+/**
+ * StartActivity에서 사용되는 화면 그룹
+ */
 @Serializable
 sealed interface StartScreen {
     @Serializable
@@ -12,7 +18,9 @@ sealed interface StartScreen {
     data object LogIn: StartScreen
 }
 
-
+/**
+ * MainActivity에서 사용되는 화면 그룹
+ */
 @Serializable
 sealed interface MainScreen {
     @Serializable
@@ -25,6 +33,9 @@ sealed interface MainScreen {
     data object Account: MainScreen
 }
 
+/**
+ * AssignmentActivity에서 사용되는 화면 그룹
+ */
 @Serializable
 sealed interface AssignmentScreen {
 

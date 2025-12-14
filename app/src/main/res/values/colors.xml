@@ -1,3 +1,4 @@
+<!-- Light Mode 색상 -->
 <resources>
     <color name="md_theme_primary">#003E31</color>
     <color name="md_theme_onPrimary">#FFFFFF</color>

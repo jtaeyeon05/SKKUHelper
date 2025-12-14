@@ -1,5 +1,8 @@
 package com.skku_team2.skku_helper.key
 
+/**
+ * Intent로 정보를 전달할 때 사용하는 Key를 정의한 객체
+ */
 
 object IntentKey {
     const val EXTRA_TOKEN = "com.skku_team2.skku_helper.EXTRA_TOKEN"

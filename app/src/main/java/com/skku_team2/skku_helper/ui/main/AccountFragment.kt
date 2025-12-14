@@ -20,11 +20,15 @@ import com.skku_team2.skku_helper.key.PrefKey
 import com.skku_team2.skku_helper.ui.start.StartActivity
 import kotlinx.coroutines.launch
 
+/**
+ * 사용자 정보를 보여주는 MainActivity 내 Fragment
+ */
 
 class AccountFragment : Fragment() {
     private var _binding: FragmentAccountBinding? = null
     private val binding get() = _binding!!
 
+    // MainActivity 단위 ViewModel
     private val mainViewModel: MainViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -39,6 +43,7 @@ class AccountFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Invalidate Button 클릭 시 다이얼로그 처리
         binding.buttonInvalidate.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext()).apply {
                 setTitle(R.string.main_account_dialog_invalidate_title)
@@ -53,6 +58,7 @@ class AccountFragment : Fragment() {
                 create().show()
             }
         }
+        // Log Out Button 클릭 시 다이얼로그 처리
         binding.buttonLogout.setOnClickListener {
             MaterialAlertDialogBuilder(requireContext()).apply {
                 setTitle(R.string.main_account_dialog_logout_title)
@@ -74,14 +80,17 @@ class AccountFragment : Fragment() {
             }
         }
 
+        // ViewModel 관측
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // MainViewModel User 기반 Fragment 내용 변경
                 launch {
                     mainViewModel.userState.collect { user ->
                         binding.textViewName.text = user?.name
                         binding.textViewEmail.text = user?.primaryEmail ?: getString(R.string.main_account_profile_email_none)
                     }
                 }
+                // MainViewModel AssignmentData 기반 Fragment 내용 변경
                 launch {
                     mainViewModel.assignmentDataListState.collect { assignmentDataList ->
                         if (assignmentDataList == null) {
