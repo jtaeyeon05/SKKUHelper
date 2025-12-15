@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.swiperefreshlayout)
 
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
@@ -59,9 +60,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.firebase.firestore)
-
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0")
-    implementation ("com.prolificinteractive:material-calendarview:1.4.3")
+    implementation (libs.material.calendarview)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
